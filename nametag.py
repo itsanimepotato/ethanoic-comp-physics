@@ -39,7 +39,7 @@ def T(pos):
     sphere(pos=pos+vector(0,height/2,0)+vector(space-2,thick-3,thick), color=rc(), radius=thick)
     sphere(pos=pos+vector(0,height/2,0)+vector(space-2,thick-4,thick), color=rc(), radius=thick)
     sphere(pos=pos+vector(0,height/2,0)+vector(space-2,thick-5,thick), color=rc(), radius=thick)
-    
+
 def H(pos):
     box(pos=pos+vector(-space/2,0,0), size=vector(thick,height,thick), color=rc())
     box(pos=pos+vector(space/2,0,0), size=vector(thick,height,thick), color=rc())
@@ -68,7 +68,7 @@ def N(pos):
 
 def C(pos):
     helix(pos=pos, axis=vector(0,0,1), radius=2, thickness=thick, coils=0.25, color=rc())
-    
+
     R = 5
     arc = curve(color=rc(), radius=thick/2)
     arc.append(pos=vector(pos.x-2,0,0))
@@ -83,4 +83,3 @@ x = -10
 for L in letters:
     L(vector(x,0,0))
     x += space + gap
-

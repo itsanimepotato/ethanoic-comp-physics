@@ -29,6 +29,6 @@ def leg(dx,dz):
     leg.axis = vector(0,-1,0)
     leg.color = vector.random()
 
-    
+
 leg(.5,.5)
 leg(-.5,-.5)

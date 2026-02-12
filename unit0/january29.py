@@ -12,7 +12,7 @@ while True:
     outputStuff()
     a = infAdd(a,b)
     b = infAdd(a,b)
-    
+
     print("the surface area of the new block is like: "+ surfArea(theBox))
 
 
@@ -21,7 +21,7 @@ def randBox():
     theBox.pos = vector.random()
     theBox.color = vector.random()
     theBox.size = vector.random()
-    
+
 def outputStuff():
     print("hiiiii")
     print(theBox.color)
@@ -30,7 +30,7 @@ def outputStuff():
 def infAdd(a,b):
     print(a+b)
     return(a+b)
-    
+
 def surfArea(block):
     return(abs(block.length*block.height*2+block.length*block.width*2+block.height*block.width*2))
     
