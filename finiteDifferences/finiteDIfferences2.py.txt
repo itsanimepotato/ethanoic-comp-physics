@@ -23,17 +23,17 @@ pVTrueCurve = gcurve(graph=pVGraph, color=color.black, label="True Velocity")
 def v(t):
     total = (3.2*t*t*t)+(-6.6*t*t)+1.5
     return total
-
+    
 for t in range(-1,2.5,deltaT):
     pVTrueCurve.plot(t,v(t))
-
+    
 pVForwardCurve = gcurve(graph=pVGraph, color=color.red, label="Forward Velocity")
 
 def vF(t):
     total = p(t+deltaT) - p(t)
     total = total/deltaT
     return total
-
+    
 for t in range(-1,2.5,deltaT):
     pVForwardCurve.plot(t,vF(t))
 
@@ -43,16 +43,16 @@ def vB(t):
     total = p(t) - p(t-deltaT)
     total = total/deltaT
     return total
-
+    
 for t in range(-1,2.5,deltaT):
     pVBackwardCurve.plot(t,vB(t))
-
+    
 pVCentralCurve = gcurve(graph=pVGraph, color=color.blue, label="Central Velocity")
 
 def vC(t):
     total = p(t+deltaT) - p(t-deltaT)
     total = total/(deltaT*2)
     return total
-
+    
 for t in range(-1,2.5,deltaT):
     pVCentralCurve.plot(t,vC(t))
