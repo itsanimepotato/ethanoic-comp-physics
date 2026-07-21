@@ -1,0 +1,54 @@
+Web VPython 3.2
+
+regentsBall = sphere(pos=vec(0,0,0), color = color.red)
+eulerImplicitBall = sphere(pos=vec(10,0,0), color = color.blue)
+eulerExplicitBall = sphere(pos=vec(-10,0,0), color = color.purple)
+
+ground = box(pos=vec(0,-2,0),size=vec(30,1,10))
+
+startVel = vec(0,30,0)
+
+regentsBall.vel = startVel
+eulerImplicitBall.vel = startVel
+eulerExplicitBall.vel = startVel
+
+gravity = vec(0,-9.81,0)
+
+gc = graph(title="Height vs Time", xtitle = "t", ytitle = "height")
+regentsCurve = gcurve(graph=gc, color=color.red, label="regents")
+eulerImplicitCurve = gcurve(graph=gc, color=color.blue, label="implicit")
+eulerExplicitCurve = gcurve(graph=gc, color=color.purple, label="explicit")
+
+t = 0
+dt = 0.01
+
+def active():
+    if regentsBall.pos.y <= -1 and eulerImplicitBall.pos.y <= -1:                                                                                                                          
+        return False
+    return True
+
+
+while(active()):
+    rate(100)
+    
+
+    regentsBall.acc = gravity
+    regentsBall.vec = startVel + regentsBall.acc * t
+    regentsBall.pos = startVel*t + 0.5*regentsBall.acc*t*t
+
+    
+    eulerImplicitBall.acc = gravity
+    eulerImplicitBall.vel = eulerImplicitBall.vel + eulerImplicitBall.acc*dt
+    eulerImplicitBall.pos = eulerImplicitBall.pos + eulerImplicitBall.vel*dt
+    
+    eulerExplicitBall.acc = gravity
+    eulerExplicitBall.pos = eulerExplicitBall.pos + eulerExplicitBall.vel*dt
+    eulerExplicitBall.vel = eulerExplicitBall.vel + eulerExplicitBall.acc*dt
+    
+    regentsCurve.plot(t,regentsBall.pos.y)
+    eulerImplicitCurve.plot(t,eulerImplicitBall.pos.y)
+    eulerExplicitCurve.plot(t, eulerExplicitBall.pos.y)
+
+    t += dt
+    
+
