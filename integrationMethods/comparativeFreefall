@@ -1,0 +1,80 @@
+Web VPython 3.2
+
+ground = box(pos=vec(0,-1,0),size=vec(10,0.5,1))
+regentsBall = sphere(color=color.purple, radius=0.5, pos=vec(0, 0 ,0))
+eulerImplicitBall= sphere(color=color.blue, radius=0.5, pos=vec(-3, 0 ,0))
+eulerExplicitBall = sphere(color=color.red, radius=0.5, pos=vec(3,0,0))
+rkBall = sphere(color=color.green, radius=0.5, pos=vec(6,0,0))
+
+startVel = vec(0, 45, 0)
+regentsBall.velocity = startVel
+eulerImplicitBall.velocity = startVel
+eulerExplicitBall.velocity = startVel
+rkBall.velocity = startVel
+
+G = vec(0, -9.81, 0)
+
+gc = graph(title="Height vs Time", fast=False)
+regentsCurve = gcurve(graph=gc, color=color.purple, label="Regents")
+eulerImplicitCurve = gcurve(graph=gc, color=color.blue, label="Implicit")
+eulerExplicitCurve = gcurve(graph=gc, color=color.red, label="Explicit")
+rkCurve = gcurve(graph=gc, color=color.green, label="RK")
+
+data1 = []
+data2 = []
+data3 = []
+data4 = []
+
+t = 0
+dt = 0.2763
+
+prev_v = rkBall.velocity
+
+while regentsBall.pos.y >= -1 or eulerImplicitBall.pos.y >= -1 or eulerExplicitBall.pos.y >= -1 or rkBall.pos.y >= -1:
+    
+    rate(2/dt)
+    
+    t += dt
+    
+    regentsBall.pos = (startVel * t) + (0.5 * G * t * t) + vec(0,0,0)
+    regentsCurve.plot(t, regentsBall.pos.y)
+    data1.append([t, regentsBall.pos.y - regentsBall.pos.y])
+    
+    eulerImplicitBall.velocity += G * dt 
+    eulerImplicitBall.pos += eulerImplicitBall.velocity * dt
+    eulerImplicitCurve.plot(t, eulerImplicitBall.pos.y)
+    data2.append([t, eulerImplicitBall.pos.y - regentsBall.pos.y])
+    
+    eulerExplicitBall.pos += eulerExplicitBall.velocity * dt
+    eulerExplicitBall.velocity += G * dt
+    eulerExplicitCurve.plot(t, eulerExplicitBall.pos.y)
+    data3.append([t, eulerExplicitBall.pos.y - regentsBall.pos.y])
+    
+    rkBall.velocity += G * dt
+    rkBall.pos += (rkBall.velocity + prev_v) / 2 * dt
+    prev_v = rkBall.velocity
+    rkCurve.plot(t, rkBall.pos.y)
+    data4.append([t, rkBall.pos.y - regentsBall.pos.y])
+
+changeYGraph = graph(title="Changes in Y", fast=False)
+changeRegents = gcurve(graph=changeYGraph, color=color.purple, label="Regents")
+changeImplicit = gcurve(graph=changeYGraph, color=color.blue, label="Implicit")
+changeExplicit = gcurve(graph=changeYGraph, color=color.red, label="Explicit")
+changeRK = gcurve(graph=changeYGraph, color=color.green, label="RK")
+
+for data in data1:
+    changeRegents.plot(data)
+
+for data in data2:
+    changeImplicit.plot(data)
+
+for data in data3:
+    changeExplicit.plot(data)
+
+for data in data4:
+    changeRK.plot(data)
+
+
+
+
+
