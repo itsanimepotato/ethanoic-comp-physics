@@ -1,0 +1,138 @@
+Web VPython 3.2
+
+    
+
+class Vector2:
+    def __init__(self, x, y):
+        self.x = x;
+        self.y = y;
+    def __add__(self, other):
+        self.x += other.x;
+        self.y += other.y; 
+        return self;
+    def __subtract__(self, other):
+        self.x -= other.x;
+        self.y -= other.y;
+        return self;
+
+    def __multiply__(self, other):
+        self.x *= other;
+        self.y *= other;
+        return self;
+    def setX(self, x):
+        self.x = x;
+    def setY(self, y):
+        self.y = y;
+    def clone(self):
+        return Vector2(self.x, self.y);
+    def magsq(self):
+        return self.x*self.x + self.y*self.y;
+    def mag(self):
+        return sqrt(self.x*self.x + self.y*self.y);
+    def distsq(self, other):
+        return (self.x-other.x)*(self.x-other.x) + (self.y-other.y)*(self.y-other.y);
+    def toString(self):
+        return f"<{self.x}, {self.y}>"
+
+fieldCount = 64; 
+fieldWidth = 8 
+fieldDA = fieldWidth / fieldCount; 
+field = [[arrow(pos=vec(y*fieldDA, 0, x*fieldDA)) for x in range(0, fieldCount)] for y in range(0, fieldCount)];
+
+G = 6.7e-11;
+dt = 0.1; 
+
+amtObjects = 2
+objects = []
+for i in range(amtObjects):
+    objects.append(0)
+
+for i in range(amtObjects):
+    global objects
+    p = vec(5,0,5)
+    objects[i] = sphere(pos=p,radius=fieldDA, color=vector.random())
+    objects[i].vel = vec(random(-0.5,0.5),0,random(-0.5,0.5))
+    objects[i].acc = vec(0,0,0)
+    objects[i].mass = 1000
+
+def printField(field):
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            str = (field[x][y].axis)
+            print(str, end=" ");
+        print();
+
+EPSILON = 1e-5
+
+def zeroPoint(field, x, y):
+    field[x][y].axis = vec(0,0,0);
+    field[x][y].pos.y = 0;
+
+def zeroField(field):
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            zeroPoint(field, x, y);
+
+#marker = arrow(size=vec(0.1,0.4,0.1), color=color.yellow); 
+
+def updateField(field, v2pos, mass):
+    for y in range(0, fieldCount):
+        for x in range(0, fieldCount):
+            p = vector(x*fieldDA, 0, y*fieldDA);
+            #marker.pos = p;
+            p.x -= v2pos.x;#*fieldDA;
+            p.z -= v2pos.y;#*fieldDA;
+            #marker.axis=-p;
+            valMag = mag(p);
+            #field[x][y].axis += -hat(p)*0.1; #-(fieldDA / (valMag)) * p ; #test jargon, this is not gravity. 
+            if(valMag > fieldDA):        
+                field[x][y].axis += -hat(p)*fieldDA;
+                field[x][y].pos.y -= fieldDA/valMag; 
+
+scene.append_to_title("<div id='fps'/>")
+
+#obj = box(pos=vec(fieldWidth/2, fieldWidth/2, 0));
+
+rate(60);
+#printField(field); 
+t = 0;
+dt = 0.1;
+floor = box(pos=vec(fieldWidth/2,0,fieldWidth/2), size=vec(fieldWidth, 0.1, fieldWidth), opacity=0.5);
+#ke = label(pos=vec(fieldWidth/2, fieldWidth, 0), text="sus");
+
+v2pos = Vector2(0,0); 
+
+def gravity(object):
+    totForce = 0
+    for i in range(len(objects)):
+        if object.pos != objects[i].pos:
+            distance = mag(object.pos-objects[i].pos)
+            force = (G * object.mass * objects[i].mass)/((distance)**2)
+            totForce += force
+    
+    aForce = totForce / len(objects)
+    avgForce = vec(aForce*object.acc.x,0,aForce*object.acc.z)
+    return avgForce
+
+while(1):
+    rate(60);
+    zeroField(field);
+    
+    for i in range(len(objects)):
+        v2pos.x = objects[i].pos.x
+        v2pos.y = objects[i].pos.z
+        updateField(field, v2pos, 5.97e24);
+        
+        ax = field[round(objects[i].pos.x/fieldDA)][round(objects[i].pos.z/fieldDA)];
+        objects[i].acc = gravity(objects[i])
+        objects[i].vel += objects[i].acc * dt
+        objects[i].pos += objects[i].vel * dt 
+        
+        if(objects[i].pos.x >= fieldWidth-fieldDA or objects[i].pos.x < fieldDA or objects[i].pos.z > fieldWidth-fieldDA or objects[i].pos.z < fieldDA):
+            objects[i].vel *= -1; 
+            objects[i].pos += objects[i].vel * dt * 2;
+    
+    for i in range(len(objects)):
+        print(f"{i}, {objects[i].pos},{objects[i].vel},{objects[i].acc}")
+    
+    t += 0.01;
