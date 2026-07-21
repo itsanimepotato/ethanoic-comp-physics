@@ -1,0 +1,53 @@
+Web VPython 3.2
+
+gVxT = graph(title="Vx vs T")
+vxVsT = gcurve(graph=gVxT)
+
+gVyT = graph(title="Vy vs T")
+vyVsT = gcurve(graph=gVyT)
+
+
+box(pos=vec(75,0,0), size=vec(175,1,1))
+
+t=0
+dt=0.1
+
+startMag = 40
+startAngle = 45
+
+ball = sphere(pos=vec(0,0,0), mass=4, make_trail=True)
+ball.vel = startForce(startMag,radians(startAngle))
+
+gravity = vec(0,-9.81,0)
+drag = 0
+
+
+def a(vel):
+    global gravity, b, s1
+    
+    return gravity - (drag / ball.mass) * (vel.mag)**2 * vel.hat
+
+def v(poo, tee):
+    return poo * tee 
+
+def startForce(force, angle):
+    return vec(force*cos(angle),force*sin(angle),0)
+
+def rk2(fxn,x,t):
+    k1 = fxn(x,t) * dt
+    k2 = fxn(x+k1/2,t+dt/2) * dt
+    return x + k2
+
+
+while True:
+    rate(10/dt)
+    global ball
+    if ball.pos.y < 0:
+        break
+    else:
+        ball.vel = rk2(a, ball.vel, t)
+        ball.pos += ball.vel * dt 
+        
+    vxVsT.plot(t,ball.vel.x)
+    vyVsT.plot(t,ball.vel.y)
+    t += dt
