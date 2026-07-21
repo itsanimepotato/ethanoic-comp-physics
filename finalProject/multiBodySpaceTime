@@ -1,0 +1,185 @@
+Web VPython 3.2
+
+            
+scene.append_to_title("<b> Multibody Physics Simulation with the Space Time Fabric</b>")
+scene.append_to_caption("To change the amount of objects in the simulation, change the slider.")
+
+amtObjects = 10
+
+startButton = button(bind=start, text="Start the Simulation")
+def start(evt):
+    global activate
+    activate = True
+    evt.disabled = True
+
+gSpeed = graph(title="Velocity of the Big Red Object vs. Time", xtitle="Time", ytitle="Speed")
+gdSpeed = gcurve(graph=gSpeed, color=color.red)
+
+
+class Vector2:
+    def __init__(self, x, y):
+        self.x = x;
+        self.y = y;
+    def __add__(self, other):
+        self.x += other.x;
+        self.y += other.y; 
+        return self;
+    def __subtract__(self, other):
+        self.x -= other.x;
+        self.y -= other.y;
+        return self;  
+
+    def __multiply__(self, other):
+        self.x *= other;
+        self.y *= other;
+        return self;
+    def setX(self, x):
+        self.x = x;
+    def setY(self, y):
+        self.y = y;
+    def clone(self):
+        return Vector2(self.x, self.y);
+    def magsq(self):
+        return self.x*self.x + self.y*self.y;
+    def mag(self):
+        return sqrt(self.x*self.x + self.y*self.y);
+    def distsq(self, other):
+        return (self.x-other.x)*(self.x-other.x) + (self.y-other.y)*(self.y-other.y);
+    def toString(self):
+        return f"<{self.x}, {self.y}>"
+
+
+
+fieldCount = 64; 
+fieldWidth = 3e11; #do not ask what the units are
+fieldDA = fieldWidth / fieldCount; 
+downConstant = log10(fieldDA);
+field = [[arrow(pos=vec(y*fieldDA, 0, x*fieldDA)) for x in range(0, fieldCount)] for y in range(0, fieldCount)];
+
+
+
+
+
+
+G = 6.7e-11;
+
+def printField(field):
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            str = (field[x][y].axis)
+            print(str, end=" ");
+        print();
+
+EPSILON = 1e-5
+
+def zeroPoint(field, x, y):
+    field[x][y].axis = vec(0,0,0);
+    field[x][y].pos.y = 0;
+
+def zeroField(field):
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            zeroPoint(field, x, y);
+
+#marker = arrow(size=vec(0.1,0.4,0.1), color=color.yellow); 
+
+def gravityField(field, v2pos, mass):
+    for y in range(0, fieldCount):
+        for x in range(0, fieldCount):
+            p = vector(x*fieldDA, 0, y*fieldDA);
+            #marker.pos = p;
+            p.x -= v2pos.x;#*fieldDA;
+            p.z -= v2pos.y;#*fieldDA;
+            #marker.axis=-p;
+            valMag = mag(p);
+            #field[x][y].axis += -hat(p)*0.1; #-(fieldDA / (valMag)) * p ; #test jargon, this is not gravity. 
+            if(valMag > fieldDA):        
+                field[x][y].axis += -p*(G*mass)/(valMag**2);
+                field[x][y].pos.y -= (G*mass*fieldDA*downConstant)/(valMag**2); #our base mass unit is in earths because kilograms are overrated 
+
+def normalizeField(field):
+    for y in range(0, fieldCount):
+        for x in range(0, fieldCount):
+            #field[x][y].axis *= 0.5
+            if(mag(field[x][y].axis) > fieldDA):
+                field[x][y].axis = hat(field[x][y].axis)*fieldDA
+            
+t = 0;
+dt = 0.1; 
+
+class body:
+    def __init__(self, x, y, mass, dims, func, trail=False):
+        #print(x, y, dims);
+        self.obj = func(pos=vec(x, 0, y), size=vec(dims, dims, dims), make_trail=trail);
+        self.obj.vel = vec(0,0,0);
+        self.obj.acc = vec(0,0,0);
+        self.obj.mass = mass;
+    def applyForce(self, field):
+        ax = field[round(self.obj.pos.x/fieldDA)][round(self.obj.pos.z/fieldDA)];
+        if(ax is not None):
+            #self.obj.acc = (ax.axis/fieldDA) * -(ax.pos.y); 
+            self.obj.acc = ax.axis;
+            self.obj.vel += self.obj.acc * dt; 
+            self.obj.pos += self.obj.vel * dt;
+            #self.obj.pos.y = ax.pos.y;
+        collisionFlag = False;
+        if(self.obj.pos.x >= fieldWidth-fieldDA*2 or self.obj.pos.x < fieldDA*2): 
+            self.obj.vel.x *= -1; 
+            collisionFlag = True;
+        if(self.obj.pos.z > fieldWidth-fieldDA*2 or self.obj.pos.z < fieldDA*2):
+            self.obj.vel.z *= -1;
+            collisionFlag = True;
+        if(collisionFlag):
+            self.obj.pos += self.obj.vel * 1.1 * dt;
+            self.obj.vel *= 0.9
+    def setVel(self, v):
+        self.obj.vel = v;
+    def setColor(self, c):
+        self.obj.color = c;
+    def impactField(self, field, v2, func):
+        v2.x = self.obj.pos.x;
+        v2.y = self.obj.pos.z;
+        func(field, v2, self.obj.mass); 
+    def dist(self, other):
+        return self.obj.pos - other.obj.pos
+    def getMass(self):
+        return self.obj.mass;
+
+rate(60);
+
+Objects = [];
+bigObj = body(fieldWidth/2, fieldWidth/2, 1e31, fieldDA*5, sphere);
+bigObj.setColor(color.red);
+
+Objects.append(bigObj);
+
+v2pos = Vector2(0,0); 
+
+for i in range(0, amtObjects):
+    mass = ((random()*1.2+0.1)*1.9891e30);
+    #print((0.1+random()*0.8)*fieldWidth);
+    obj = body((0.1+random()*0.8)*fieldWidth, (0.1+random()*0.8)*fieldWidth, mass, fieldDA*mass/1e30, sphere); 
+    dist = obj.dist(bigObj); 
+    perp = hat(vec(dist.x, 0, -dist.z));
+    obj.setVel(perp*(sqrt(bigObj.getMass()/mag(obj.dist(bigObj)))));
+    Objects.append(obj); 
+
+
+
+while(1):
+    rate(60);
+    if activate:
+        zeroField(field);
+            
+        for o in Objects:
+            o.impactField(field, v2pos, gravityField);
+            
+        for o in Objects:
+            o.applyForce(field);
+                
+        normalizeField(field);
+        
+        gdSpeed.plot(t,mag(Objects[0].obj.vel))
+        
+            
+        t += dt;
