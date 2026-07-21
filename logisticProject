@@ -1,0 +1,413 @@
+Web VPython 3.2
+
+scene_logistic = canvas(title='Logistic', userzoom=False, userspin=False, userpan=False, resizable=False, width=800, height=400, align='left')
+scene_random = canvas(title='Random', userzoom=False, userspin=False, userpan=False, resizable=False, width=800, height=400, align='left')
+
+
+criticalValues = [0, 3.841, 5.991, 7.815, 9.488, 11.070, 12.592, 14.067, 15.507, 16.919, 18.307, 19.675, 21.026, 22.362, 23.685, 24.996, 26.296, 27.587, 28.869, 30.144, 31.41, 32.671, 33.924, 35.172, 36.415, 37.652, 38.885, 40.113, 41.337] + [0] * 90
+
+playing = False
+
+#center is 10 
+
+columns = 23 #1
+rows = 10
+
+rowSpacing = 3
+columnSpacing = 3
+
+bttm = 5 - (rows - 1) * columnSpacing
+
+s = 10 - ((columns - 1) / 2) * rowSpacing
+e = 10 + ((columns - 1) / 2) * rowSpacing
+
+slots = [[i, i + rowSpacing] for i in range(s, e, rowSpacing)]
+
+
+counts_logistic = [0 for i in range(columns - 1)]
+counts_random = [0 for i in range(columns - 1)]
+#print(slots)
+#print(counts)
+
+dt = 0.01
+damp = 0.3 #damping 0.3
+
+#slider for gravity, rows, ball number, elasticity, dt, initials, number of balls, radius of balls?
+gravity = vec(0, -50, 0)
+mass = 0.01
+
+balls = 0 #ball count
+ballss_logistic = []#lists to store the different balls and pegs
+ballss_random = [] 
+pegs_logistic = [] 
+pegs_random = [] 
+t = 0 #time
+
+ballRadius = 1
+ballLim = 100000
+
+#seperate graphs and canvases to show the 2 different formulas
+g_logistic = graph(title = "Probability Distribution for Logistic Eq", xtitle = "slots", ytitle="balls",
+                   xmin = 0, xmax = columns - 1, align='left', width=800, height=200)
+gc_logistic = gvbars(graph = g_logistic)
+
+g_random = graph(title = "Probability Distribution for Random", xtitle = "slots", ytitle="balls",
+                 xmin = 0, xmax = columns - 1, align='left', width=800, height=200)
+gc_random = gvbars(graph = g_random)
+
+
+radii = ballRadius + 0.5
+#initials = [i for i in range(10 - radii, 10 + radii, 1)]
+
+dLRM = 0
+dLRSD = 0
+
+
+r = 4
+list_logistic = [0.2]
+list_random = [0.2]
+
+
+def logisitc(X):
+    global r
+    return r * X * (1 - X)
+    
+    
+#User Input                  
+
+
+
+starts = button(bind=strt, text='Start/Stop', disabled =True)
+
+def strt(evt):
+    global playing, s1, s2, s3, s4
+    playing = not playing
+    disabling = [s1, s2, s3, s4]
+    for obj in disabling:
+        #print("working")
+        obj.disabled = not obj.disabled
+    #print("hi")
+    
+
+    
+def clearGraphs():
+    global ndCurve_random, ndCurve_logistic, gc_random, gc_logistic, dLRM, dLRSD
+    l = [ndCurve_random, ndCurve_logistic, gc_random, gc_logistic]
+    for obj in l:
+        obj.delete()
+        
+    dLRM = 0
+    dLRSD = 0
+        
+    dLRMText.text=f"\nDifference between Logistic and True Random Means: {dLRM}"
+    dLRSDText.text=f"\nDifference between Logistic and True Random Standard Deviations: {dLRSD}"
+    
+
+    
+mkP = button(bind=mPegs, text='Make Pegs')
+
+
+
+def mPegs(evt):
+    global columns, rowSpacing, columnSpacing, rows, pegs_logistic, pegs_random, ballss_logistic, ballss_random, balls, counts_logistic, counts_random, list_logistic, list_random, gc_logistic, gc_random, slots
+    
+    #restarting
+    
+    for obj in ballss_logistic + ballss_random + pegs_logistic + pegs_random:
+            obj.visible = False
+    pegs_logistic = []
+    pegs_random = []
+    ballss_logistic = []
+    ballss_random = []
+    counts_logistic = [0 for i in range(columns - 1)]
+    counts_random = [0 for i in range(columns - 1)]
+    balls = 0
+    list_logistic = [0.2]
+    list_random = [0.2]
+    #gc.clear()
+    
+    for i in range(rows):
+        if i % 2 == 0:
+                s_row = 10 - ((columns - 1) / 2) * rowSpacing 
+        else:
+            s_row = 10 - ((columns - 1) / 2) * rowSpacing - (rowSpacing / 2)
+        for o in range(columns):
+            pos_vec = vec(s_row + o * rowSpacing, 5 - i * columnSpacing, 0)
+            c_log = cylinder(canvas=scene_logistic, pos=pos_vec, axis=vec(0,0,3), radius=0.5)
+            c_rnd = cylinder(canvas=scene_random, pos=pos_vec, axis=vec(0,0,3), radius=0.5)
+            pegs_logistic += [c_log]
+            pegs_random += [c_rnd]
+            
+    starts.disabled = False
+    mkP.disabled = True
+    
+    clearGraphs()
+    #print(slots)
+            #print("(" + c.pos.x + ", " + c.pos.y + ")")
+
+
+
+ww = wtext(text="\n")
+
+s1 = slider(bind=setCols, min=9, max=50, value = 23, step = 2)
+
+w = wtext(text= "\nColumns: " + s1.value)
+
+def setCols(evt):
+    global columns, g_logistic, g_random, counts_logistic, counts_random, rowSpacing, e, s, slots
+    columns = evt.value
+    w.text = "\nColumns: " + s1.value
+    g_logistic.xmax = columns - 1
+    g_random.xmax = columns - 1
+    counts_logistic = [0 for i in range(columns - 1)]
+    counts_random = [0 for i in range(columns - 1)]
+    s = 10 - ((columns - 1) / 2) * rowSpacing
+    e = 10 + ((columns - 1) / 2) * rowSpacing
+    slots = [[i, i + rowSpacing] for i in range(s, e, rowSpacing)]
+    
+    starts.disabled = True
+    mkP.disabled = False
+
+space = wtext(text = "\n")
+
+
+
+ww = wtext(text="\n")
+
+s2 = slider(bind=setRows, min=3, max=50, value = 10, step = 1)
+
+w2 = wtext(text= "\nRows: " + s2.value)
+
+def setRows(evt):
+    global rows, bttm, columnSpacing
+    rows = evt.value
+    w2.text = "\nRows: " + s2.value
+    bttm = 5 - (rows - 1) * columnSpacing
+    
+    starts.disabled = True
+    mkP.disabled = False
+
+space = wtext(text = "\n")
+
+
+
+www = wtext(text="\n")
+
+s3 = slider(bind=setNumBalls, min=1, max=100000, value = 100000, step = 1)
+
+w3 = wtext(text= "\nBall Limit: " + s3.value)
+
+def setNumBalls(evt):
+    global ballLim
+    ballLim = evt.value
+    w3.text = "\nBall Limit: " + s3.value
+    
+    starts.disabled = True
+    mkP.disabled = False
+    
+    
+    
+space = wtext(text = "\n")
+
+dLRMText = wtext(text=f"\nDifference between Logistic and True Random Means: {dLRM}")
+dLRSDText = wtext(text=f"\nDifference between Logistic and True Random Standard Deviations: {dLRSD}")
+
+space = wtext(text = "\n")
+
+dd = wtext(text="\nStandard deviation of logistic: 0")
+ddd = wtext(text = "\nStandard deviation of random: 0")
+
+space = wtext(text = "\n")
+
+dddd = wtext(text = "\nPearson's Chi-Square (of Fit) Test:")
+dddddd = wtext(text = "\nCritical value:")
+ddddd = wtext(text = "\nDegrees of freedom:")
+
+space = wtext(text = "\n")
+
+ndCurve_logistic = gcurve(graph=g_logistic, color=color.red)
+ndCurve_random = gcurve(graph=g_random, color=color.blue)
+
+def chiSquare(expected, observed):
+    s = 0
+    for i in range(len(expected)):
+        if expected[i] != 0:
+            s += ((observed[i] - expected[i])**2 / expected[i])
+    return s
+    
+def degOfFreedom(counts):
+    num = 0
+    for i in range(len(counts)):
+        if counts[i] != 0:
+            num += 1
+    return num - 1
+
+
+def mean_counts(counts):
+    total = sum(counts)
+    if total == 0:
+        return 0
+    return sum(i * counts[i] for i in range(len(counts))) / total
+    
+def SD_counts(counts):
+    total = sum(counts)
+    if total == 0:
+        return 0
+    
+    m = mean_counts(counts)
+    variance = sum(counts[i] * (i - m)**2 for i in range(len(counts))) / total
+    return sqrt(variance)
+
+def ndFormula(x, m, sd):
+    if sd == 0:
+        return 0
+    
+    mult = (1/(sd*sqrt(2*pi)))
+    ePart = exp(-((x - m)**2)/(2*sd**2))
+    return mult * ePart
+    
+while True:
+    rate(100) 
+    if playing:
+        t += 1  
+        
+        if balls < ballLim and t % 10 == 0:
+            balls += 1
+            
+            list_logistic[balls] = logisitc(list_logistic[balls - 1])
+            start_logistic = 8.6 + list_logistic[balls] * 2.8
+            bs_logistic = sphere(canvas=scene_logistic, pos= vec(start_logistic, 10, 0), color = color.red, radius = ballRadius)
+            bs_logistic.vel = vec(0, 0, 0)
+            bs_logistic.counted = False
+            ballss_logistic += [bs_logistic]
+            
+            list_random[balls] = random()
+            start_random = 8.6 + random() * 2.8
+            bs_random = sphere(canvas=scene_random, pos= vec(start_random, 10, 0), color = color.blue, radius = ballRadius)
+            bs_random.vel = vec(0, 0, 0)
+            bs_random.counted = False
+            ballss_random += [bs_random]
+            
+        for b in ballss_logistic:
+                    
+            #applies gravity
+            if b.pos.y > bttm:
+                b.vel = b.vel + gravity * dt
+                b.pos = b.pos + b.vel*dt
+                
+                
+                for p in pegs_logistic:
+                    if mag(p.pos - b.pos) < radii:
+             
+                        #finds normal
+                        dir = b.pos - p.pos
+                        n = norm(dir)
+                        
+                        ####FIX
+                        if n.x == 0:
+                            n.x += (random() - 0.5) * 0.1
+                        
+                        #finds new velocity and applies damping
+                        b.vel = b.vel - 2 * (dot(b.vel, n) * n) * (1 - damp)
+                        
+                        #fixes overlap (pushes out along normal)
+                        over = radii - mag(b.pos - p.pos)
+                        b.pos += n * over
+                
+            if b.pos.y < bttm:
+                for i in range(len(slots)):
+                    if b.pos.x < slots[i][1] and b.pos.x > slots[i][0] and b.counted == False:
+                        counts_logistic[i] += 1
+                        
+                        gc_logistic.visible = False
+                        gc_logistic.delete()
+                        gc_logistic = gvbars(graph = g_logistic)
+
+                        for i in range(len(counts_logistic)):
+                            gc_logistic.plot(i, counts_logistic[i])
+                        b.counted = True
+                        b.visible = False
+                        ballss_logistic.remove(b)
+                
+        for b in ballss_random:
+                    
+            #applies gravity
+            if b.pos.y > bttm:
+                b.vel = b.vel + gravity * dt
+                b.pos = b.pos + b.vel*dt
+                
+                
+                for p in pegs_random:
+                    if mag(p.pos - b.pos) < radii:
+             
+                        #finds normal
+                        dir = b.pos - p.pos
+                        n = norm(dir)
+                        
+                        if n.x == 0:
+                            n.x += (random() - 0.5) * 0.1
+                        
+                        #finds new velocity and applies damping
+                        b.vel = b.vel - 2 * (dot(b.vel, n) * n) * (1 - damp)
+                        
+                        #fixes overlap (pushes out along normal)
+                        over = radii - mag(b.pos - p.pos)
+                        b.pos += n * over
+                
+            if b.pos.y < bttm:
+                for i in range(len(slots)):
+                    if b.pos.x < slots[i][1] and b.pos.x > slots[i][0] and b.counted == False:
+                        counts_random[i] += 1
+                        
+                        gc_random.visible = False
+                        gc_random.delete()
+                        gc_random = gvbars(graph = g_random)
+
+                        for i in range(len(counts_random)):
+                            gc_random.plot(i, counts_random[i])
+                        b.counted = True
+                        b.visible = False
+                        ballss_random.remove(b)
+                
+        m_log = mean_counts(counts_logistic)
+        sd_log = SD_counts(counts_logistic)
+        total_log = sum(counts_logistic)
+
+        m_rnd = mean_counts(counts_random)
+        sd_rnd = SD_counts(counts_random)
+        total_rnd = sum(counts_random)
+
+        ndCurve_logistic.visible = False
+        ndCurve_logistic.delete()
+        ndCurve_logistic = gcurve(graph=g_logistic, color=color.red)
+
+        ndCurve_random.visible = False
+        ndCurve_random.delete()
+        ndCurve_random = gcurve(graph=g_random, color=color.blue)
+
+        for i in range(columns):
+            nd_log = ndFormula(i, m_log, sd_log) * total_log
+            ndCurve_logistic.plot(i, nd_log)
+            nd_rnd = ndFormula(i, m_rnd, sd_rnd) * total_rnd
+            ndCurve_random.plot(i, nd_rnd)
+            
+        dLRM = abs(m_log-m_rnd)
+        dLRSD = abs(sd_log-sd_rnd)
+        
+        dLRMText.text=f"\nDifference between Logistic and True Random Means: {dLRM}"
+        dLRSDText.text=f"\nDifference between Logistic and True Random Standard Deviations: {dLRSD}"
+        
+        dd.text = f"\nStandard deviation of logistic: {sd_log}"
+        ddd.text = f"\nStandard deviation of random: {sd_rnd}"
+
+        chi = chiSquare(counts_random, counts_logistic)
+        dddd.text = f"\nPearson's Chi-Square (of Fit) Test: {chi}" 
+        
+        degFree = degOfFreedom(counts_random)
+        
+        critical = criticalValues[degFree]
+        dddddd.text = f"\nCritical value: {critical}"
+            
+        ddddd.text = f"\nDegrees of freedom: {degFree}"
+            
+            
