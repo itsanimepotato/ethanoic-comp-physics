@@ -1,0 +1,53 @@
+Web VPython 3.2
+
+seed1 = float(input(prompt="starting pop? for seed 1"))
+seed2 = float(input(prompt="starting pop? for seed 2"))
+
+
+r = float(input(prompt="rate?"))
+n = int(input(prompt="iters?"))
+
+vals1 = []
+vals1.append(seed1)
+
+vals2 = []
+vals2.append(seed2)
+
+def logistic(cx):
+    return r*cx*(1-cx)
+    
+pIGraph = graph(title="pop fraction vs iterate number", xtitle="iterate number", ytitle="pop fraction")
+pIDots1 = gdots(graph=pIGraph, color=color.red)
+pICurve1 = gcurve(graph=pIGraph, color=color.red)
+
+pIDots2 = gdots(graph=pIGraph, color=color.blue)
+pICurve2 = gcurve(graph=pIGraph, color=color.blue)
+
+sepGraph = graph(title="separation between seed1 and seed2 vs. time", xtitle = "time", ytitle = "separation")
+sepDots = gdots(graph=sepGraph)
+for i in range(0,n,1):
+    if i == 0:
+        pIDots1.plot(0,vals1[0])
+        pICurve1.plot(0,vals1[0])
+        
+        pIDots2.plot(0,vals2[0])
+        pICurve2.plot(0,vals2[0])  
+        
+        sepDots.plot(i,vals2[0]-vals1[0])
+    else:
+        global vals1
+        vals1[i] = logistic(vals1[i-1])
+        pIDots1.plot(i,vals1[i])
+        pICurve1.plot(i,vals1[i])
+        
+        global vals2
+        vals2[i] = logistic(vals2[i-1])
+        pIDots2.plot(i,vals2[i])
+        pICurve2.plot(i,vals2[i])     
+        
+        sepGraph.plot(i,vals2[i]-vals1[i])
+
+        
+        
+        
+
