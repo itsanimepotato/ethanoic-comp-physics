@@ -1,0 +1,80 @@
+Web VPython 3.2
+scene = canvas(width=600, height=600)
+
+P2SMAg = graph(title='Period^2 vs Semi-major Axis^3', ytitle='T^2 (s^2)', xtitle='a^3 (m^3)')
+P2SMAc = gcurve(color=color.red, graph=P2SMAg)
+
+AU = 1.49597870700e11
+G = 6.674e-11
+
+sun = sphere(pos=vector(0,0,0), radius=1.5e10, texture="https://i.imgur.com/XdRTvzj.jpeg", shininess=0, emissive=True)
+
+jup = sphere(pos=vector(5.2*AU,0,0), radius=8e9, texture="https://i.imgur.com/5FbL240.jpeg", make_trail=True, retain=50, color=color.orange)
+sat = sphere(pos=vector(9.5*AU,0,0), radius=7e9, texture="https://i.imgur.com/5Pur4IE.jpeg", make_trail=True, retain=50, color=color.yellow)
+nep = sphere(pos=vector(30*AU,0,0), radius=5e9, texture="https://i.imgur.com/lyLpoMk.jpeg", make_trail=True, retain=50, color=color.blue)
+
+sun.mass = 1.9891e30
+adjMass = 5.9742e24
+jup.mass = 317.83 * adjMass
+sat.mass = 95.159 * adjMass
+nep.mass = 17.204 * adjMass
+
+jup.name = "Jupiter"
+
+sat.name = "Saturn"
+
+nep.name = "Neptune"
+
+
+planets = [jup, sat, nep]
+
+def startVel(r):
+    return vec(0, sqrt(G*sun.mass/r), 0)
+
+def gravity(star, satellite):
+    r_vec = star.pos - satellite.pos
+    r = mag(r_vec)
+    return G * star.mass * satellite.mass * norm(r_vec) / r**2
+
+for p in planets:
+    r = mag(p.pos - sun.pos)
+    p.vel = startVel(r)
+    p.acc = vec(0,0,0)
+    p.prevPos = p.pos
+    p.distances = []
+    p.timeTook = 0
+    p.finished = False
+
+dt = 3600
+t = 0
+print("This is on Aug 12, 2026")
+
+while any(not p.finished for p in planets):
+    rate(100000)
+    for p in planets:
+        if p.finished:
+            continue
+
+        # Update acceleration, velocity, and position
+        force = gravity(sun, p)
+        p.acc = force / p.mass
+        p.vel += p.acc * dt
+        p.pos += p.vel * dt
+        p.distances.append(mag(p.pos - sun.pos))
+        p.timeTook = t
+
+        # Detect orbit completion (crossing y=0 plane moving upward)
+        if p.prevPos.y < 0 and p.pos.y >= 0:
+            p.finished = True
+            RA = max(p.distances)
+            RP = min(p.distances)
+            a = (RA + RP)/2
+            T2 = p.timeTook**2
+            P2SMAc.plot(a**3, T2)
+            print(f"{p.name} done orbiting")
+            print("Semi-major axis:", a)
+            print("Period:", p.timeTook)
+
+        p.prevPos = p.pos
+
+    t += dt
