@@ -1,0 +1,66 @@
+Web VPython 3.2
+
+dt = 0.1
+tMin = 0
+tMax = 10
+time = 0
+
+g = graph(title ="x v t")
+gc = gcurve(color = color.blue, label= "-xt rk")
+gc2 = gcurve(color = color.red, label = "x^-t rk")
+gc3 = gcurve(color = color.yellow, label = "cos(xt) rk")
+
+gc4 = gcurve(color = color.green, label = "-xt euler")
+gc5 = gcurve(color = color.orange, label = "x^-t euler")
+gc6 = gcurve(color = color.purple, label = "cos(xt) euler")
+
+
+xs = 0.2
+xs2 = 1.1
+xs3 = 0.9
+
+xs4 = 0.2
+xs5 = 1.1
+xs6 = 0.9
+
+def eqOne(x, t):
+    return -x * t
+    
+def eqTwo(x, t):
+    return x**-t
+    
+def eqThree(x, t):
+    return cos(x * t)
+    
+def rk2(fxn, x, t):
+    k1 = fxn(x, t) * dt
+    k2 = fxn(x + k1/2, t + dt / 2)* dt
+    return x + k2
+    
+def euler(fxn, x, t):
+    return x + fxn(x, t) * dt
+    
+    
+for t in range(tMin, tMax, dt):
+    gc.plot(time, rk2(eqOne, xs, time))
+    xs = rk2(eqOne, xs, time)
+    
+    gc2.plot(time, rk2(eqTwo, xs2, time))
+    xs2 = rk2(eqTwo, xs2, time)
+    
+    gc3.plot(time, rk2(eqThree, xs3, time))
+    xs3 = rk2(eqThree, xs3, time)
+    
+    gc4.plot(time, euler(eqOne, xs4, time))
+    xs4 = euler(eqOne, xs4, time)
+    
+    gc5.plot(time, euler(eqTwo, xs5, time))
+    xs5 = euler(eqTwo, xs5, time)
+    
+    gc6.plot(time, euler(eqThree, xs6, time))
+    xs6 = euler(eqThree, xs6, time)
+    
+    time += dt
+    
+
+
