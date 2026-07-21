@@ -1,0 +1,559 @@
+Web VPython 3.2
+
+DCvsT = graph(title="Distance from center vs. Time", xtitle="Time", ytitle="Distance")
+DCvsTC = []
+orbitalRingBool = False
+
+colorsAvailable = [color.red, color.blue, color.green, color.cyan, color.magenta, color.yellow]
+
+scene.title = "<b>Multibody Gravitational Field</b>"
+scene.caption = "To start, select a preset if wanted and press the start button!\n"
+
+
+class Vector2:
+    def __init__(self, x, y):
+        self.x = x;
+        self.y = y;
+    def __add__(self, other):
+        self.x += other.x;
+        self.y += other.y; 
+        return self;
+    def __subtract__(self, other):
+        self.x -= other.x;
+        self.y -= other.y;
+        return self;  
+
+    def __multiply__(self, other):
+        self.x *= other;
+        self.y *= other;
+        return self;
+    def setX(self, x):
+        self.x = x;
+    def setY(self, y):
+        self.y = y;
+    def clone(self):
+        return Vector2(self.x, self.y);
+    def magsq(self):
+        return self.x*self.x + self.y*self.y;
+    def mag(self):
+        return sqrt(self.x*self.x + self.y*self.y);
+    def distsq(self, other):
+        return (self.x-other.x)*(self.x-other.x) + (self.y-other.y)*(self.y-other.y);
+    def toString(self):
+        return f"<{self.x}, {self.y}>"
+
+class EquipotentialLine:
+    def __init__(self, col=vec(random(),random(),random())):
+        #self.curve = curve(radius=fieldDA/3, color=col); 
+        self.color = col;
+    def initField(self, field):
+        global field;
+        for x in range(0, fieldCount):
+            for y in range(0, fieldCount):
+                field[x][y].flag = False;
+                field[x][y].color = vec(255,255,255); 
+    def greedyAdd(self, x, y, tol, prevVal):
+        global field;
+        #print(x, y, field[x][y].flag);
+        if(x < 0 or y < 0 or x >= fieldCount or y >= fieldCount):
+            #print("NOT ADDING", x, y);
+            return;
+        else:
+            if(not field[x][y].flag):
+                #print("a");
+                if(abs((field[x][y].pos.y-prevVal) / prevVal) < tol):
+                    #print("b");
+                    #rate(100);
+                    #self.curve.append(vec(x*fieldDA, 0, y*fieldDA));
+                    field[x][y].flag = True;
+                    field[x][y].color = self.color;
+                    self.greedyAdd(x+1, y, tol, prevVal);
+                    self.greedyAdd(x-1, y, tol, prevVal); 
+                    self.greedyAdd(x, y+1, tol, prevVal); 
+                    self.greedyAdd(x, y-1, tol, prevVal); #not a fan of the recursion but it already will barely run so idc tbh 
+            
+    def clear(self):
+        self.curve.visible = False;
+        self.curve = curve(color=self.curve.color); 
+
+regTol = 0.09;
+meanTol = 0.23;
+
+def runFieldLines():
+    meanX = 0;
+    meanY = 0;
+    for o in Objects:
+        meanX += o.getX()/len(Objects);
+        meanY += o.getY()/len(Objects);
+        
+    larr[0].initField(field);
+    for i in range(1, len(larr)):
+        l = i * (round(fieldCount / len(larr))-1)
+        larr[i].greedyAdd(l, l, regTol, field[l][l].pos.y);
+    meanX = round(meanX);
+    meanY = round(meanY);
+    larr[0].greedyAdd(meanX, meanY, meanTol, field[meanX][meanY].pos.y);
+
+fieldCount = 32; 
+fieldWidth = 8e11; #do not ask what the units are
+fieldDA = fieldWidth / (fieldCount-1); 
+downConstant = log10(fieldDA);
+fieldExponent = 1; 
+field = [[arrow(pos=vec(y*fieldDA, 0, x*fieldDA), flag=False) for x in range(0, fieldCount)] for y in range(0, fieldCount)];
+
+def stretch(evt):
+    global fieldCount;
+    global fieldDA;
+    global downConstant;
+    global field;
+    global fieldWidth;
+    if(evt.id is "fieldCount"):
+        for x in range(0, fieldCount):
+            for y in range(0, fieldCount):
+                field[x][y].visible = False;
+        fieldCount = evt.value;
+        fcWT.text='Field resolution: {0} subdivisions'.format(evt.value)
+        fieldDA = fieldWidth / (fieldCount-1); 
+        downConstant = log10(fieldDA);
+        field = [[arrow(pos=vec(y*fieldDA, 0, x*fieldDA), flag=False) for x in range(0, fieldCount)] for y in range(0, fieldCount)]; #a pretty notable issue: the field is larger at higher subdivisions. Idk why.
+        zeroField(field);
+        for o in Objects:
+            o.impactField(field, v2pos, gravityField);
+        normalizeField(field);
+        #print(fieldWidth, fieldCount, fieldDA);
+        #print(fieldCount * fieldDA);
+        #print(field[fieldCount-1][fieldCount-1].pos, field[fieldCount-1][fieldCount-1].pos+vec(1,0,1)*fieldDA);
+        #marker.pos = vec(1,0,1)*fieldWidth;
+        #marker.size=vec(1,1,1)*fieldDA;
+        
+        
+fcSlider = slider(bind=stretch, max=64, min=16, step=1, value=fieldCount, id="fieldCount");
+fcWT = wtext(text='Field resolution: {0} subdivisions'.format(fcSlider.value))
+
+def toggleRunning(b):
+    global running;
+    running = not running;
+    if(running):
+        b.text = "Click to pause the simulation";
+    else:
+        b.text = "Click to continue the simulation"; 
+
+def toggleLines(b):
+    global doFieldLines; 
+    global field;
+    doFieldLines = not doFieldLines;
+    if(doFieldLines):
+        b.text = "Click to turn off the field lines";
+        runFieldLines();
+    else:
+        b.text = "Click to re-enable the field lines"; 
+        for x in range(0, fieldCount):
+            for y in range(0, fieldCount):
+                field[x][y].flag = False;
+                field[x][y].color = vec(255,255,255); 
+
+def regTolStretch(evt):
+    global regTol; 
+    if(evt.id is "regTol"):
+        regTol = evt.value;
+        regTolWT.text = 'Iterated field line tolerance: {:1.2f}'.format(regTol)
+        runFieldLines();
+def meanTolStretch(evt):
+    global meanTol; 
+    if(evt.id is "meanTol"):
+        meanTol = evt.value;
+        meanTolWT.text = 'Mean object position field line tolerance: {:1.2f}'.format(meanTol)
+        runFieldLines();
+def fieldScaleStretch(evt):
+    global meanTol; 
+    if(evt.id is "meanTol"):
+        meanTol = evt.value;
+        meanTolWT.text = 'Mean object position field line tolerance: {:1.2f}'.format(meanTol)
+        runFieldLines();
+
+scene.append_to_caption('\n\n')
+menu(choices=['Choose a preset', 'Earth and the Sun', 'Binary system', 'Trinary system', 'Binary + Planet', 'Orbital ring', 'Syzygy', 'Random'], index=0, bind=chooseSystem);
+scene.append_to_caption('\n\n')
+runButton = button(bind=toggleRunning, text="Click to start the simulation");
+scene.append_to_caption('\n\n')
+integralButton = button(bind=ccButton, text="Click to compute a closed curve integral around the field");
+scene.append_to_caption('\n\n')
+runButton = button(bind=toggleLines, text="Click to enable equipotential coloring in the field");
+scene.append_to_caption('\n\n')
+regTolSlider = slider(bind=regTolStretch, max=1, min=0, step=0.01, value=regTol, id="regTol");
+regTolWT = wtext(text='Iterated field line tolerance: {:1.2f}'.format(regTolSlider.value))
+scene.append_to_caption('\n\n')
+meanTolSlider = slider(bind=meanTolStretch, max=1, min=0, step=0.01, value=meanTol, id="meanTol");
+meanTolWT = wtext(text='Mean object position field line tolerance: {:1.2f}'.format(meanTolSlider.value))
+scene.append_to_caption('\n\n')
+fieldScaleSlider = slider(bind=fieldScaleStretch, max=10, min=0.01, step=0.1, value=fieldExponent, id="fieldExponent");
+fieldScaleSliderWT = wtext(text="Field line scale exponent: {:1.1f}".format(fieldScaleSlider.value));
+
+
+G = 6.7e-11;
+#G*=4; #not figuring out dimensions and its consequences...
+#G=1;
+
+def printField(field):
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            str = (field[x][y].axis)
+            print(str, end=" ");
+        print();
+
+EPSILON = 1e-5
+
+def zeroPoint(field, x, y):
+    field[x][y].axis = vec(0,0,0);
+    field[x][y].pos.y = 0;
+
+def zeroField(field):
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            zeroPoint(field, x, y);
+
+
+def gravityField(field, v2pos, mass):
+    for y in range(0, fieldCount):
+        for x in range(0, fieldCount):
+            p = vector(x*fieldDA, 0, y*fieldDA);
+            #marker.pos = p;
+            p.x -= v2pos.x;#*fieldDA;
+            p.z -= v2pos.y;#*fieldDA;
+            #marker.axis=-p;
+            valMag = mag(p);
+            #field[x][y].axis += -hat(p)*0.1; #-(fieldDA / (valMag)) * p ; #test jargon, this is not gravity. 
+            if(valMag > fieldDA): #objects shouldnt impact themselves. this is relevant because of the field being discrete        
+                field[x][y].axis += -p*(G*mass)/(valMag**2);
+                field[x][y].pos.y -= (G*mass*fieldDA*downConstant)/(valMag**2);
+
+def testField(field, v2pos, mass):
+    for y in range(0, fieldCount):
+        for x in range(0, fieldCount):
+            field[x][y].axis = vec(2*x, 0, 2*y) * fieldDA;
+
+
+def normalizeField(field):
+    for y in range(0, fieldCount):
+        for x in range(0, fieldCount):
+            field[x][y].axis *= 1.5
+            if(mag(field[x][y].axis) > fieldDA):
+                field[x][y].axis = hat(field[x][y].axis)*fieldDA
+
+
+
+t = 0;
+dt = 0.1; 
+
+class body:
+    def __init__(self, x, y, mass, dims, func, trail=False):
+        #print(x, y, dims);
+        self.obj = func(pos=vec(x, 0, y), size=vec(dims, dims, dims), make_trail=trail);
+        self.obj.vel = vec(0,0,0);
+        self.obj.acc = vec(0,0,0);
+        self.obj.mass = mass;
+    def applyForce(self, field):
+        ax = field[round(self.obj.pos.x/fieldDA)][round(self.obj.pos.z/fieldDA)];
+        if(ax is not None):
+            #self.obj.acc = (ax.axis/fieldDA) * -(ax.pos.y); 
+            self.obj.acc = ax.axis;
+            self.obj.vel += self.obj.acc * dt / 2;
+            self.obj.pos += self.obj.vel * dt;
+            self.obj.vel += self.obj.acc * dt / 2;
+        collisionFlag = False;
+        if(self.obj.pos.x+self.obj.vel.x*dt >= fieldWidth-fieldDA or self.obj.pos.x+self.obj.vel.x*dt < fieldDA): 
+            self.obj.vel.x *= -1; 
+            collisionFlag = True;
+        if(self.obj.pos.z+self.obj.vel.z*dt > fieldWidth-fieldDA or self.obj.pos.z+self.obj.vel.z*dt < fieldDA):
+            self.obj.vel.z *= -1;
+            collisionFlag = True;
+        if(collisionFlag):
+            self.obj.pos += self.obj.vel * 1.1 * dt;
+            self.obj.vel *= 0.9
+    def getX(self):
+        return round(self.obj.pos.x/fieldDA);
+    def getY(self):
+        return round(self.obj.pos.z/fieldDA);
+    def setVel(self, v):
+        self.obj.vel = v;
+    def setColor(self, c):
+        self.obj.color = c;
+    def impactField(self, field, v2, func):
+        v2.x = self.obj.pos.x;
+        v2.y = self.obj.pos.z;
+        func(field, v2, self.obj.mass); 
+    def dist(self, other):
+        return self.obj.pos - other.obj.pos
+    def moveTo(self, v):
+        self.obj.pos = v;
+    def getMass(self):
+        return self.obj.mass;
+            
+scene.append_to_title("<div id='fps'/>\n")
+scene.append_to_title("""This is a discrete gravity field simulation. You can define the precision of the field using the field resolution slider
+Due to being a discrete field, there will be inherent error in the simulation, you can measure said error via the closed curve integral button""")
+
+#obj = box(pos=vec(fieldWidth/2, fieldWidth/2, 0));
+
+rate(60);
+#printField(field); 
+
+#floor = box(pos=vec(fieldWidth/2,0,fieldWidth/2), size=vec(fieldWidth, 0.1, fieldWidth), opacity=0.5);
+#marker1 = arrow(size=vec(1,1,1)*fieldDA, color=color.yellow); 
+#marker2 = arrow(size=vec(1,1,1), color=color.red); 
+
+def ccButton():
+    closedCurveIntegral(4); 
+
+def closedCurveIntegral(rfactor=4):
+    global running;
+    runningCache = running;
+    running = False;
+    obj = body(fieldDA * fieldCount/2 + fieldWidth/8, fieldDA*fieldCount/2, 1, fieldDA*0.2, sphere, trail=False);
+    obj.setColor(color.green);
+    sum = 0;
+    r = fieldCount * rfactor;
+    print(r);
+    for i in range(0, fieldCount, 1):
+        rate(r);
+        circPos = vec(0, 0, fieldDA*i); 
+        vel = vec(0, 0, 1);
+        obj.moveTo(circPos); 
+        obj.obj.make_trail=True;
+        ax = field[round(obj.obj.pos.x/fieldDA)][round(obj.obj.pos.z/fieldDA)];
+        sum += dot((ax.axis), hat(vel));
+    for i in range(0, fieldCount, 1):
+        rate(r);
+        circPos = vec(fieldDA*i, 0, fieldWidth); 
+        vel = vec(1, 0, 0);
+        obj.moveTo(circPos); 
+        obj.obj.make_trail=True;
+        ax = field[round(obj.obj.pos.x/fieldDA)][round(obj.obj.pos.z/fieldDA)];
+        sum += dot((ax.axis), hat(vel));
+    for i in range(0, fieldCount, 1):
+        rate(r);
+        circPos = vec(fieldWidth, 0, fieldWidth-fieldDA*i); 
+        vel = vec(0, 0, -1);
+        obj.moveTo(circPos); 
+        obj.obj.make_trail=True;
+        ax = field[round(obj.obj.pos.x/fieldDA)][round(obj.obj.pos.z/fieldDA)];
+        sum += dot((ax.axis), hat(vel));
+    for i in range(0, fieldCount, 1):
+        rate(r);
+        circPos = vec(fieldWidth-fieldDA*i, 0, 0); 
+        vel = vec(-1, 0, 0);
+        obj.moveTo(circPos); 
+        obj.obj.make_trail=True;
+        ax = field[round(obj.obj.pos.x/fieldDA)][round(obj.obj.pos.z/fieldDA)];
+        sum += dot((ax.axis), hat(vel));
+    
+        
+    print("Closed curve integral of the field (N): ", f"{sum:.8f}");
+    nf = 0;
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            nf += mag(field[x][y].axis);
+    nf /= (fieldCount**2); 
+    ratio = (sum/nf)*100
+    print("Closed curve integral % of the average field magnitude: ", f"{ratio:.8f}%"); 
+    #print("The integral of the field / the mass of the objects*G (expected to be effectively 0): ");
+    #for o in Objects:
+    #    print(sum/o.obj.mass*G);  
+    obj.obj.visible = False;
+    obj.obj.clear_trail(); 
+    running = runningCache;
+    return sum;
+    
+    
+Objects = [];
+fieldFunction = gravityField;
+
+def chooseSystem(m):
+    global Objects;
+    global fieldDA;
+    global downConstant;
+    global field;
+    global fieldWidth;
+    val = m.selected
+    for o in Objects:
+        o.obj.visible=False;
+    Objects = [];
+    
+    t=0
+    global DCvsT, DCvsTC, orbitalRingBool
+    DCvsT.delete()
+    DCvsT = graph(title="Distance from center vs. Time", xtitle="Time", ytitle="Distance", fast=False)
+    DCvsTC = []
+    orbitalRingBool = False
+
+    if(val == 'Earth and the Sun'):     
+        #Earth and the sun:
+        obj1 = body(fieldDA*fieldCount/2,fieldDA*fieldCount/2, 1.9891e30, fieldDA*3, sphere)
+        obj2 = body(fieldDA*fieldCount/2 + 1.5e11,fieldDA*fieldCount/2, 5.97e24, fieldDA*1, sphere, trail=False)
+        
+        
+        #obj2.setVel(vec(sqrt(obj1.getMass()/mag(obj1.dist(obj2))) * 1,0,0));
+        
+        obj2.setVel(vec(0,0,-pi) * sqrt(obj1.getMass()/mag(obj1.dist(obj2)))) #our units are so messed up there's a division by pi somewhere :skull:
+        
+        #obj2.setVel(vec(0,0,-1) * sqrt(obj1.getMass()/mag(obj1.dist(obj2))))
+        
+        obj1.setColor(color.red);
+        obj2.setColor(color.blue);
+        
+        Objects = [obj1, obj2]; 
+    elif(val == 'Binary system'):
+        #Binary star system: 
+        obj1 = body(fieldDA*fieldCount/3,fieldDA*fieldCount/3, 1.9891e31, fieldDA*3, sphere, trail=False)
+        obj2 = body(fieldDA*2*fieldCount/3,fieldDA*2*fieldCount/3, 1.9891e31, fieldDA*3, sphere, trail=False)
+        
+        obj1.setVel(vec(sqrt(obj2.getMass()/mag(obj1.dist(obj2))),0,-sqrt(obj2.getMass()/mag(obj1.dist(obj2)))));
+        obj2.setVel(vec(-sqrt(obj1.getMass()/mag(obj2.dist(obj1))),0,sqrt(obj2.getMass()/mag(obj1.dist(obj2)))));
+        
+        Objects = [obj1, obj2]; 
+    elif(val == 'Trinary system'):
+        #Trinary star system: 
+        obj1 = body(fieldDA*fieldCount/2,   fieldDA*fieldCount/3, 1.9891e30, fieldDA*3, sphere)
+        obj2 = body(fieldDA*fieldCount/2, fieldDA*2*fieldCount/3, 1.9891e30, fieldDA*3, sphere)
+        obj3 = body(fieldDA*fieldCount/2,   fieldDA*fieldCount/2, 1.9891e30, fieldDA*3, sphere)
+        
+        obj1.setVel(vec(sqrt(obj3.getMass()/mag(obj1.dist(obj3)))*pi,0,0));
+        obj2.setVel(vec(-sqrt(obj3.getMass()/mag(obj1.dist(obj3)))*pi,0,0));
+        
+        Objects = [obj1, obj2, obj3];
+    elif(val == 'Binary + Planet'):
+        fieldWidth = 8e11;
+        obj1 = body(fieldWidth/2 - 1e11/3, fieldWidth/2 - 1e11/3, 1e31, fieldDA*3, sphere, trail=False)
+        obj2 = body(fieldWidth/2 + 1e11/3,fieldWidth/2 + 1e11/3, 1e31, fieldDA*3, sphere, trail=False)
+        
+        obj1.setVel(vec(sqrt(obj2.getMass()/mag(obj1.dist(obj2))),0,-sqrt(obj2.getMass()/mag(obj1.dist(obj2)))));
+        obj2.setVel(vec(-sqrt(obj1.getMass()/mag(obj2.dist(obj1))),0,sqrt(obj2.getMass()/mag(obj1.dist(obj2)))));
+        
+        obj3 = body(fieldWidth/2 + fieldDA*fieldCount/4, fieldWidth/2 + fieldDA*fieldCount/4, 5e24, fieldDA*1, sphere, trail=False); 
+        
+        
+        
+        obj3.setVel(vec(-1, 0, 1) * sqrt((obj2.getMass() + obj1.getMass()) / mag(obj3.obj.pos-(obj2.obj.pos+obj1.obj.pos)))*pi);
+        
+        Objects = [obj1, obj2, obj3]; 
+    elif(val == 'Orbital ring'):
+        #Orbital ring (Saturn): 
+        fieldWidth = 8e11;
+        bigObj = body(fieldWidth/2, fieldWidth/2, 4e32, fieldDA*2, sphere);
+        bigObj.setColor(color.red);
+        
+        Objects.append(bigObj);
+        
+        objC = 64; 
+        dTheta = 360/objC;
+        for i in range(0, objC):
+            #mass = ((random()*1.2+0.1)*1e31);
+            mass = 1e29;
+            #print((0.1+random()*0.8)*fieldWidth);
+            #circPos = vec(cos(t), 0, sin(t)) * (0.1+random()*0.8)*fieldWidth; 
+            circPos = vec(fieldWidth/2, 0, fieldWidth/2) + (vec(cos(radians(i*dTheta)), 0, sin(radians(i*dTheta))) * fieldWidth/8); 
+            obj = body(circPos.x, circPos.z, mass, fieldDA*1, sphere); 
+            obj.setVel(vec(-sin(radians(i*dTheta)), 0, cos(radians(i*dTheta))) * mag(circPos-vec(fieldWidth/2, 0, fieldWidth/2)) * 1/2);
+            #obj.setVel(random() * obj.getMass() * vec(random()-0.5, 0, random()-0.5));
+            #dist = obj.dist(bigObj); 
+            #perp = hat(vec(dist.x, 0, -dist.z));
+            #obj.setVel(perp*pi*(sqrt(bigObj.getMass()/mag(obj.dist(bigObj)))));
+            
+            Objects.append(obj); 
+    elif(val == 'Syzygy'):
+        #straight line 
+        fieldWidth = 8e11;
+        bigObj = body(fieldWidth/2, fieldWidth/2, 4e31, fieldDA*2, sphere);
+        bigObj.setColor(color.red);
+         
+        Objects.append(bigObj);
+         
+        numPlanets = 5
+        objC = 64; 
+        dTheta = 360/objC;
+        for i in range(numPlanets):
+            diff = -int(numPlanets/2) + i
+            
+            mass = 1e29;
+            circPos = vec(fieldWidth/2, 0, fieldWidth/2) + vec(diff,0,0) * fieldWidth/8; 
+            print(circPos)
+            obj = body(circPos.x, circPos.z, mass, fieldDA*1, sphere); 
+            obj.setVel(vec(-sin(radians(i*dTheta)), 0, cos(radians(i*dTheta))) * mag(circPos-vec(fieldWidth/2, 0, fieldWidth/2)) * 1/2);
+            Objects.append(obj);         
+    
+    elif(val == 'Random'):
+        #random placement 
+        fieldWidth = 8e11;
+
+        numPlanets = 5
+        objC = 64; 
+        dTheta = 360/objC;
+        for i in range(numPlanets):
+            mass = 1e30;
+            circPos = vec(random()*fieldWidth, 0, random()*fieldWidth)
+            #circPos.x += random(-fieldWidth/4, fieldWidth/4)
+            #circPos.z += random(-fieldWidth/4, fieldWidth/4)
+            obj = body(circPos.x, circPos.z, mass, fieldDA*1, sphere); 
+            obj.setVel(vec(0,0,0))
+            Objects.append(obj);               
+    
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            field[x][y].visible = False;
+    fieldDA = fieldWidth / (fieldCount-1); 
+    downConstant = log10(fieldDA);
+    field = [[arrow(pos=vec(y*fieldDA, 0, x*fieldDA)) for x in range(0, fieldCount)] for y in range(0, fieldCount)];
+    zeroField(field);
+    for o in Objects:
+        o.impactField(field, v2pos, fieldFunction);
+    #closedCurveIntegral();
+    scene.center = vec(fieldWidth/2, 0, fieldWidth/2);
+    normalizeField(field);
+    #print(fieldWidth);
+    
+    for i in range(len(Objects)):
+        global colorsAvailable
+        randNum = int(i/len(colorsAvailable))
+        print(randNum)
+        c = gcurve(label=f"Object {i}") 
+        c.color=colorsAvailable[int(i/colorsAvailable)]
+        DCvsTC.append(c)
+
+v2pos = Vector2(0,0);
+running = False; 
+doFieldLines = False;
+
+zeroField(field);
+for o in Objects:
+        o.impactField(field, v2pos, fieldFunction);
+        
+normalizeField(field);
+
+larr = [];
+for i in range(0, 16):
+    l = EquipotentialLine(col=vec(random(),random(),random()))
+    larr.append(l);
+
+while(1):
+    rate(60);    
+    if(running):        
+        for o in Objects:
+            o.applyForce(field);
+        
+        zeroField(field);
+        meanX = 0;
+        meanY = 0;
+        for o in Objects:
+            o.impactField(field, v2pos, fieldFunction);
+            meanX += o.getX()/len(Objects);
+            meanY += o.getY()/len(Objects);
+        
+        if(doFieldLines):
+            runFieldLines();
+        
+        
+        for i in range(len(Objects)):
+            DCvsTC[i].plot(t,mag(Objects[i].obj.pos-vec(fieldWidth/2,0,fieldWidth/2)))
+        
+        normalizeField(field);
+        t += dt;    
