@@ -1,0 +1,72 @@
+Web VPython 3.2
+
+scene = canvas(width=600, height=600)
+
+G = 6.67e-11
+
+sun = sphere(pos = vector(0, 0, 0), radius = 12e9, texture = "https://i.imgur.com/XdRTvzj.jpeg", shininess = 0, emissive=True, make_trail = True)
+earth = sphere(pos = vector(1.5e11, 0, 0), radius = 6.37e9, texture=textures.earth, make_trail = True, retain=30)
+
+sun.mass = 1.9891e30
+earth.mass = 5.97e24
+
+sun.velocity = vector(0,0,0)
+earth.velocity = vector(0,21000,0)
+
+sun.acc = vector(0,0,0)
+earth.acc = vector(0,0,0)
+
+def gravity(star, satellite):
+    smass = star.mass 
+    emass = satellite.mass
+    
+    ab = satellite.pos - star.pos
+    r = mag(ab)
+    nab = norm(ab)
+    
+    return nab*((-G*smass*emass)/(r*r))
+
+t = 0 
+dt = 3600
+
+r_min = mag(earth.pos - sun.pos)
+r_max = r_min
+
+prev_y = earth.pos.y
+crossed = False
+
+while True:
+    rate(1000)
+
+    earth.acc = gravity(sun,earth)/earth.mass
+    sun.acc = gravity(earth,sun)/sun.mass
+
+    earth.velocity += earth.acc*dt
+    sun.velocity += sun.acc*dt
+
+    earth.pos += earth.velocity*dt
+    sun.pos += sun.velocity*dt
+
+    r = mag(earth.pos - sun.pos)
+    if r < r_min:
+        r_min = r
+    if r > r_max:
+        r_max = r
+
+    if prev_y < 0 and earth.pos.y >= 0 and earth.pos.x > 0:
+        if crossed:
+            break
+        crossed = True
+
+    prev_y = earth.pos.y
+    t += dt
+
+    perihelion = r_min
+    aphelion = r_max
+    eccentricity = (aphelion - perihelion) / (aphelion + perihelion)
+    
+    if crossed:
+        print_options(clear = True)
+        print(f"Perihelion: {perihelion} meters,\nAphelion: {aphelion} meters,\nEccentricity: {eccentricity}")
+        sphere(pos = vector(aphelion-perihelion,0,0), radius=sun.radius/2)
+        crossed = False
