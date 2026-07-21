@@ -1,0 +1,239 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, tMin, tMax, rmseGraph, rmseCurve, totalTime, dt, rmse_central, rmse_forward, rmseCentralCurve, rmseForwardCurve, t;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    tMin = 1["-u"]()["*"](1);
+    "4";
+    tMax = 2.5;
+    "6";
+    rmseGraph = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "RMSE vs. Time"})]);
+    "7";
+    rmseCurve = curve();
+    "9";
+    totalTime = tMax["-"](1["*"](tMin));
+    "10";
+    dt = totalTime["/"](67);
+    "12";
+    async function p(t) {
+        var ρσ_ls, total;
+        "13";
+        total = .8["*"](t)["*"](t)["*"](t)["*"](t)["+"](1["-u"]()["*"](2.2)["*"](t)["*"](t)["*"](t))["+"](1.5["*"](t))["+"](1);
+        "14";
+        return total;
+    };
+    if (!p.__argnames__) Object.defineProperties(p, {
+        __argnames__ : {value: ["t"]},
+        __module__ : {value: null}
+    });
+
+    "16";
+    async function v(t) {
+        var ρσ_ls, total;
+        "17";
+        total = 3.2["*"](t)["*"](t)["*"](t)["+"](1["-u"]()["*"](6.6)["*"](t)["*"](t))["+"](1.5);
+        "18";
+        return total;
+    };
+    if (!v.__argnames__) Object.defineProperties(v, {
+        __argnames__ : {value: ["t"]},
+        __module__ : {value: null}
+    });
+
+    "21";
+    async function vC(t) {
+        var ρσ_ls, total;
+        "22";
+        total = (await p(t["+"](dt)))["-"](1["*"]((await p(t["-"](1["*"](dt))))));
+        "23";
+        total = total["/"](dt["*"](2));
+        "24";
+        return total;
+    };
+    if (!vC.__argnames__) Object.defineProperties(vC, {
+        __argnames__ : {value: ["t"]},
+        __module__ : {value: null}
+    });
+
+    "26";
+    async function centralDiff(t, dt) {
+        "27";
+        return (await p(t["+"](dt)))["-"](1["*"]((await p(t))))["/"](dt);
+    };
+    if (!centralDiff.__argnames__) Object.defineProperties(centralDiff, {
+        __argnames__ : {value: ["t", "dt"]},
+        __module__ : {value: null}
+    });
+
+    "29";
+    async function forwardDiff(t, dt) {
+        "30";
+        return (await p(t["+"](dt)))["-"](1["*"]((await p(t))))["/"](dt);
+    };
+    if (!forwardDiff.__argnames__) Object.defineProperties(forwardDiff, {
+        __argnames__ : {value: ["t", "dt"]},
+        __module__ : {value: null}
+    });
+
+    "32";
+    rmse_central = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: rmseGraph, color: color.blue, label: "central"})]);
+    "34";
+    async function centralDiffSummation(dt) {
+        var ρσ_ls, numStepsCentral, centralDiffSum, timeStep, deviance;
+        "35";
+        numStepsCentral = 0;
+        "36";
+        centralDiffSum = 0;
+        "37";
+        timeStep = tMin;
+        "38";
+        while (timeStep["<="](tMax)) {
+            "39";
+            deviance = (await v(timeStep))["-"](1["*"]((await centralDiff(timeStep, dt))));
+            "40";
+            centralDiffSum=centralDiffSum["+"](Math.pow(deviance, 2));
+            "41";
+            timeStep=timeStep["+"](.001);
+            "42";
+            numStepsCentral=numStepsCentral["+"](1);
+        }
+        "43";
+        return sqrt(centralDiffSum["/"](numStepsCentral));
+    };
+    if (!centralDiffSummation.__argnames__) Object.defineProperties(centralDiffSummation, {
+        __argnames__ : {value: ["dt"]},
+        __module__ : {value: null}
+    });
+
+    "45";
+    dt = .001;
+    "46";
+    while (dt["<="](.05)) {
+        "47";
+        rmse_central.plot(dt, (await centralDiffSummation(dt)));
+        "48";
+        dt=dt["+"](.001);
+    }
+    "51";
+    rmse_forward = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: rmseGraph, color: color.red, label: "forward"})]);
+    "52";
+    async function forwardDiffSummation(dt) {
+        var ρσ_ls, numStepsForward, forwardDiffSum, timeStep, deviance;
+        "53";
+        numStepsForward = 0;
+        "54";
+        forwardDiffSum = 0;
+        "55";
+        timeStep = tMin;
+        "56";
+        while (timeStep["<="](tMax)) {
+            "57";
+            deviance = (await p(timeStep))["-"](1["*"]((await forwardDiff(timeStep, dt))));
+            "58";
+            forwardDiffSum=forwardDiffSum["+"](Math.pow(deviance, 2));
+            "59";
+            timeStep=timeStep["+"](.001);
+            "60";
+            numStepsForward=numStepsForward["+"](1);
+        }
+        "61";
+        return sqrt(forwardDiffSum["/"](numStepsForward));
+    };
+    if (!forwardDiffSummation.__argnames__) Object.defineProperties(forwardDiffSummation, {
+        __argnames__ : {value: ["dt"]},
+        __module__ : {value: null}
+    });
+
+    "63";
+    dt = .001;
+    "64";
+    while (dt["<="](.05)) {
+        "65";
+        rmse_forward.plot(dt, (await forwardDiffSummation(dt)));
+        "66";
+        dt=dt["+"](.001);
+    }
+    "68";
+    rmseGraph = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Velocity vs. Time", xtitle: "Time", ytitle: "Velocity"})]);
+    "70";
+    rmseCentralCurve = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: rmseGraph, color: color.blue, label: "Central Difference RMSE"})]);
+    "72";
+    rmseForwardCurve = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: rmseGraph, color: color.red, label: "Forward Difference RMSE"})]);
+    "74";
+    for (var ρσ_Index1 = tMin; ρσ_Index1["<"](tMax); ρσ_Index1=ρσ_Index1["+"](.002)) {
+        t = ρσ_Index1;
+        "75";
+        rmseCentralCurve.plot(t, (await vC(t)));
+        "76";
+        rmseForwardCurve.plot(t, (await vC(t)));
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

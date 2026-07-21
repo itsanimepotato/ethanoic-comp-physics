@@ -1,0 +1,248 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var numDays, area1, area2;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, scene, G, sun, earth, t, dt, r_min, r_max, prev_y, crossed, rad, showArea, dAGraph, dACurve, r, perihelion, aphelion, eccentricity;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    scene = ρσ_interpolate_kwargs.call(this, canvas, [ρσ_desugar_kwargs({width: 600, height: 600})]);
+    "5";
+    G = 6.67e-11;
+    "7";
+    sun = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(0, 0, 0), radius: 12e9, texture: "https://i.imgur.com/XdRTvzj.jpeg", shininess: 0, emissive: true, make_trail: true})]);
+    "8";
+    earth = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(15e10, 0, 0), radius: 637e7, texture: textures.earth, make_trail: true, retain: 30})]);
+    "10";
+    sun.mass = 1.9891e30;
+    "11";
+    earth.mass = 5.97e24;
+    "13";
+    sun.velocity = vector(0, 0, 0);
+    "14";
+    earth.velocity = vector(0, 21e3, 0);
+    "16";
+    sun.acc = vector(0, 0, 0);
+    "17";
+    earth.acc = vector(0, 0, 0);
+    "19";
+    async function gravity(star, satellite) {
+        var ρσ_ls, smass, emass, ab, r, nab;
+        "20";
+        smass = star.mass;
+        "21";
+        emass = satellite.mass;
+        "23";
+        ab = satellite.pos["-"](1["*"](star.pos));
+        "24";
+        r = mag(ab);
+        "25";
+        nab = norm(ab);
+        "27";
+        return nab["*"](1["-u"]()["*"](G)["*"](smass)["*"](emass)["/"](r["*"](r)));
+    };
+    if (!gravity.__argnames__) Object.defineProperties(gravity, {
+        __argnames__ : {value: ["star", "satellite"]},
+        __module__ : {value: null}
+    });
+
+    "29";
+    t = 0;
+    "30";
+    dt = 3600;
+    "32";
+    r_min = mag(earth.pos["-"](1["*"](sun.pos)));
+    "33";
+    r_max = r_min;
+    "35";
+    prev_y = earth.pos.y;
+    "36";
+    crossed = false;
+    "38";
+    rad = ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ sun.pos, earth.pos ])})]);
+    "39";
+    showArea = true;
+    "40";
+    numDays = 0;
+    "42";
+    dAGraph = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "dA vs t", xtitle: "t", ytitle: "dA"})]);
+    "43";
+    dACurve = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: dAGraph})]);
+    "45";
+    async function days(t) {
+        "46";
+        if (ρσ_equals(t["%"](86400), 0)) {
+            "47";
+            "48";
+            numDays=numDays["+"](1);
+        }
+    };
+    if (!days.__argnames__) Object.defineProperties(days, {
+        __argnames__ : {value: ["t"]},
+        __module__ : {value: null}
+    });
+
+    "50";
+    area1 = 0;
+    "51";
+    area2 = 0;
+    "53";
+    while (true) {
+        "54";
+        (await rate(1e3));
+        "55";
+        (await days(t));
+        "56";
+        if (numDays[">="](190) || numDays["<="](10)) {
+            "57";
+            ρσ_interpolate_kwargs.call(rad, rad.append, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ sun.pos, earth.pos ]), color: color.blue})]);
+            "58";
+            area1=area1["+"](.5["*"](mag(sun.pos["-"](1["*"](earth.pos))))["*"](mag(earth.velocity["*"](dt))));
+            "59";
+        } else if (numDays[">="](90) && numDays["<="](110)) {
+            "60";
+            ρσ_interpolate_kwargs.call(rad, rad.append, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ sun.pos, earth.pos ]), color: color.red})]);
+            "61";
+            area2=area2["+"](.5["*"](mag(sun.pos["-"](1["*"](earth.pos))))["*"](mag(earth.velocity["*"](dt))));
+            "62";
+        } else {
+            "63";
+            showArea = false;
+        }
+        "66";
+        dACurve.plot(t, abs(area2["-"](1["*"](area1))));
+        "68";
+        earth.acc = (await gravity(sun, earth))["/"](earth.mass);
+        "69";
+        sun.acc = (await gravity(earth, sun))["/"](sun.mass);
+        "71";
+        earth.velocity=earth.velocity["+"](earth.acc["*"](dt));
+        "72";
+        sun.velocity=sun.velocity["+"](sun.acc["*"](dt));
+        "74";
+        earth.pos=earth.pos["+"](earth.velocity["*"](dt));
+        "75";
+        sun.pos=sun.pos["+"](sun.velocity["*"](dt));
+        "77";
+        rad = ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ sun.pos, earth.pos ])})]);
+        "80";
+        r = mag(earth.pos["-"](1["*"](sun.pos)));
+        "81";
+        if (r["<"](r_min)) {
+            "82";
+            r_min = r;
+            "83";
+        }
+        if (r[">"](r_max)) {
+            "84";
+            r_max = r;
+            "86";
+        }
+        if (prev_y["<"](0) && earth.pos.y[">="](0) && earth.pos.x[">"](0)) {
+            "87";
+            if (crossed) {
+                "88";
+                break;
+            }
+            "89";
+            crossed = true;
+        }
+        "91";
+        prev_y = earth.pos.y;
+        "92";
+        t=t["+"](dt);
+        "94";
+        perihelion = r_min;
+        "95";
+        aphelion = r_max;
+        "96";
+        eccentricity = aphelion["-"](1["*"](perihelion))["/"](aphelion["+"](perihelion));
+        "98";
+        if (crossed) {
+            "99";
+            ρσ_interpolate_kwargs.call(this, print_options, [ρσ_desugar_kwargs({clear: true})]);
+            "100";
+            print("Perihelion: "["+"](ρσ_str.format("{}", perihelion))["+"](" meters,\nAphelion: ")["+"](ρσ_str.format("{}", aphelion))["+"](" meters,\nEccentricity: ")["+"](ρσ_str.format("{}", eccentricity))["+"](""));
+            "101";
+            ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(aphelion["-"](1["*"](perihelion)), 0, 0), radius: sun.radius["/"](2)})]);
+            "102";
+            crossed = false;
+            "104";
+            print("Area 1: "["+"](ρσ_str.format("{}", area1))["+"](", Area 2: ")["+"](ρσ_str.format("{}", area2))["+"](""));
+            "105";
+            "106";
+            area1 = 0;
+            "107";
+            area2 = 0;
+            "108";
+            numDays = 0;
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

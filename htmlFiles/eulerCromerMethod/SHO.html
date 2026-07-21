@@ -1,0 +1,161 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var velSign, t, prevTime;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, velVsPosGraph, velVsPosCurve, wall, ball, spring, equilPos, t, dt, velSign, prevTime;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    velVsPosGraph = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Velocity vs. Position", xtitle: "Position", ytitle: "Velocity"})]);
+    "4";
+    velVsPosCurve = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: velVsPosGraph})]);
+    "10";
+    scene.userzoom = false;
+    "11";
+    wall = ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](3), 0, 0), height: 3, length: .1, texture: textures.wood})]);
+    "12";
+    ball = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(4, 0, 0), radius: .3, color: color.yellow})]);
+    "13";
+    spring = ρσ_interpolate_kwargs.call(this, helix, [ρσ_desugar_kwargs({pos: wall.pos, axis: ball.pos["-"](1["*"](wall.pos)), coils: 20, radius: .2})]);
+    "18";
+    ball.vel = vector(0, 0, 0);
+    "19";
+    ball.acc = vector(0, 0, 0);
+    "20";
+    ball.mass = 10;
+    "22";
+    equilPos = vector(2, 0, 0);
+    "23";
+    spring.k = 200;
+    "25";
+    ball.pos = vector(4, 0, 0);
+    "28";
+    async function springForce(displacement) {
+        "29";
+        return 1["-u"]()["*"](spring.k)["*"](displacement["-"](1["*"](equilPos)));
+    };
+    if (!springForce.__argnames__) Object.defineProperties(springForce, {
+        __argnames__ : {value: ["displacement"]},
+        __module__ : {value: null}
+    });
+
+    "34";
+    t = 0;
+    "35";
+    dt = .01;
+    "40";
+    velSign = sign(ball.vel.x);
+    "41";
+    prevTime = 0;
+    "43";
+    async function maxima(t) {
+        var ρσ_ls, diffTime;
+        "44";
+        "45";
+        "46";
+        "47";
+        diffTime = t["-"](1["*"](prevTime));
+        "49";
+        if (ρσ_not_equals(velSign, sign(ball.vel.x))) {
+            "50";
+            print("extrema at "["+"](t));
+            "51";
+            print("amt of time between extrema: "["+"](diffTime));
+            "52";
+            prevTime = t;
+        }
+        "53";
+        velSign = sign(ball.vel.x);
+    };
+    if (!maxima.__argnames__) Object.defineProperties(maxima, {
+        __argnames__ : {value: ["t"]},
+        __module__ : {value: null}
+    });
+
+    "55";
+    while (true) {
+        "56";
+        (await rate(100));
+        "57";
+        t=t["+"](dt);
+        "59";
+        ball.acc = (await springForce(ball.pos))["/"](ball.mass);
+        "61";
+        ball.vel=ball.vel["+"](ball.acc["*"](dt));
+        "63";
+        ball.pos=ball.pos["+"](ball.vel["*"](dt));
+        "65";
+        spring.axis = ball.pos["-"](1["*"](wall.pos));
+        "66";
+        (await maxima(t));
+        "69";
+        velVsPosCurve.plot(ball.pos.x, ball.vel.x);
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

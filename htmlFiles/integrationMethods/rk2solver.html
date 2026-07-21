@@ -1,0 +1,195 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, dt, tMin, tMax, time, g, gc, gc2, gc3, gc4, gc5, gc6, xs, xs2, xs3, xs4, xs5, xs6, t;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    dt = .1;
+    "4";
+    tMin = 0;
+    "5";
+    tMax = 10;
+    "6";
+    time = 0;
+    "8";
+    g = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "x v t"})]);
+    "9";
+    gc = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({color: color.blue, label: "-xt rk"})]);
+    "10";
+    gc2 = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({color: color.red, label: "x^-t rk"})]);
+    "11";
+    gc3 = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({color: color.yellow, label: "cos(xt) rk"})]);
+    "13";
+    gc4 = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({color: color.green, label: "-xt euler"})]);
+    "14";
+    gc5 = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({color: color.orange, label: "x^-t euler"})]);
+    "15";
+    gc6 = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({color: color.purple, label: "cos(xt) euler"})]);
+    "18";
+    xs = .2;
+    "19";
+    xs2 = 1.1;
+    "20";
+    xs3 = .9;
+    "22";
+    xs4 = .2;
+    "23";
+    xs5 = 1.1;
+    "24";
+    xs6 = .9;
+    "26";
+    async function eqOne(x, t) {
+        "27";
+        return 1["-u"]()["*"](x)["*"](t);
+    };
+    if (!eqOne.__argnames__) Object.defineProperties(eqOne, {
+        __argnames__ : {value: ["x", "t"]},
+        __module__ : {value: null}
+    });
+
+    "29";
+    async function eqTwo(x, t) {
+        "30";
+        return Math.pow(x, t["-u"]());
+    };
+    if (!eqTwo.__argnames__) Object.defineProperties(eqTwo, {
+        __argnames__ : {value: ["x", "t"]},
+        __module__ : {value: null}
+    });
+
+    "32";
+    async function eqThree(x, t) {
+        "33";
+        return cos(x["*"](t));
+    };
+    if (!eqThree.__argnames__) Object.defineProperties(eqThree, {
+        __argnames__ : {value: ["x", "t"]},
+        __module__ : {value: null}
+    });
+
+    "35";
+    async function rk2(fxn, x, t) {
+        var ρσ_ls, k1, k2;
+        "36";
+        k1 = (await fxn(x, t))["*"](dt);
+        "37";
+        k2 = (await fxn(x["+"](k1["/"](2)), t["+"](dt["/"](2))))["*"](dt);
+        "38";
+        return x["+"](k2);
+    };
+    if (!rk2.__argnames__) Object.defineProperties(rk2, {
+        __argnames__ : {value: ["fxn", "x", "t"]},
+        __module__ : {value: null}
+    });
+
+    "40";
+    async function euler(fxn, x, t) {
+        "41";
+        return x["+"]((await fxn(x, t))["*"](dt));
+    };
+    if (!euler.__argnames__) Object.defineProperties(euler, {
+        __argnames__ : {value: ["fxn", "x", "t"]},
+        __module__ : {value: null}
+    });
+
+    "44";
+    var ρσ_Iter1 = range(tMin, tMax, dt);
+    ρσ_Iter1 = ((typeof ρσ_Iter1[Symbol.iterator] === "function") ? (ρσ_Iter1 instanceof Map ? ρσ_Iter1.keys() : ρσ_Iter1) : Object.keys(ρσ_Iter1));
+    for (var ρσ_Index1 of ρσ_Iter1) {
+        t = ρσ_Index1;
+        "45";
+        gc.plot(time, (await rk2(eqOne, xs, time)));
+        "46";
+        xs = (await rk2(eqOne, xs, time));
+        "48";
+        gc2.plot(time, (await rk2(eqTwo, xs2, time)));
+        "49";
+        xs2 = (await rk2(eqTwo, xs2, time));
+        "51";
+        gc3.plot(time, (await rk2(eqThree, xs3, time)));
+        "52";
+        xs3 = (await rk2(eqThree, xs3, time));
+        "54";
+        gc4.plot(time, (await euler(eqOne, xs4, time)));
+        "55";
+        xs4 = (await euler(eqOne, xs4, time));
+        "57";
+        gc5.plot(time, (await euler(eqTwo, xs5, time)));
+        "58";
+        xs5 = (await euler(eqTwo, xs5, time));
+        "60";
+        gc6.plot(time, (await euler(eqThree, xs6, time)));
+        "61";
+        xs6 = (await euler(eqThree, xs6, time));
+        "63";
+        time=time["+"](dt);
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

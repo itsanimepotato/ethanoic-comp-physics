@@ -1,0 +1,203 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function round(num, n=0) {return Number(num.toFixed(n))}
+
+    var version, print, arange, __name__, type, ρσ_ls, ground, regentsBall, eulerImplicitBall, eulerExplicitBall, rkBall, startVel, G, gc, regentsCurve, eulerImplicitCurve, eulerExplicitCurve, rkCurve, data1, data2, data3, data4, t, dt, prev_v, changeYGraph, changeRegents, changeImplicit, changeExplicit, changeRK, data;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    ground = ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vec(0, 1["-u"]()["*"](1), 0), size: vec(10, .5, 1)})]);
+    "4";
+    regentsBall = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({color: color.purple, radius: .5, pos: vec(0, 0, 0)})]);
+    "5";
+    eulerImplicitBall = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({color: color.blue, radius: .5, pos: vec(1["-u"]()["*"](3), 0, 0)})]);
+    "6";
+    eulerExplicitBall = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({color: color.red, radius: .5, pos: vec(3, 0, 0)})]);
+    "7";
+    rkBall = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({color: color.green, radius: .5, pos: vec(6, 0, 0)})]);
+    "9";
+    startVel = vec(0, 45, 0);
+    "10";
+    regentsBall.velocity = startVel;
+    "11";
+    eulerImplicitBall.velocity = startVel;
+    "12";
+    eulerExplicitBall.velocity = startVel;
+    "13";
+    rkBall.velocity = startVel;
+    "15";
+    G = vec(0, 1["-u"]()["*"](9.81), 0);
+    "17";
+    gc = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Height vs Time", fast: false})]);
+    "18";
+    regentsCurve = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: gc, color: color.purple, label: "Regents"})]);
+    "19";
+    eulerImplicitCurve = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: gc, color: color.blue, label: "Implicit"})]);
+    "20";
+    eulerExplicitCurve = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: gc, color: color.red, label: "Explicit"})]);
+    "21";
+    rkCurve = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: gc, color: color.green, label: "RK"})]);
+    "23";
+    data1 = ρσ_list_decorate([]);
+    "24";
+    data2 = ρσ_list_decorate([]);
+    "25";
+    data3 = ρσ_list_decorate([]);
+    "26";
+    data4 = ρσ_list_decorate([]);
+    "28";
+    t = 0;
+    "29";
+    dt = .2763;
+    "31";
+    prev_v = rkBall.velocity;
+    "33";
+    while (regentsBall.pos.y[">="](1["-u"]()["*"](1)) || eulerImplicitBall.pos.y[">="](1["-u"]()["*"](1)) || eulerExplicitBall.pos.y[">="](1["-u"]()["*"](1)) || rkBall.pos.y[">="](1["-u"]()["*"](1))) {
+        "35";
+        (await rate(2["/"](dt)));
+        "37";
+        t=t["+"](dt);
+        "39";
+        regentsBall.pos = startVel["*"](t)["+"](.5["*"](G)["*"](t)["*"](t))["+"](vec(0, 0, 0));
+        "40";
+        regentsCurve.plot(t, regentsBall.pos.y);
+        "41";
+        data1.append(ρσ_list_decorate([ t, regentsBall.pos.y["-"](1["*"](regentsBall.pos.y)) ]));
+        "43";
+        eulerImplicitBall.velocity=eulerImplicitBall.velocity["+"](G["*"](dt));
+        "44";
+        eulerImplicitBall.pos=eulerImplicitBall.pos["+"](eulerImplicitBall.velocity["*"](dt));
+        "45";
+        eulerImplicitCurve.plot(t, eulerImplicitBall.pos.y);
+        "46";
+        data2.append(ρσ_list_decorate([ t, eulerImplicitBall.pos.y["-"](1["*"](regentsBall.pos.y)) ]));
+        "48";
+        eulerExplicitBall.pos=eulerExplicitBall.pos["+"](eulerExplicitBall.velocity["*"](dt));
+        "49";
+        eulerExplicitBall.velocity=eulerExplicitBall.velocity["+"](G["*"](dt));
+        "50";
+        eulerExplicitCurve.plot(t, eulerExplicitBall.pos.y);
+        "51";
+        data3.append(ρσ_list_decorate([ t, eulerExplicitBall.pos.y["-"](1["*"](regentsBall.pos.y)) ]));
+        "53";
+        rkBall.velocity=rkBall.velocity["+"](G["*"](dt));
+        "54";
+        rkBall.pos=rkBall.pos["+"](rkBall.velocity["+"](prev_v)["/"](2)["*"](dt));
+        "55";
+        prev_v = rkBall.velocity;
+        "56";
+        rkCurve.plot(t, rkBall.pos.y);
+        "57";
+        data4.append(ρσ_list_decorate([ t, rkBall.pos.y["-"](1["*"](regentsBall.pos.y)) ]));
+    }
+    "59";
+    changeYGraph = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Changes in Y", fast: false})]);
+    "60";
+    changeRegents = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: changeYGraph, color: color.purple, label: "Regents"})]);
+    "61";
+    changeImplicit = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: changeYGraph, color: color.blue, label: "Implicit"})]);
+    "62";
+    changeExplicit = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: changeYGraph, color: color.red, label: "Explicit"})]);
+    "63";
+    changeRK = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: changeYGraph, color: color.green, label: "RK"})]);
+    "65";
+    var ρσ_Iter1 = data1;
+    ρσ_Iter1 = ((typeof ρσ_Iter1[Symbol.iterator] === "function") ? (ρσ_Iter1 instanceof Map ? ρσ_Iter1.keys() : ρσ_Iter1) : Object.keys(ρσ_Iter1));
+    for (var ρσ_Index1 of ρσ_Iter1) {
+        data = ρσ_Index1;
+        "66";
+        changeRegents.plot(data);
+    }
+    "68";
+    var ρσ_Iter2 = data2;
+    ρσ_Iter2 = ((typeof ρσ_Iter2[Symbol.iterator] === "function") ? (ρσ_Iter2 instanceof Map ? ρσ_Iter2.keys() : ρσ_Iter2) : Object.keys(ρσ_Iter2));
+    for (var ρσ_Index2 of ρσ_Iter2) {
+        data = ρσ_Index2;
+        "69";
+        changeImplicit.plot(data);
+    }
+    "71";
+    var ρσ_Iter3 = data3;
+    ρσ_Iter3 = ((typeof ρσ_Iter3[Symbol.iterator] === "function") ? (ρσ_Iter3 instanceof Map ? ρσ_Iter3.keys() : ρσ_Iter3) : Object.keys(ρσ_Iter3));
+    for (var ρσ_Index3 of ρσ_Iter3) {
+        data = ρσ_Index3;
+        "72";
+        changeExplicit.plot(data);
+    }
+    "74";
+    var ρσ_Iter4 = data4;
+    ρσ_Iter4 = ((typeof ρσ_Iter4[Symbol.iterator] === "function") ? (ρσ_Iter4 instanceof Map ? ρσ_Iter4.keys() : ρσ_Iter4) : Object.keys(ρσ_Iter4));
+    for (var ρσ_Index4 of ρσ_Iter4) {
+        data = ρσ_Index4;
+        "75";
+        changeRK.plot(data);
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

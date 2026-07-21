@@ -1,0 +1,1689 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var field, fieldCount, fieldDA, downConstant, fieldWidth, running, doFieldLines, regTol, meanTol, fieldExponent, Objects, fieldFunction, DCvsT, DCvsTC, mDCvsT, mDCC, SKEvsT, kePlot;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function round(num, n=0) {return Number(num.toFixed(n))}
+
+    var version, print, arange, __name__, type, ρσ_ls, DCvsT, DCvsTC, mDCvsT, mDCC, SKEvsT, kePlot, regTol, meanTol, fieldCount, fieldWidth, fieldDA, downConstant, fieldExponent, field, y, fcSlider, fcWT, runButton, integralButton, regTolSlider, regTolWT, meanTolSlider, meanTolWT, fieldScaleSlider, fieldScaleSliderWT, G, EPSILON, magnetConstant, t, dt, Objects, fieldFunction, _GS_1, v2pos, running, doFieldLines, o, larr, cols, l, i, meanX, meanY, KE, totD, d, avgD;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "32";
+    DCvsT = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Distance from center vs. Time", xtitle: "Time", ytitle: "Distance"})]);
+    "33";
+    DCvsTC = ρσ_list_decorate([]);
+    "35";
+    mDCvsT = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Mean distance from center vs. Time", xtitle: "Time", ytitle: "Distance"})]);
+    "36";
+    mDCC = gcurve();
+    "38";
+    SKEvsT = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Total kinetic energy vs. Time", xtitle: "Time", ytitle: "KE (J)"})]);
+    "39";
+    kePlot = gcurve();
+    "41";
+    function Vector2() {;
+    }
+    Vector2.prototype.__init__ = async function __init__(x, y) {
+        var self = this;
+        "43";
+        self.x = x;
+        "44";
+        self.y = y;
+    };
+    if (!Vector2.prototype.__init__.__argnames__) Object.defineProperties(Vector2.prototype.__init__, {
+        __argnames__ : {value: ["x", "y"]},
+        __module__ : {value: null}
+    });
+    Vector2.__argnames__ = Vector2.prototype.__init__.__argnames__;
+    Vector2.__handles_kwarg_interpolation__ = Vector2.prototype.__init__.__handles_kwarg_interpolation__;
+    Vector2.prototype.__add__ = async function __add__(other) {
+        var self = this;
+        "46";
+        self.x=self.x["+"](other.x);
+        "47";
+        self.y=self.y["+"](other.y);
+        "48";
+        return self;
+    };
+    if (!Vector2.prototype.__add__.__argnames__) Object.defineProperties(Vector2.prototype.__add__, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.__subtract__ = async function __subtract__(other) {
+        var self = this;
+        "50";
+        self.x=self.x["-"](other.x);
+        "51";
+        self.y=self.y["-"](other.y);
+        "52";
+        return self;
+    };
+    if (!Vector2.prototype.__subtract__.__argnames__) Object.defineProperties(Vector2.prototype.__subtract__, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.__multiply__ = async function __multiply__(other) {
+        var self = this;
+        "55";
+        self.x=self.x["*"](other);
+        "56";
+        self.y=self.y["*"](other);
+        "57";
+        return self;
+    };
+    if (!Vector2.prototype.__multiply__.__argnames__) Object.defineProperties(Vector2.prototype.__multiply__, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.setX = async function setX(x) {
+        var self = this;
+        "59";
+        self.x = x;
+    };
+    if (!Vector2.prototype.setX.__argnames__) Object.defineProperties(Vector2.prototype.setX, {
+        __argnames__ : {value: ["x"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.setY = async function setY(y) {
+        var self = this;
+        "61";
+        self.y = y;
+    };
+    if (!Vector2.prototype.setY.__argnames__) Object.defineProperties(Vector2.prototype.setY, {
+        __argnames__ : {value: ["y"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.clone = async function clone() {
+        var self = this;
+        var ρσ_ls, _GS_1;
+        "63";
+        _GS_1 = new Vector2;
+        (await _GS_1.__init__(self.x, self.y));
+        return _GS_1;
+    };
+    if (!Vector2.prototype.clone.__module__) Object.defineProperties(Vector2.prototype.clone, {
+        __module__ : {value: null}
+    });
+    Vector2.prototype.magsq = async function magsq() {
+        var self = this;
+        "65";
+        return self.x["*"](self.x)["+"](self.y["*"](self.y));
+    };
+    if (!Vector2.prototype.magsq.__module__) Object.defineProperties(Vector2.prototype.magsq, {
+        __module__ : {value: null}
+    });
+    Vector2.prototype.mag = async function mag() {
+        var self = this;
+        "67";
+        return sqrt(self.x["*"](self.x)["+"](self.y["*"](self.y)));
+    };
+    if (!Vector2.prototype.mag.__module__) Object.defineProperties(Vector2.prototype.mag, {
+        __module__ : {value: null}
+    });
+    Vector2.prototype.distsq = async function distsq(other) {
+        var self = this;
+        "69";
+        return self.x["-"](1["*"](other.x))["*"](self.x["-"](1["*"](other.x)))["+"](self.y["-"](1["*"](other.y))["*"](self.y["-"](1["*"](other.y))));
+    };
+    if (!Vector2.prototype.distsq.__argnames__) Object.defineProperties(Vector2.prototype.distsq, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.toString = async function toString() {
+        var self = this;
+        "71";
+        return "<"["+"](ρσ_str.format("{}", self.x))["+"](", ")["+"](ρσ_str.format("{}", self.y))["+"](">");
+    };
+    if (!Vector2.prototype.toString.__module__) Object.defineProperties(Vector2.prototype.toString, {
+        __module__ : {value: null}
+    });
+    Vector2.prototype.__repr__ = async function __repr__() {
+                return "<"["+"](__name__)["+"](".")["+"](this.constructor.name)["+"](" #")["+"](this.ρσ_object_id)["+"](">");
+    };
+    Vector2.prototype.__str__ = async function __str__() {
+        return this.__repr__();
+    };
+    Object.defineProperty(Vector2.prototype, "__bases__", {value: []});
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    "73";
+    function EquipotentialLine() {;
+    }
+    EquipotentialLine.prototype.__init__ = async function __init__(col) {
+        var self = this;
+        "76";
+        self.color = col;
+    };
+    if (!EquipotentialLine.prototype.__init__.__argnames__) Object.defineProperties(EquipotentialLine.prototype.__init__, {
+        __argnames__ : {value: ["col"]},
+        __module__ : {value: null}
+    });
+    EquipotentialLine.__argnames__ = EquipotentialLine.prototype.__init__.__argnames__;
+    EquipotentialLine.__handles_kwarg_interpolation__ = EquipotentialLine.prototype.__init__.__handles_kwarg_interpolation__;
+    EquipotentialLine.prototype.initField = async function initField(field) {
+        var self = this;
+        var ρσ_ls, y, x;
+        "78";
+        "79";
+        for (var ρσ_Index1 = 0; ρσ_Index1["<"](fieldCount); ρσ_Index1++) {
+            x = ρσ_Index1;
+            "80";
+            for (var ρσ_Index2 = 0; ρσ_Index2["<"](fieldCount); ρσ_Index2++) {
+                y = ρσ_Index2;
+                "81";
+                ρσ_getitem(ρσ_getitem(field, x), y).flag = false;
+                "82";
+                ρσ_getitem(ρσ_getitem(field, x), y).color = vec(1, 1, 1);
+            }
+        }
+    };
+    if (!EquipotentialLine.prototype.initField.__argnames__) Object.defineProperties(EquipotentialLine.prototype.initField, {
+        __argnames__ : {value: ["field"]},
+        __module__ : {value: null}
+    });
+    EquipotentialLine.prototype.greedyAdd = async function greedyAdd(x, y, tol, prevVal) {
+        var self = this;
+        "84";
+        "86";
+        if (x["<"](0) || y["<"](0) || x[">="](fieldCount) || y[">="](fieldCount)) {
+            "88";
+            return;
+            "89";
+        } else {
+            "90";
+            if (!(ρσ_getitem(ρσ_getitem(field, x), y).flag)) {
+                "92";
+                if (abs(ρσ_getitem(ρσ_getitem(field, x), y).pos.y["-"](1["*"](prevVal))["/"](prevVal))["<"](tol)) {
+                    "96";
+                    ρσ_getitem(ρσ_getitem(field, x), y).flag = true;
+                    "97";
+                    ρσ_getitem(ρσ_getitem(field, x), y).color = self.color;
+                    "98";
+                    (await self.greedyAdd(x["+"](1), y, tol, prevVal));
+                    "99";
+                    (await self.greedyAdd(x["-"](1["*"](1)), y, tol, prevVal));
+                    "100";
+                    (await self.greedyAdd(x, y["+"](1), tol, prevVal));
+                    "101";
+                    (await self.greedyAdd(x, y["-"](1["*"](1)), tol, prevVal));
+                }
+            }
+        }
+    };
+    if (!EquipotentialLine.prototype.greedyAdd.__argnames__) Object.defineProperties(EquipotentialLine.prototype.greedyAdd, {
+        __argnames__ : {value: ["x", "y", "tol", "prevVal"]},
+        __module__ : {value: null}
+    });
+    EquipotentialLine.prototype.clear = async function clear() {
+        var self = this;
+        "104";
+        self.curve.visible = false;
+        "105";
+        self.curve = ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({color: self.curve.color})]);
+    };
+    if (!EquipotentialLine.prototype.clear.__module__) Object.defineProperties(EquipotentialLine.prototype.clear, {
+        __module__ : {value: null}
+    });
+    EquipotentialLine.prototype.__repr__ = async function __repr__() {
+                return "<"["+"](__name__)["+"](".")["+"](this.constructor.name)["+"](" #")["+"](this.ρσ_object_id)["+"](">");
+    };
+    EquipotentialLine.prototype.__str__ = async function __str__() {
+        return this.__repr__();
+    };
+    Object.defineProperty(EquipotentialLine.prototype, "__bases__", {value: []});
+    
+    
+    
+    
+
+    "107";
+    regTol = .09;
+    "108";
+    meanTol = .23;
+    "110";
+    async function runFieldLines() {
+        var ρσ_ls, meanX, meanY, o, l, i;
+        "111";
+        if (doFieldLines) {
+            "112";
+            meanX = 0;
+            "113";
+            meanY = 0;
+            "114";
+            var ρσ_Iter3 = Objects;
+            ρσ_Iter3 = ((typeof ρσ_Iter3[Symbol.iterator] === "function") ? (ρσ_Iter3 instanceof Map ? ρσ_Iter3.keys() : ρσ_Iter3) : Object.keys(ρσ_Iter3));
+            for (var ρσ_Index3 of ρσ_Iter3) {
+                o = ρσ_Index3;
+                "115";
+                meanX=meanX["+"]((await o.getX())["/"](len(Objects)));
+                "116";
+                meanY=meanY["+"]((await o.getY())["/"](len(Objects)));
+            }
+            "118";
+            (await ρσ_getitem(larr, 0).initField(field));
+            "119";
+            var ρσ_Iter4 = range(1, len(larr));
+            ρσ_Iter4 = ((typeof ρσ_Iter4[Symbol.iterator] === "function") ? (ρσ_Iter4 instanceof Map ? ρσ_Iter4.keys() : ρσ_Iter4) : Object.keys(ρσ_Iter4));
+            for (var ρσ_Index4 of ρσ_Iter4) {
+                i = ρσ_Index4;
+                "120";
+                l = floor(i["*"](fieldCount["/"](len(larr)))["*"](1));
+                "122";
+                (await ρσ_getitem(larr, i).greedyAdd(l, l, regTol, ρσ_getitem(ρσ_getitem(field, l), l).pos.y));
+            }
+            "123";
+            meanX = round(meanX);
+            "124";
+            meanY = round(meanY);
+            "125";
+            (await ρσ_getitem(larr, 0).greedyAdd(meanX, meanY, meanTol, ρσ_getitem(ρσ_getitem(field, meanX), meanY).pos.y));
+        }
+    };
+    if (!runFieldLines.__module__) Object.defineProperties(runFieldLines, {
+        __module__ : {value: null}
+    });
+
+    "127";
+    fieldCount = 32;
+    "128";
+    fieldWidth = 8e11;
+    "129";
+    fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+    "130";
+    downConstant = log10(fieldDA);
+    "131";
+    fieldExponent = 0;
+    "132";
+    field = (function() {
+        var ρσ_Iter = range(0, fieldCount), ρσ_Result = [], y;
+        ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+        for (var ρσ_Index of ρσ_Iter) {
+            y = ρσ_Index;
+            ρσ_Result.push((function() {
+                var ρσ_Iter = range(0, fieldCount), ρσ_Result = [], x;
+                ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                for (var ρσ_Index of ρσ_Iter) {
+                    x = ρσ_Index;
+                    ρσ_Result.push(ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(y["*"](fieldDA), 0, x["*"](fieldDA)), flag: false})]));
+                }
+                ρσ_Result = ρσ_list_constructor(ρσ_Result);
+                return ρσ_Result;
+            })());
+        }
+        ρσ_Result = ρσ_list_constructor(ρσ_Result);
+        return ρσ_Result;
+    })();
+    "134";
+    async function stretch(evt) {
+        var ρσ_ls, y, x, o;
+        "135";
+        "136";
+        "137";
+        "138";
+        "139";
+        "140";
+        if (evt.id === "fieldCount") {
+            "141";
+            for (var ρσ_Index5 = 0; ρσ_Index5["<"](fieldCount); ρσ_Index5++) {
+                x = ρσ_Index5;
+                "142";
+                for (var ρσ_Index6 = 0; ρσ_Index6["<"](fieldCount); ρσ_Index6++) {
+                    y = ρσ_Index6;
+                    "143";
+                    ρσ_getitem(ρσ_getitem(field, x), y).visible = false;
+                }
+            }
+            "144";
+            fieldCount = evt.value;
+            "145";
+            fcWT.text = "Field resolution: {0} subdivisions".format(evt.value);
+            "146";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "147";
+            downConstant = log10(fieldDA);
+            "148";
+            field = (function() {
+                var ρσ_Iter = range(0, fieldCount), ρσ_Result = [], y;
+                ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                for (var ρσ_Index of ρσ_Iter) {
+                    y = ρσ_Index;
+                    ρσ_Result.push((function() {
+                        var ρσ_Iter = range(0, fieldCount), ρσ_Result = [], x;
+                        ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                        for (var ρσ_Index of ρσ_Iter) {
+                            x = ρσ_Index;
+                            ρσ_Result.push(ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(y["*"](fieldDA), 0, x["*"](fieldDA)), flag: false})]));
+                        }
+                        ρσ_Result = ρσ_list_constructor(ρσ_Result);
+                        return ρσ_Result;
+                    })());
+                }
+                ρσ_Result = ρσ_list_constructor(ρσ_Result);
+                return ρσ_Result;
+            })();
+            "149";
+            (await zeroField(field));
+            "150";
+            var ρσ_Iter7 = Objects;
+            ρσ_Iter7 = ((typeof ρσ_Iter7[Symbol.iterator] === "function") ? (ρσ_Iter7 instanceof Map ? ρσ_Iter7.keys() : ρσ_Iter7) : Object.keys(ρσ_Iter7));
+            for (var ρσ_Index7 of ρσ_Iter7) {
+                o = ρσ_Index7;
+                "151";
+                (await o.impactField(field, v2pos, gravityField));
+            }
+            "152";
+            (await normalizeField(field));
+        }
+    };
+    if (!stretch.__argnames__) Object.defineProperties(stretch, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "160";
+    fcSlider = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: stretch, max: 80, min: 16, step: 1, value: fieldCount, id: "fieldCount"})]);
+    "161";
+    fcWT = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "Field resolution: {0} subdivisions".format(fcSlider.value)})]);
+    "163";
+    async function toggleRunning(b) {
+        "164";
+        "165";
+        running = !running;
+        "166";
+        if (running) {
+            "167";
+            b.text = "Click to pause the simulation";
+            "168";
+        } else {
+            "169";
+            b.text = "Click to continue the simulation";
+        }
+    };
+    if (!toggleRunning.__argnames__) Object.defineProperties(toggleRunning, {
+        __argnames__ : {value: ["b"]},
+        __module__ : {value: null}
+    });
+
+    "171";
+    async function toggleLines(b) {
+        var ρσ_ls, y, x;
+        "172";
+        "173";
+        "174";
+        doFieldLines = !doFieldLines;
+        "175";
+        if (doFieldLines) {
+            "176";
+            b.text = "Click to turn off the field lines";
+            "177";
+            (await runFieldLines());
+            "178";
+        } else {
+            "179";
+            b.text = "Click to re-enable the field lines";
+            "180";
+            for (var ρσ_Index8 = 0; ρσ_Index8["<"](fieldCount); ρσ_Index8++) {
+                x = ρσ_Index8;
+                "181";
+                for (var ρσ_Index9 = 0; ρσ_Index9["<"](fieldCount); ρσ_Index9++) {
+                    y = ρσ_Index9;
+                    "182";
+                    ρσ_getitem(ρσ_getitem(field, x), y).flag = false;
+                    "183";
+                    ρσ_getitem(ρσ_getitem(field, x), y).color = vec(255, 255, 255);
+                }
+            }
+        }
+    };
+    if (!toggleLines.__argnames__) Object.defineProperties(toggleLines, {
+        __argnames__ : {value: ["b"]},
+        __module__ : {value: null}
+    });
+
+    "185";
+    async function regTolStretch(evt) {
+        "186";
+        "187";
+        if (evt.id === "regTol") {
+            "188";
+            regTol = evt.value;
+            "189";
+            regTolWT.text = "Iterated field line tolerance: {:1.2f}".format(regTol);
+            "190";
+            (await runFieldLines());
+        }
+    };
+    if (!regTolStretch.__argnames__) Object.defineProperties(regTolStretch, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "191";
+    async function meanTolStretch(evt) {
+        "192";
+        "193";
+        if (evt.id === "meanTol") {
+            "194";
+            meanTol = evt.value;
+            "195";
+            meanTolWT.text = "Mean object position field line tolerance: {:1.2f}".format(meanTol);
+            "196";
+            (await runFieldLines());
+        }
+    };
+    if (!meanTolStretch.__argnames__) Object.defineProperties(meanTolStretch, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "197";
+    async function fieldScaleStretch(evt) {
+        "198";
+        "199";
+        if (evt.id === "fieldExponent") {
+            "200";
+            fieldExponent = evt.value;
+            "201";
+            fieldScaleSliderWT.text = "Field line scale exponent: {:1.3f}".format(fieldExponent);
+            "202";
+            (await runFieldLines());
+        }
+    };
+    if (!fieldScaleStretch.__argnames__) Object.defineProperties(fieldScaleStretch, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "204";
+    scene.append_to_caption("\n\n");
+    "205";
+    ρσ_interpolate_kwargs.call(this, menu, [ρσ_desugar_kwargs({choices: ρσ_list_decorate([ "Choose a preset", "Earth and the Sun", "Binary system", "Trinary system", "Binary + Planet", "Orbital ring", "Syzygy", "Carousel", "Random", "Cool swirly field (NOT GRAVITY)", "Cool swirly field 2 (NOT GRAVITY)" ]), index: 0, bind: chooseSystem})]);
+    "206";
+    scene.append_to_caption("\n\n");
+    "207";
+    runButton = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: toggleRunning, text: "Click to start the simulation"})]);
+    "208";
+    scene.append_to_caption("\n\n");
+    "209";
+    integralButton = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: ccButton, text: "Click to compute a closed curve integral around the field (aka measure error)"})]);
+    "210";
+    scene.append_to_caption("\n\n");
+    "211";
+    runButton = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: toggleLines, text: "Click to enable equipotential coloring in the field"})]);
+    "212";
+    scene.append_to_caption("\n\n");
+    "213";
+    regTolSlider = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: regTolStretch, max: 1, min: 0, step: .01, value: regTol, id: "regTol"})]);
+    "214";
+    regTolWT = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "Iterated field line tolerance: {:1.2f}".format(regTolSlider.value)})]);
+    "215";
+    scene.append_to_caption("\n\n");
+    "216";
+    meanTolSlider = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: meanTolStretch, max: 1, min: 0, step: .01, value: meanTol, id: "meanTol"})]);
+    "217";
+    meanTolWT = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "Mean object position field line tolerance: {:1.2f}".format(meanTolSlider.value)})]);
+    "218";
+    scene.append_to_caption("\n\n");
+    "219";
+    fieldScaleSlider = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: fieldScaleStretch, max: 1, min: 0, step: .01, value: fieldExponent, id: "fieldExponent"})]);
+    "220";
+    fieldScaleSliderWT = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "Field line scale exponent: {:1.3f}".format(fieldScaleSlider.value)})]);
+    "223";
+    G = 6.7e-11;
+    "227";
+    async function printField(field) {
+        var ρσ_ls, str, y, x;
+        "228";
+        for (var ρσ_Index10 = 0; ρσ_Index10["<"](fieldCount); ρσ_Index10++) {
+            x = ρσ_Index10;
+            "229";
+            for (var ρσ_Index11 = 0; ρσ_Index11["<"](fieldCount); ρσ_Index11++) {
+                y = ρσ_Index11;
+                "230";
+                str = ρσ_getitem(ρσ_getitem(field, x), y).axis;
+                "231";
+                ρσ_interpolate_kwargs.call(this, print, [str].concat([ρσ_desugar_kwargs({end: " "})]));
+            }
+            "232";
+            print();
+        }
+    };
+    if (!printField.__argnames__) Object.defineProperties(printField, {
+        __argnames__ : {value: ["field"]},
+        __module__ : {value: null}
+    });
+
+    "234";
+    EPSILON = 1e-5;
+    "236";
+    async function zeroPoint(field, x, y) {
+        "237";
+        ρσ_getitem(ρσ_getitem(field, x), y).axis = vec(0, 0, 0);
+        "238";
+        ρσ_getitem(ρσ_getitem(field, x), y).pos.y = 0;
+    };
+    if (!zeroPoint.__argnames__) Object.defineProperties(zeroPoint, {
+        __argnames__ : {value: ["field", "x", "y"]},
+        __module__ : {value: null}
+    });
+
+    "240";
+    async function zeroField(field) {
+        var ρσ_ls, y, x;
+        "241";
+        for (var ρσ_Index12 = 0; ρσ_Index12["<"](fieldCount); ρσ_Index12++) {
+            x = ρσ_Index12;
+            "242";
+            for (var ρσ_Index13 = 0; ρσ_Index13["<"](fieldCount); ρσ_Index13++) {
+                y = ρσ_Index13;
+                "243";
+                (await zeroPoint(field, x, y));
+            }
+        }
+    };
+    if (!zeroField.__argnames__) Object.defineProperties(zeroField, {
+        __argnames__ : {value: ["field"]},
+        __module__ : {value: null}
+    });
+
+    "246";
+    async function gravityField(field, v2pos, vel, mass, mass2) {
+        var ρσ_ls, p, valMag, x, y;
+        "247";
+        for (var ρσ_Index14 = 0; ρσ_Index14["<"](fieldCount); ρσ_Index14++) {
+            y = ρσ_Index14;
+            "248";
+            for (var ρσ_Index15 = 0; ρσ_Index15["<"](fieldCount); ρσ_Index15++) {
+                x = ρσ_Index15;
+                "249";
+                p = vector(x["*"](fieldDA), 0, y["*"](fieldDA));
+                "251";
+                p.x=p.x["-"](v2pos.x);
+                "252";
+                p.z=p.z["-"](v2pos.y);
+                "254";
+                valMag = mag(p);
+                "256";
+                if (valMag[">"](fieldDA)) {
+                    "257";
+                    ρσ_getitem(ρσ_getitem(field, x), y).axis=ρσ_getitem(ρσ_getitem(field, x), y).axis["+"](1["-u"]()["*"](p)["*"](G)["*"](mass)["/"](Math.pow(valMag, 2)));
+                    "258";
+                    ρσ_getitem(ρσ_getitem(field, x), y).pos.y=ρσ_getitem(ρσ_getitem(field, x), y).pos.y["-"](G["*"](mass)["*"](fieldDA)["*"](downConstant)["/"](Math.pow(valMag, 2)));
+                }
+            }
+        }
+    };
+    if (!gravityField.__argnames__) Object.defineProperties(gravityField, {
+        __argnames__ : {value: ["field", "v2pos", "vel", "mass", "mass2"]},
+        __module__ : {value: null}
+    });
+
+    "260";
+    async function testField(field, v2pos, vel, mass, mass2) {
+        var ρσ_ls, x, y;
+        "261";
+        for (var ρσ_Index16 = 0; ρσ_Index16["<"](fieldCount); ρσ_Index16++) {
+            y = ρσ_Index16;
+            "262";
+            for (var ρσ_Index17 = 0; ρσ_Index17["<"](fieldCount); ρσ_Index17++) {
+                x = ρσ_Index17;
+                "263";
+                ρσ_getitem(ρσ_getitem(field, x), y).axis = vec(2["*"](x), 0, 2["*"](y))["*"](fieldDA);
+            }
+        }
+    };
+    if (!testField.__argnames__) Object.defineProperties(testField, {
+        __argnames__ : {value: ["field", "v2pos", "vel", "mass", "mass2"]},
+        __module__ : {value: null}
+    });
+
+    "265";
+    magnetConstant = 1e-7;
+    "267";
+    async function coolSwirlyField(field, v2pos, y, vel, mass, charge) {
+        var ρσ_ls, p, valMag, crs, force, x;
+        "268";
+        for (var ρσ_Index18 = 0; ρσ_Index18["<"](fieldCount); ρσ_Index18++) {
+            y = ρσ_Index18;
+            "269";
+            for (var ρσ_Index19 = 0; ρσ_Index19["<"](fieldCount); ρσ_Index19++) {
+                x = ρσ_Index19;
+                "270";
+                p = vector(x["*"](fieldDA), 0, y["*"](fieldDA));
+                "272";
+                p.x=p.x["-"](v2pos.x);
+                "273";
+                p.z=p.z["-"](v2pos.y);
+                "276";
+                valMag = mag(p);
+                "277";
+                crs = cross(vel, p["+"](vec(0, y, 0)));
+                "278";
+                if (valMag[">"](fieldDA)) {
+                    "279";
+                    force = magnetConstant["*"](charge)["*"](crs)["/"](Math.pow(valMag, 2));
+                    "280";
+                    ρσ_getitem(ρσ_getitem(field, x), y).axis=ρσ_getitem(ρσ_getitem(field, x), y).axis["-"](force);
+                }
+            }
+        }
+    };
+    if (!coolSwirlyField.__argnames__) Object.defineProperties(coolSwirlyField, {
+        __argnames__ : {value: ["field", "v2pos", "y", "vel", "mass", "charge"]},
+        __module__ : {value: null}
+    });
+
+    "283";
+    async function carouselField(field, v2pos, vel, mass, mass2) {
+        var ρσ_ls, scaler, p, force, x, y;
+        "284";
+        scaler = fieldDA["/"](pi);
+        "285";
+        for (var ρσ_Index20 = 0; ρσ_Index20["<"](fieldCount); ρσ_Index20++) {
+            y = ρσ_Index20;
+            "286";
+            for (var ρσ_Index21 = 0; ρσ_Index21["<"](fieldCount); ρσ_Index21++) {
+                x = ρσ_Index21;
+                "287";
+                p = vector(x["*"](fieldDA), 0, y["*"](fieldDA));
+                "288";
+                p.x=p.x["-"](v2pos.x);
+                "289";
+                p.z=p.z["-"](v2pos.y);
+                "291";
+                force = vec(p.z, 0, 1["-u"]()["*"](p.x));
+                "292";
+                ρσ_getitem(ρσ_getitem(field, x), y).axis=ρσ_getitem(ρσ_getitem(field, x), y).axis["+"](hat(force)["*"](scaler));
+            }
+        }
+    };
+    if (!carouselField.__argnames__) Object.defineProperties(carouselField, {
+        __argnames__ : {value: ["field", "v2pos", "vel", "mass", "mass2"]},
+        __module__ : {value: null}
+    });
+
+    "294";
+    async function normalizeField(field) {
+        var ρσ_ls, x, y;
+        "295";
+        for (var ρσ_Index22 = 0; ρσ_Index22["<"](fieldCount); ρσ_Index22++) {
+            y = ρσ_Index22;
+            "296";
+            for (var ρσ_Index23 = 0; ρσ_Index23["<"](fieldCount); ρσ_Index23++) {
+                x = ρσ_Index23;
+                "297";
+                ρσ_getitem(ρσ_getitem(field, x), y).axis=ρσ_getitem(ρσ_getitem(field, x), y).axis["*"](Math.pow(mag(ρσ_getitem(ρσ_getitem(field, x), y).axis), fieldExponent));
+                "298";
+                if (mag(ρσ_getitem(ρσ_getitem(field, x), y).axis)[">"](fieldDA)) {
+                    "299";
+                    ρσ_getitem(ρσ_getitem(field, x), y).axis = hat(ρσ_getitem(ρσ_getitem(field, x), y).axis)["*"](fieldDA);
+                }
+            }
+        }
+    };
+    if (!normalizeField.__argnames__) Object.defineProperties(normalizeField, {
+        __argnames__ : {value: ["field"]},
+        __module__ : {value: null}
+    });
+
+    "303";
+    t = 0;
+    "304";
+    dt = .1;
+    "307";
+    function body() {;
+    }
+    body.prototype.__init__ = async function __init__() {
+        var self = this;
+        var x = ( 0 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true) ? undefined : arguments[0];
+        var y = ( 1 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true) ? undefined : arguments[1];
+        var mass = ( 2 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true) ? undefined : arguments[2];
+        var dims = ( 3 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true) ? undefined : arguments[3];
+        var func = ( 4 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true) ? undefined : arguments[4];
+        var trail = (arguments[5] === undefined || ( 5 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? __init__.__defaults__.trail : arguments[5];
+        var mass2 = (arguments[6] === undefined || ( 6 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? __init__.__defaults__.mass2 : arguments[6];
+        var fieldFunc = (arguments[7] === undefined || ( 7 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? __init__.__defaults__.fieldFunc : arguments[7];
+        var ρσ_kwargs_obj = arguments[arguments.length["-"](1)];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "trail")){
+            trail = ρσ_kwargs_obj.trail;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "mass2")){
+            mass2 = ρσ_kwargs_obj.mass2;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "fieldFunc")){
+            fieldFunc = ρσ_kwargs_obj.fieldFunc;
+        }
+        "310";
+        self.obj = ρσ_interpolate_kwargs.call(this, func, [ρσ_desugar_kwargs({pos: vec(x, 0, y), size: vec(dims, dims, dims), make_trail: trail})]);
+        "311";
+        self.obj.vel = vec(0, 0, 0);
+        "312";
+        self.obj.acc = vec(0, 0, 0);
+        "313";
+        self.obj.mass = mass;
+        "314";
+        self.obj.mass2 = mass2;
+        "315";
+        self.function = fieldFunc;
+    };
+    if (!body.prototype.__init__.__defaults__) Object.defineProperties(body.prototype.__init__, {
+        __defaults__ : {value: {trail:false, mass2:0, fieldFunc:gravityField}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["x", "y", "mass", "dims", "func", "trail", "mass2", "fieldFunc"]},
+        __module__ : {value: null}
+    });
+    body.__argnames__ = body.prototype.__init__.__argnames__;
+    body.__handles_kwarg_interpolation__ = body.prototype.__init__.__handles_kwarg_interpolation__;
+    body.prototype.applyForce = async function applyForce(field) {
+        var self = this;
+        var ρσ_ls, ax, collisionFlag;
+        "317";
+        if (self.obj.pos.x[">"](fieldWidth)) {
+            "318";
+            self.obj.pos.x = fieldWidth["-"](1["*"](fieldDA));
+            "319";
+        } else if (self.obj.pos.x["<"](0)) {
+            "320";
+            self.obj.pos.x = fieldDA;
+            "321";
+        }
+        if (self.obj.pos.z[">"](fieldWidth)) {
+            "322";
+            self.obj.pos.z = fieldWidth["-"](1["*"](fieldDA));
+            "323";
+        } else if (self.obj.pos.z["<"](0)) {
+            "324";
+            self.obj.pos.z = fieldDA;
+        }
+        "326";
+        ax = ρσ_getitem(ρσ_getitem(field, round(self.obj.pos.x["/"](fieldDA))), round(self.obj.pos.z["/"](fieldDA)));
+        "327";
+        if (ax !== null) {
+            "329";
+            self.obj.acc = ax.axis;
+            "330";
+            if (self.function !== gravityField) {
+                "331";
+                self.obj.acc=self.obj.acc["*"](self.obj.mass2["/"](self.obj.mass));
+            }
+            "333";
+            self.obj.vel=self.obj.vel["+"](self.obj.acc["*"](dt)["/"](2));
+            "334";
+            self.obj.pos=self.obj.pos["+"](self.obj.vel["*"](dt));
+            "335";
+            self.obj.vel=self.obj.vel["+"](self.obj.acc["*"](dt)["/"](2));
+        }
+        "336";
+        collisionFlag = false;
+        "337";
+        if (self.obj.pos.x["+"](self.obj.vel.x["*"](dt))[">="](fieldWidth["-"](1["*"](fieldDA))) || self.obj.pos.x["+"](self.obj.vel.x["*"](dt))["<"](fieldDA)) {
+            "338";
+            self.obj.vel.x=self.obj.vel.x["*"](1["-u"]()["*"](1));
+            "339";
+            collisionFlag = true;
+            "340";
+        }
+        if (self.obj.pos.z["+"](self.obj.vel.z["*"](dt))[">"](fieldWidth["-"](1["*"](fieldDA))) || self.obj.pos.z["+"](self.obj.vel.z["*"](dt))["<"](fieldDA)) {
+            "341";
+            self.obj.vel.z=self.obj.vel.z["*"](1["-u"]()["*"](1));
+            "342";
+            collisionFlag = true;
+            "343";
+        }
+        if (collisionFlag) {
+            "344";
+            self.obj.pos=self.obj.pos["+"](self.obj.vel["*"](1.1)["*"](dt));
+            "345";
+            self.obj.vel=self.obj.vel["*"](.9);
+        }
+    };
+    if (!body.prototype.applyForce.__argnames__) Object.defineProperties(body.prototype.applyForce, {
+        __argnames__ : {value: ["field"]},
+        __module__ : {value: null}
+    });
+    body.prototype.getX = async function getX() {
+        var self = this;
+        "347";
+        return round(self.obj.pos.x["/"](fieldDA));
+    };
+    if (!body.prototype.getX.__module__) Object.defineProperties(body.prototype.getX, {
+        __module__ : {value: null}
+    });
+    body.prototype.getY = async function getY() {
+        var self = this;
+        "349";
+        return round(self.obj.pos.z["/"](fieldDA));
+    };
+    if (!body.prototype.getY.__module__) Object.defineProperties(body.prototype.getY, {
+        __module__ : {value: null}
+    });
+    body.prototype.setVel = async function setVel(v) {
+        var self = this;
+        "351";
+        self.obj.vel = v;
+    };
+    if (!body.prototype.setVel.__argnames__) Object.defineProperties(body.prototype.setVel, {
+        __argnames__ : {value: ["v"]},
+        __module__ : {value: null}
+    });
+    body.prototype.setColor = async function setColor(c) {
+        var self = this;
+        "353";
+        self.obj.color = c;
+    };
+    if (!body.prototype.setColor.__argnames__) Object.defineProperties(body.prototype.setColor, {
+        __argnames__ : {value: ["c"]},
+        __module__ : {value: null}
+    });
+    body.prototype.impactField = async function impactField(field, v2) {
+        var self = this;
+        "355";
+        v2.x = self.obj.pos.x;
+        "356";
+        v2.y = self.obj.pos.z;
+        "357";
+        if (self.function === coolSwirlyField) {
+            "358";
+            (await self.function(field, v2, self.obj.pos.y, self.obj.vel, self.obj.mass, self.obj.mass2));
+            "359";
+        } else {
+            "360";
+            (await self.function(field, v2, self.obj.vel, self.obj.mass, self.obj.mass2));
+        }
+    };
+    if (!body.prototype.impactField.__argnames__) Object.defineProperties(body.prototype.impactField, {
+        __argnames__ : {value: ["field", "v2"]},
+        __module__ : {value: null}
+    });
+    body.prototype.dist = async function dist(other) {
+        var self = this;
+        "362";
+        return self.obj.pos["-"](1["*"](other.obj.pos));
+    };
+    if (!body.prototype.dist.__argnames__) Object.defineProperties(body.prototype.dist, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    body.prototype.moveTo = async function moveTo(v) {
+        var self = this;
+        "364";
+        self.obj.pos = v;
+    };
+    if (!body.prototype.moveTo.__argnames__) Object.defineProperties(body.prototype.moveTo, {
+        __argnames__ : {value: ["v"]},
+        __module__ : {value: null}
+    });
+    body.prototype.getMass = async function getMass() {
+        var self = this;
+        "366";
+        return self.obj.mass;
+    };
+    if (!body.prototype.getMass.__module__) Object.defineProperties(body.prototype.getMass, {
+        __module__ : {value: null}
+    });
+    body.prototype.__repr__ = async function __repr__() {
+                return "<"["+"](__name__)["+"](".")["+"](this.constructor.name)["+"](" #")["+"](this.ρσ_object_id)["+"](">");
+    };
+    body.prototype.__str__ = async function __str__() {
+        return this.__repr__();
+    };
+    Object.defineProperty(body.prototype, "__bases__", {value: []});
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    "368";
+    scene.append_to_title("<h1>Multi body field forces simulation\n");
+    "371";
+    scene.append_to_title("This is a discrete gravity field simulation. You can define the precision of the field using the field resolution slider\nDue to being a discrete field, there will be inherent error in the simulation, you can measure said error via the closed curve integral button\nThere's also a few non-physics fields, those being the Cool Swirly Fields and the Carousel, although the Carousel still contains gravity objects");
+    "375";
+    (await rate(60));
+    "382";
+    async function ccButton() {
+        "383";
+        (await closedCurveIntegral(4));
+    };
+    if (!ccButton.__module__) Object.defineProperties(ccButton, {
+        __module__ : {value: null}
+    });
+
+    "385";
+    async function closedCurveIntegral() {
+        var rfactor = (arguments[0] === undefined || ( 0 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? closedCurveIntegral.__defaults__.rfactor : arguments[0];
+        var ρσ_kwargs_obj = arguments[arguments.length["-"](1)];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "rfactor")){
+            rfactor = ρσ_kwargs_obj.rfactor;
+        }
+        var ρσ_ls, runningCache, _GS_1, obj, sum, r, circPos, vel, ax, i, nf, y, x, ratio;
+        "386";
+        "387";
+        runningCache = running;
+        "388";
+        running = false;
+        "389";
+        _GS_1 = new body;
+        ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldDA["*"](fieldCount)["/"](2)["+"](fieldWidth["/"](8)), fieldDA["*"](fieldCount)["/"](2), 1, fieldDA["*"](.2), sphere].concat([ρσ_desugar_kwargs({trail: false})]));
+        obj = _GS_1;
+        "390";
+        (await obj.setColor(color.green));
+        "391";
+        sum = 0;
+        "392";
+        r = fieldCount["*"](rfactor);
+        "394";
+        for (var ρσ_Index24 = 0; ρσ_Index24["<"](fieldCount); ρσ_Index24=ρσ_Index24["+"](1)) {
+            i = ρσ_Index24;
+            "395";
+            (await rate(r));
+            "396";
+            circPos = vec(0, 0, fieldDA["*"](i));
+            "397";
+            vel = vec(0, 0, 1);
+            "398";
+            (await obj.moveTo(circPos));
+            "399";
+            obj.obj.make_trail = true;
+            "400";
+            ax = ρσ_getitem(ρσ_getitem(field, round(obj.obj.pos.x["/"](fieldDA))), round(obj.obj.pos.z["/"](fieldDA)));
+            "401";
+            sum=sum["+"](dot(ax.axis, hat(vel)));
+        }
+        "402";
+        for (var ρσ_Index25 = 0; ρσ_Index25["<"](fieldCount); ρσ_Index25=ρσ_Index25["+"](1)) {
+            i = ρσ_Index25;
+            "403";
+            (await rate(r));
+            "404";
+            circPos = vec(fieldDA["*"](i), 0, fieldWidth);
+            "405";
+            vel = vec(1, 0, 0);
+            "406";
+            (await obj.moveTo(circPos));
+            "407";
+            obj.obj.make_trail = true;
+            "408";
+            ax = ρσ_getitem(ρσ_getitem(field, round(obj.obj.pos.x["/"](fieldDA))), round(obj.obj.pos.z["/"](fieldDA)));
+            "409";
+            sum=sum["+"](dot(ax.axis, hat(vel)));
+        }
+        "410";
+        for (var ρσ_Index26 = 0; ρσ_Index26["<"](fieldCount); ρσ_Index26=ρσ_Index26["+"](1)) {
+            i = ρσ_Index26;
+            "411";
+            (await rate(r));
+            "412";
+            circPos = vec(fieldWidth, 0, fieldWidth["-"](1["*"](fieldDA)["*"](i)));
+            "413";
+            vel = vec(0, 0, 1["-u"]()["*"](1));
+            "414";
+            (await obj.moveTo(circPos));
+            "415";
+            obj.obj.make_trail = true;
+            "416";
+            ax = ρσ_getitem(ρσ_getitem(field, round(obj.obj.pos.x["/"](fieldDA))), round(obj.obj.pos.z["/"](fieldDA)));
+            "417";
+            sum=sum["+"](dot(ax.axis, hat(vel)));
+        }
+        "418";
+        for (var ρσ_Index27 = 0; ρσ_Index27["<"](fieldCount); ρσ_Index27=ρσ_Index27["+"](1)) {
+            i = ρσ_Index27;
+            "419";
+            (await rate(r));
+            "420";
+            circPos = vec(fieldWidth["-"](1["*"](fieldDA)["*"](i)), 0, 0);
+            "421";
+            vel = vec(1["-u"]()["*"](1), 0, 0);
+            "422";
+            (await obj.moveTo(circPos));
+            "423";
+            obj.obj.make_trail = true;
+            "424";
+            ax = ρσ_getitem(ρσ_getitem(field, round(obj.obj.pos.x["/"](fieldDA))), round(obj.obj.pos.z["/"](fieldDA)));
+            "425";
+            sum=sum["+"](dot(ax.axis, hat(vel)));
+        }
+        "428";
+        print("Closed curve integral of the field (N): ", ""["+"](ρσ_str.format("{:.8f}", sum))["+"](""));
+        "429";
+        nf = 0;
+        "430";
+        for (var ρσ_Index28 = 0; ρσ_Index28["<"](fieldCount); ρσ_Index28++) {
+            x = ρσ_Index28;
+            "431";
+            for (var ρσ_Index29 = 0; ρσ_Index29["<"](fieldCount); ρσ_Index29++) {
+                y = ρσ_Index29;
+                "432";
+                nf=nf["+"](mag(ρσ_getitem(ρσ_getitem(field, x), y).axis));
+            }
+        }
+        "433";
+        nf=nf["/"](Math.pow(fieldCount, 2));
+        "434";
+        ratio = sum["/"](nf)["*"](100);
+        "435";
+        print("Closed curve integral % of the average field magnitude: ", ""["+"](ρσ_str.format("{:.8f}", ratio))["+"]("%"));
+        "439";
+        obj.obj.visible = false;
+        "440";
+        obj.obj.clear_trail();
+        "441";
+        running = runningCache;
+        "442";
+        return sum;
+    };
+    if (!closedCurveIntegral.__defaults__) Object.defineProperties(closedCurveIntegral, {
+        __defaults__ : {value: {rfactor:4}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["rfactor"]},
+        __module__ : {value: null}
+    });
+
+    "445";
+    Objects = ρσ_list_decorate([]);
+    "446";
+    fieldFunction = gravityField;
+    "448";
+    async function chooseSystem(m) {
+        var ρσ_ls, val, o, _GS_1, obj1, obj2, dist, obj3, bigObj, objC, dTheta, mass, circPos, obj, i, numPlanets, diff, centObj, partCount, c, y, x, t;
+        "449";
+        "450";
+        "451";
+        "452";
+        "453";
+        "454";
+        "455";
+        val = m.selected;
+        "456";
+        var ρσ_Iter30 = Objects;
+        ρσ_Iter30 = ((typeof ρσ_Iter30[Symbol.iterator] === "function") ? (ρσ_Iter30 instanceof Map ? ρσ_Iter30.keys() : ρσ_Iter30) : Object.keys(ρσ_Iter30));
+        for (var ρσ_Index30 of ρσ_Iter30) {
+            o = ρσ_Index30;
+            "457";
+            o.obj.visible = false;
+        }
+        "458";
+        Objects = ρσ_list_decorate([]);
+        "459";
+        "460";
+        DCvsT.remove();
+        "461";
+        DCvsT = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Distance from center vs. Time", xtitle: "Time", ytitle: "Distance", fast: true, ymin: 0})]);
+        "462";
+        DCvsTC = ρσ_list_decorate([]);
+        "464";
+        "465";
+        mDCvsT.remove();
+        "466";
+        mDCvsT = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Mean distance from center vs. Time", xtitle: "Time", ytitle: "Distance"})]);
+        "467";
+        mDCC = gcurve();
+        "470";
+        "471";
+        SKEvsT.remove();
+        "472";
+        SKEvsT = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Total kinetic energy vs. Time", xtitle: "Time", ytitle: "KE (J)"})]);
+        "473";
+        kePlot = gcurve();
+        "474";
+        if ((val === "Earth and the Sun" || typeof val === "object" && ρσ_equals(val, "Earth and the Sun"))) {
+            "476";
+            fieldWidth = 4e11;
+            "477";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "478";
+            _GS_1 = new body;
+            (await _GS_1.__init__(fieldDA["*"](fieldCount)["/"](2), fieldDA["*"](fieldCount)["/"](2), 1.9891e30, fieldDA["*"](3), sphere));
+            obj1 = _GS_1;
+            "479";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldDA["*"](fieldCount)["/"](2)["+"](15e10), fieldDA["*"](fieldCount)["/"](2), 5.97e24, fieldDA["*"](1), sphere].concat([ρσ_desugar_kwargs({trail: false})]));
+            obj2 = _GS_1;
+            "484";
+            (await obj2.setVel(vec(0, 0, 1["-u"]()["*"](pi))["*"](sqrt((await obj1.getMass())["/"](mag((await obj1.dist(obj2))))))));
+            "488";
+            (await obj1.setColor(color.red));
+            "489";
+            (await obj2.setColor(color.blue));
+            "491";
+            Objects = ρσ_list_decorate([ obj1, obj2 ]);
+            "492";
+            fieldFunction = gravityField;
+            "494";
+        } else if ((val === "Binary system" || typeof val === "object" && ρσ_equals(val, "Binary system"))) {
+            "498";
+            fieldWidth = 8e11;
+            "499";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "500";
+            dist = 5e10;
+            "501";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2)["-"](1["*"](dist)), fieldWidth["/"](2)["-"](1["*"](dist)), 2.78e31, fieldDA["*"](3), sphere].concat([ρσ_desugar_kwargs({trail: false})]));
+            obj1 = _GS_1;
+            "502";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2)["+"](dist), fieldWidth["/"](2)["+"](dist), 2.78e31, fieldDA["*"](3), sphere].concat([ρσ_desugar_kwargs({trail: false})]));
+            obj2 = _GS_1;
+            "504";
+            (await obj1.setVel(hat(vec(1, 0, 1["-u"]()["*"](1)))["*"](sqrt((await obj2.getMass())["+"]((await obj1.getMass()))["/"](mag((await obj1.dist(obj2))))))["*"](3)["*"](pi)["/"](5)));
+            "505";
+            (await obj2.setVel(hat(vec(1["-u"]()["*"](1), 0, 1))["*"](sqrt((await obj2.getMass())["+"]((await obj1.getMass()))["/"](mag((await obj2.dist(obj1))))))["*"](3)["*"](pi)["/"](5)));
+            "508";
+            Objects = ρσ_list_decorate([ obj1, obj2 ]);
+            "509";
+            fieldFunction = gravityField;
+            "511";
+        } else if ((val === "Trinary system" || typeof val === "object" && ρσ_equals(val, "Trinary system"))) {
+            "513";
+            fieldWidth = 8e11;
+            "514";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "515";
+            _GS_1 = new body;
+            (await _GS_1.__init__(fieldDA["*"](fieldCount)["/"](2), fieldDA["*"](fieldCount)["/"](3), 1.9891e30, fieldDA["*"](3), sphere));
+            obj1 = _GS_1;
+            "516";
+            _GS_1 = new body;
+            (await _GS_1.__init__(fieldDA["*"](fieldCount)["/"](2), fieldDA["*"](2)["*"](fieldCount)["/"](3), 1.9891e30, fieldDA["*"](3), sphere));
+            obj2 = _GS_1;
+            "517";
+            _GS_1 = new body;
+            (await _GS_1.__init__(fieldDA["*"](fieldCount)["/"](2), fieldDA["*"](fieldCount)["/"](2), 1.9891e30, fieldDA["*"](3), sphere));
+            obj3 = _GS_1;
+            "519";
+            (await obj1.setVel(vec(sqrt((await obj3.getMass())["/"](mag((await obj1.dist(obj3)))))["*"](pi), 0, 0)));
+            "520";
+            (await obj2.setVel(vec(1["-u"]()["*"](sqrt((await obj3.getMass())["/"](mag((await obj1.dist(obj3))))))["*"](pi), 0, 0)));
+            "522";
+            Objects = ρσ_list_decorate([ obj1, obj2, obj3 ]);
+            "523";
+            fieldFunction = gravityField;
+            "525";
+        } else if ((val === "Binary + Planet" || typeof val === "object" && ρσ_equals(val, "Binary + Planet"))) {
+            "526";
+            fieldWidth = 8e11;
+            "527";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "528";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2)["-"](1["*"](1e11)["/"](3)), fieldWidth["/"](2)["-"](1["*"](1e11)["/"](3)), 1e31, fieldDA["*"](3), sphere].concat([ρσ_desugar_kwargs({trail: false})]));
+            obj1 = _GS_1;
+            "529";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2)["+"](1e11["/"](3)), fieldWidth["/"](2)["+"](1e11["/"](3)), 1e31, fieldDA["*"](3), sphere].concat([ρσ_desugar_kwargs({trail: false})]));
+            obj2 = _GS_1;
+            "531";
+            (await obj1.setVel(vec(sqrt((await obj2.getMass())["/"](mag((await obj1.dist(obj2))))), 0, 1["-u"]()["*"](sqrt((await obj2.getMass())["/"](mag((await obj1.dist(obj2)))))))));
+            "532";
+            (await obj2.setVel(vec(1["-u"]()["*"](sqrt((await obj1.getMass())["/"](mag((await obj2.dist(obj1)))))), 0, sqrt((await obj2.getMass())["/"](mag((await obj1.dist(obj2))))))));
+            "534";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2)["+"](fieldDA["*"](fieldCount)["/"](4)), fieldWidth["/"](2)["+"](fieldDA["*"](fieldCount)["/"](4)), 5e24, fieldDA["*"](1), sphere].concat([ρσ_desugar_kwargs({trail: false})]));
+            obj3 = _GS_1;
+            "538";
+            (await obj3.setVel(vec(1["-u"]()["*"](1), 0, 1)["*"](sqrt((await obj2.getMass())["+"]((await obj1.getMass()))["/"](mag(obj3.obj.pos["-"](1["*"](obj2.obj.pos["+"](obj1.obj.pos)))))))["*"](pi)));
+            "540";
+            Objects = ρσ_list_decorate([ obj1, obj2, obj3 ]);
+            "541";
+            fieldFunction = gravityField;
+            "542";
+        } else if ((val === "Orbital ring" || typeof val === "object" && ρσ_equals(val, "Orbital ring"))) {
+            "544";
+            fieldWidth = 8e11;
+            "545";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "546";
+            _GS_1 = new body;
+            (await _GS_1.__init__(fieldWidth["/"](2), fieldWidth["/"](2), 4e32, fieldDA["*"](2), sphere));
+            bigObj = _GS_1;
+            "547";
+            (await bigObj.setColor(color.red));
+            "549";
+            Objects.append(bigObj);
+            "551";
+            objC = 64;
+            "552";
+            dTheta = 360["/"](objC);
+            "553";
+            for (var ρσ_Index31 = 0; ρσ_Index31["<"](objC); ρσ_Index31++) {
+                i = ρσ_Index31;
+                "555";
+                mass = 1e29;
+                "558";
+                circPos = vec(fieldWidth["/"](2), 0, fieldWidth["/"](2))["+"](vec(cos((await radians(i["*"](dTheta)))), 0, sin((await radians(i["*"](dTheta)))))["*"](fieldWidth)["/"](8));
+                "559";
+                _GS_1 = new body;
+                (await _GS_1.__init__(circPos.x, circPos.z, mass, fieldDA["*"](1), sphere));
+                obj = _GS_1;
+                "560";
+                (await obj.setVel(vec(1["-u"]()["*"](sin((await radians(i["*"](dTheta))))), 0, cos((await radians(i["*"](dTheta)))))["*"](mag(circPos["-"](1["*"](vec(fieldWidth["/"](2), 0, fieldWidth["/"](2))))))["*"](pi)["/"](3)));
+                "566";
+                Objects.append(obj);
+            }
+            "567";
+            fieldFunction = gravityField;
+            "569";
+        } else if ((val === "Syzygy" || typeof val === "object" && ρσ_equals(val, "Syzygy"))) {
+            "571";
+            fieldWidth = 8e11;
+            "572";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "573";
+            _GS_1 = new body;
+            (await _GS_1.__init__(fieldWidth["/"](2), fieldWidth["/"](2), 8e31, fieldDA["*"](2), sphere));
+            bigObj = _GS_1;
+            "574";
+            (await bigObj.setColor(color.red));
+            "576";
+            Objects.append(bigObj);
+            "578";
+            numPlanets = 5;
+            "579";
+            objC = 64;
+            "580";
+            dTheta = 360["/"](objC);
+            "581";
+            for (var ρσ_Index32 = 0; ρσ_Index32["<"](numPlanets); ρσ_Index32++) {
+                i = ρσ_Index32;
+                "582";
+                diff = 1["-u"]()["*"](int(numPlanets["/"](2)))["+"](i);
+                "584";
+                mass = 1e29;
+                "585";
+                circPos = vec(fieldWidth["/"](2), 0, fieldWidth["/"](2))["+"](vec(diff, 0, 0)["*"](fieldWidth)["/"](8));
+                "587";
+                _GS_1 = new body;
+                (await _GS_1.__init__(circPos.x, circPos.z, mass, fieldDA["*"](1), sphere));
+                obj = _GS_1;
+                "588";
+                (await obj.setVel(vec(1["-u"]()["*"](sin((await radians(i["*"](dTheta))))), 0, cos((await radians(i["*"](dTheta)))))["*"](mag(circPos["-"](1["*"](vec(fieldWidth["/"](2), 0, fieldWidth["/"](2))))))["*"](1)["/"](2)));
+                "589";
+                Objects.append(obj);
+            }
+            "590";
+            fieldFunction = gravityField;
+            "592";
+        } else if ((val === "Random" || typeof val === "object" && ρσ_equals(val, "Random"))) {
+            "594";
+            fieldWidth = 8e11;
+            "595";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "596";
+            numPlanets = 5;
+            "597";
+            objC = 64;
+            "598";
+            dTheta = 360["/"](objC);
+            "599";
+            for (var ρσ_Index33 = 0; ρσ_Index33["<"](numPlanets); ρσ_Index33++) {
+                i = ρσ_Index33;
+                "600";
+                mass = 1e30;
+                "601";
+                circPos = vec(random()["*"](fieldWidth), 0, random()["*"](fieldWidth));
+                "604";
+                _GS_1 = new body;
+                (await _GS_1.__init__(circPos.x, circPos.z, mass, fieldDA["*"](1), sphere));
+                obj = _GS_1;
+                "605";
+                (await obj.setVel(vec(0, 0, 0)));
+                "606";
+                Objects.append(obj);
+            }
+            "607";
+            fieldFunction = gravityField;
+            "609";
+        } else if ((val === "Carousel" || typeof val === "object" && ρσ_equals(val, "Carousel"))) {
+            "610";
+            fieldWidth = 8e11;
+            "611";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "613";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2), fieldWidth["/"](2), 5e40, fieldDA["*"](2), sphere].concat([ρσ_desugar_kwargs({trail: false, mass2: 0, fieldFunc: carouselField})]));
+            centObj = _GS_1;
+            "614";
+            Objects.append(centObj);
+            "615";
+            numPlanets = 15;
+            "616";
+            objC = 64;
+            "617";
+            dTheta = 360["/"](objC);
+            "618";
+            for (var ρσ_Index34 = 0; ρσ_Index34["<"](numPlanets); ρσ_Index34++) {
+                i = ρσ_Index34;
+                "619";
+                mass = 8e30;
+                "620";
+                circPos = vec(fieldDA["+"](random()["*"](fieldWidth["-"](1["*"](fieldDA)["*"](2)))), 0, fieldDA["+"](random()["*"](fieldWidth["-"](1["*"](fieldDA)["*"](2)))));
+                "621";
+                _GS_1 = new body;
+                (await _GS_1.__init__(circPos.x, circPos.z, mass, fieldDA["*"](1), sphere));
+                obj = _GS_1;
+                "622";
+                (await obj.setVel(vec(0, 0, 0)));
+                "623";
+                Objects.append(obj);
+                "624";
+            }
+        } else if ((val === "Cool swirly field (NOT GRAVITY)" || typeof val === "object" && ρσ_equals(val, "Cool swirly field (NOT GRAVITY)"))) {
+            "626";
+            fieldWidth = 8e12;
+            "627";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "628";
+            dist = 1e11["/"](3);
+            "630";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2)["-"](1["*"](dist)), fieldWidth["/"](2)["-"](1["*"](dist)), 5e20, fieldDA, sphere].concat([ρσ_desugar_kwargs({trail: false, mass2: 3e19, fieldFunc: coolSwirlyField})]));
+            obj1 = _GS_1;
+            "631";
+            _GS_1 = new body;
+            ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2)["+"](dist), fieldWidth["/"](2)["+"](dist), 5e20, fieldDA, sphere].concat([ρσ_desugar_kwargs({trail: false, mass2: 1["-u"]()["*"](3e19), fieldFunc: coolSwirlyField})]));
+            obj2 = _GS_1;
+            "633";
+            (await obj1.setVel(vec(1, 0, 1["-u"]()["*"](1))["*"](sqrt(1e31["/"](mag((await obj1.dist(obj2))))))));
+            "634";
+            (await obj2.setVel(vec(1, 0, 1)["*"](sqrt(1e31["/"](mag((await obj2.dist(obj1))))))));
+            "636";
+            (await obj1.setColor(color.red));
+            "637";
+            (await obj2.setColor(color.blue));
+            "639";
+            Objects = ρσ_list_decorate([ obj1, obj2 ]);
+            "641";
+        } else if ((val === "Cool swirly field 2 (NOT GRAVITY)" || typeof val === "object" && ρσ_equals(val, "Cool swirly field 2 (NOT GRAVITY)"))) {
+            "642";
+            fieldWidth = 8e11;
+            "643";
+            fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+            "644";
+            dist = fieldWidth["/"](3);
+            "645";
+            partCount = 16;
+            "646";
+            c = color.red;
+            "647";
+            m = 3e19;
+            "649";
+            for (var ρσ_Index35 = 0; ρσ_Index35["<"](partCount); ρσ_Index35++) {
+                i = ρσ_Index35;
+                "650";
+                if (random()[">"](.5)) {
+                    "651";
+                    c = color.red;
+                    "652";
+                    m = 3e19;
+                    "653";
+                } else {
+                    "654";
+                    c = color.blue;
+                    "655";
+                    m = 1["-u"]()["*"](3e19);
+                }
+                "658";
+                _GS_1 = new body;
+                ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [fieldWidth["/"](2)["+"](dist["*"](1["-u"]()["*"](1)["+"](random()["*"](2)))), fieldWidth["/"](2)["+"](dist["*"](1["-u"]()["*"](1)["+"](random()["*"](2)))), 5e23, fieldDA["/"](4), sphere].concat([ρσ_desugar_kwargs({trail: false, mass2: m, fieldFunc: coolSwirlyField})]));
+                obj = _GS_1;
+                "659";
+                (await obj.setColor(c));
+                "660";
+                (await obj.setVel(dist["*"](vec(random()["-"](1["*"](.5)), 0, random()["-"](1["*"](.5))))));
+                "661";
+                Objects.append(obj);
+            }
+        }
+        "667";
+        for (var ρσ_Index36 = 0; ρσ_Index36["<"](fieldCount); ρσ_Index36++) {
+            x = ρσ_Index36;
+            "668";
+            for (var ρσ_Index37 = 0; ρσ_Index37["<"](fieldCount); ρσ_Index37++) {
+                y = ρσ_Index37;
+                "669";
+                ρσ_getitem(ρσ_getitem(field, x), y).visible = false;
+            }
+        }
+        "670";
+        fieldDA = fieldWidth["/"](fieldCount["-"](1["*"](1)));
+        "671";
+        downConstant = log10(fieldDA);
+        "672";
+        field = (function() {
+            var ρσ_Iter = range(0, fieldCount), ρσ_Result = [], y;
+            ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+            for (var ρσ_Index of ρσ_Iter) {
+                y = ρσ_Index;
+                ρσ_Result.push((function() {
+                    var ρσ_Iter = range(0, fieldCount), ρσ_Result = [], x;
+                    ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                    for (var ρσ_Index of ρσ_Iter) {
+                        x = ρσ_Index;
+                        ρσ_Result.push(ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(y["*"](fieldDA), 0, x["*"](fieldDA))})]));
+                    }
+                    ρσ_Result = ρσ_list_constructor(ρσ_Result);
+                    return ρσ_Result;
+                })());
+            }
+            ρσ_Result = ρσ_list_constructor(ρσ_Result);
+            return ρσ_Result;
+        })();
+        "673";
+        (await zeroField(field));
+        "674";
+        var ρσ_Iter38 = Objects;
+        ρσ_Iter38 = ((typeof ρσ_Iter38[Symbol.iterator] === "function") ? (ρσ_Iter38 instanceof Map ? ρσ_Iter38.keys() : ρσ_Iter38) : Object.keys(ρσ_Iter38));
+        for (var ρσ_Index38 of ρσ_Iter38) {
+            o = ρσ_Index38;
+            "675";
+            (await o.impactField(field, v2pos, fieldFunction));
+        }
+        "677";
+        scene.center = vec(fieldWidth["/"](2), 0, fieldWidth["/"](2));
+        "678";
+        (await normalizeField(field));
+        "680";
+        var ρσ_Iter39 = range(len(Objects));
+        ρσ_Iter39 = ((typeof ρσ_Iter39[Symbol.iterator] === "function") ? (ρσ_Iter39 instanceof Map ? ρσ_Iter39.keys() : ρσ_Iter39) : Object.keys(ρσ_Iter39));
+        for (var ρσ_Index39 of ρσ_Iter39) {
+            i = ρσ_Index39;
+            "681";
+            c = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({color: vector.random(), graph: DCvsT})]);
+            "682";
+            DCvsTC.append(c);
+        }
+        "683";
+        t = 0;
+    };
+    if (!chooseSystem.__argnames__) Object.defineProperties(chooseSystem, {
+        __argnames__ : {value: ["m"]},
+        __module__ : {value: null}
+    });
+
+    "686";
+    _GS_1 = new Vector2;
+    (await _GS_1.__init__(0, 0));
+    v2pos = _GS_1;
+    "687";
+    running = false;
+    "688";
+    doFieldLines = false;
+    "690";
+    (await zeroField(field));
+    "691";
+    var ρσ_Iter40 = Objects;
+    ρσ_Iter40 = ((typeof ρσ_Iter40[Symbol.iterator] === "function") ? (ρσ_Iter40 instanceof Map ? ρσ_Iter40.keys() : ρσ_Iter40) : Object.keys(ρσ_Iter40));
+    for (var ρσ_Index40 of ρσ_Iter40) {
+        o = ρσ_Index40;
+        "692";
+        (await o.impactField(field, v2pos));
+    }
+    "694";
+    (await normalizeField(field));
+    "696";
+    larr = ρσ_list_decorate([]);
+    "697";
+    for (var ρσ_Index41 = 0; ρσ_Index41["<"](16); ρσ_Index41++) {
+        i = ρσ_Index41;
+        "698";
+        cols = vec(random()["*"](.5), random()["*"](.5), random()["*"](.5))["+"](vec(.5, .5, .5));
+        "699";
+        _GS_1 = new EquipotentialLine;
+        ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [ρσ_desugar_kwargs({col: cols})]);
+        l = _GS_1;
+        "700";
+        larr.append(l);
+    }
+    "702";
+    while (1) {
+        "703";
+        (await rate(1e3));
+        "704";
+        if (running) {
+            "707";
+            (await zeroField(field));
+            "708";
+            meanX = 0;
+            "709";
+            meanY = 0;
+            "710";
+            var ρσ_Iter42 = Objects;
+            ρσ_Iter42 = ((typeof ρσ_Iter42[Symbol.iterator] === "function") ? (ρσ_Iter42 instanceof Map ? ρσ_Iter42.keys() : ρσ_Iter42) : Object.keys(ρσ_Iter42));
+            for (var ρσ_Index42 of ρσ_Iter42) {
+                o = ρσ_Index42;
+                "711";
+                (await o.impactField(field, v2pos));
+                "712";
+                meanX=meanX["+"]((await o.getX())["/"](len(Objects)));
+                "713";
+                meanY=meanY["+"]((await o.getY())["/"](len(Objects)));
+                "715";
+            }
+            if (doFieldLines) {
+                "716";
+                (await runFieldLines());
+            }
+            "718";
+            KE = 0;
+            "719";
+            var ρσ_Iter43 = Objects;
+            ρσ_Iter43 = ((typeof ρσ_Iter43[Symbol.iterator] === "function") ? (ρσ_Iter43 instanceof Map ? ρσ_Iter43.keys() : ρσ_Iter43) : Object.keys(ρσ_Iter43));
+            for (var ρσ_Index43 of ρσ_Iter43) {
+                o = ρσ_Index43;
+                "720";
+                (await o.applyForce(field));
+                "721";
+                KE=KE["+"](.5["*"](Math.pow(mag(o.obj.vel), 2))["*"](o.obj.mass));
+            }
+            "722";
+            kePlot.plot(t, KE);
+            "724";
+            totD = 0;
+            "725";
+            var ρσ_Iter44 = range(len(Objects));
+            ρσ_Iter44 = ((typeof ρσ_Iter44[Symbol.iterator] === "function") ? (ρσ_Iter44 instanceof Map ? ρσ_Iter44.keys() : ρσ_Iter44) : Object.keys(ρσ_Iter44));
+            for (var ρσ_Index44 of ρσ_Iter44) {
+                i = ρσ_Index44;
+                "726";
+                d = mag(ρσ_getitem(Objects, i).obj.pos["-"](1["*"](vec(fieldWidth["/"](2), 0, fieldWidth["/"](2)))));
+                "727";
+                ρσ_getitem(DCvsTC, i).plot(t, d);
+                "728";
+                totD=totD["+"](d);
+            }
+            "729";
+            avgD = totD["/"](len(Objects));
+            "730";
+            mDCC.plot(t, avgD);
+            "733";
+            (await normalizeField(field));
+            "734";
+            t=t["+"](dt);
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

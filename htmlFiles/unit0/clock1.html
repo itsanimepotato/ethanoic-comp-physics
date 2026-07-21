@@ -1,0 +1,264 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var wound, disabledSelect, currentHr, currentMin;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, wound, currentHr, currentMin, runButton, selectHr, i, selectMin, minute, big_rad, little_rad, micro_rad, outer_x, outer_y, inner_x, inner_y, minute_hand, hour_hand, t, dt;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "14";
+    scene.title = "This clock uses radios to change the time. Select a time for each section.";
+    "17";
+    wound = false;
+    "18";
+    currentHr = 0;
+    "19";
+    currentMin = 0;
+    "21";
+    runButton = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: winding, text: "click to start\n"})]);
+    "22";
+    async function winding() {
+        var ρσ_ls, r;
+        "23";
+        "24";
+        "25";
+        wound = !wound;
+        "27";
+        if (wound) {
+            "28";
+            runButton.text = "click to stop";
+            "29";
+            var ρσ_Iter1 = selectHr;
+            ρσ_Iter1 = ((typeof ρσ_Iter1[Symbol.iterator] === "function") ? (ρσ_Iter1 instanceof Map ? ρσ_Iter1.keys() : ρσ_Iter1) : Object.keys(ρσ_Iter1));
+            for (var ρσ_Index1 of ρσ_Iter1) {
+                r = ρσ_Index1;
+                "30";
+                r.disabled = true;
+            }
+            "31";
+            var ρσ_Iter2 = selectMin;
+            ρσ_Iter2 = ((typeof ρσ_Iter2[Symbol.iterator] === "function") ? (ρσ_Iter2 instanceof Map ? ρσ_Iter2.keys() : ρσ_Iter2) : Object.keys(ρσ_Iter2));
+            for (var ρσ_Index2 of ρσ_Iter2) {
+                r = ρσ_Index2;
+                "32";
+                r.disabled = true;
+                "33";
+            }
+        } else {
+            "34";
+            runButton.text = "click to start";
+            "35";
+            var ρσ_Iter3 = selectHr;
+            ρσ_Iter3 = ((typeof ρσ_Iter3[Symbol.iterator] === "function") ? (ρσ_Iter3 instanceof Map ? ρσ_Iter3.keys() : ρσ_Iter3) : Object.keys(ρσ_Iter3));
+            for (var ρσ_Index3 of ρσ_Iter3) {
+                r = ρσ_Index3;
+                "36";
+                r.disabled = false;
+            }
+            "37";
+            var ρσ_Iter4 = selectMin;
+            ρσ_Iter4 = ((typeof ρσ_Iter4[Symbol.iterator] === "function") ? (ρσ_Iter4 instanceof Map ? ρσ_Iter4.keys() : ρσ_Iter4) : Object.keys(ρσ_Iter4));
+            for (var ρσ_Index4 of ρσ_Iter4) {
+                r = ρσ_Index4;
+                "38";
+                r.disabled = false;
+            }
+        }
+        "39";
+        scene.append_to_caption("\n");
+    };
+    if (!winding.__module__) Object.defineProperties(winding, {
+        __module__ : {value: null}
+    });
+
+    "41";
+    scene.append_to_caption("\nhours\n");
+    "43";
+    selectHr = ρσ_list_decorate([]);
+    "45";
+    for (var ρσ_Index5 = 0; ρσ_Index5["<"](12); ρσ_Index5++) {
+        i = ρσ_Index5;
+        "46";
+        var disabledSelect;
+        "47";
+        selectHr.append(ρσ_interpolate_kwargs.call(this, radio, [ρσ_desugar_kwargs({bind: changeHr, text: str(i["+"](1))["+"](":00"), id: i["+"](1), name: "hrGroup", disabled: false})]));
+        "48";
+        scene.append_to_caption("\n");
+    }
+    "50";
+    async function changeHr(evt) {
+        var ρσ_ls, new_hour, delta_hour;
+        "51";
+        "53";
+        new_hour = evt.id;
+        "54";
+        delta_hour = new_hour["-"](1["*"](currentHr));
+        "55";
+        currentHr = new_hour;
+        "57";
+        ρσ_interpolate_kwargs.call(hour_hand, hour_hand.rotate, [ρσ_desugar_kwargs({axis: vec(0, 0, 1["-u"]()["*"](1)), angle: delta_hour["*"](pi)["/"](6), origin: vec(0, 0, 0)})]);
+    };
+    if (!changeHr.__argnames__) Object.defineProperties(changeHr, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "63";
+    scene.append_to_caption("\nminutes");
+    "65";
+    selectMin = ρσ_list_decorate([]);
+    "67";
+    for (var ρσ_Index6 = 0; ρσ_Index6["<"](60); ρσ_Index6++) {
+        i = ρσ_Index6;
+        "68";
+        if (i["<"](10)) {
+            "69";
+            minute = "0"["+"](str(i));
+            "70";
+        } else {
+            "71";
+            minute = i;
+        }
+        "73";
+        scene.append_to_caption("\n");
+        "75";
+        selectMin.append(ρσ_interpolate_kwargs.call(this, radio, [ρσ_desugar_kwargs({bind: changeMin, text: "xx:"["+"](minute), id: i["+"](1), name: "minGroup", disabled: false})]));
+    }
+    "77";
+    async function changeMin(evt) {
+        var ρσ_ls, new_minute, delta_minute;
+        "78";
+        "80";
+        new_minute = evt.id;
+        "81";
+        delta_minute = new_minute["-"](1["*"](currentMin));
+        "82";
+        currentMin = new_minute;
+        "84";
+        ρσ_interpolate_kwargs.call(minute_hand, minute_hand.rotate, [ρσ_desugar_kwargs({axis: vec(0, 0, 1["-u"]()["*"](1)), angle: delta_minute["*"](pi)["/"](30), origin: vec(0, 0, 0)})]);
+        "90";
+        ρσ_interpolate_kwargs.call(hour_hand, hour_hand.rotate, [ρσ_desugar_kwargs({axis: vec(0, 0, 1["-u"]()["*"](1)), angle: delta_minute["*"](pi)["/"](30)["/"](12), origin: vec(0, 0, 0)})]);
+    };
+    if (!changeMin.__argnames__) Object.defineProperties(changeMin, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "98";
+    big_rad = 3.1;
+    "99";
+    little_rad = 2.6;
+    "100";
+    micro_rad = 2.8;
+    "102";
+    for (var ρσ_Index7 = 0; ρσ_Index7["<"](12); ρσ_Index7++) {
+        i = ρσ_Index7;
+        "103";
+        outer_x = big_rad["*"](cos(pi["*"](i)["/"](6)));
+        "104";
+        outer_y = big_rad["*"](sin(pi["*"](i)["/"](6)));
+        "105";
+        if (ρσ_equals(i["%"](3), 0)) {
+            "106";
+            inner_x = little_rad["*"](cos(pi["*"](i)["/"](6)));
+            "107";
+            inner_y = little_rad["*"](sin(pi["*"](i)["/"](6)));
+            "108";
+        } else {
+            "109";
+            inner_x = micro_rad["*"](cos(pi["*"](i)["/"](6)));
+            "110";
+            inner_y = micro_rad["*"](sin(pi["*"](i)["/"](6)));
+        }
+        "111";
+        ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ vec(outer_x, outer_y, 0), vec(inner_x, inner_y, 0) ]), radius: .05, color: color.yellow})]);
+    }
+    "114";
+    minute_hand = ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(0, 0, .1), axis: vec(0, little_rad["-"](1["*"](.2)), .1), color: color.blue})]);
+    "115";
+    hour_hand = ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(0, 0, 1["-u"]()["*"](.1)), axis: vec(0, little_rad["-"](1["*"](.5)), 1["-u"]()["*"](.1)), color: color.green})]);
+    "118";
+    t = 0;
+    "120";
+    dt = .05;
+    "123";
+    while (true) {
+        "124";
+        (await rate(10));
+        "126";
+        if (wound) {
+            "128";
+            ρσ_interpolate_kwargs.call(minute_hand, minute_hand.rotate, [ρσ_desugar_kwargs({axis: vec(0, 0, 1["-u"]()["*"](1)), angle: dt, origin: vec(0, 0, 0)})]);
+            "129";
+            ρσ_interpolate_kwargs.call(hour_hand, hour_hand.rotate, [ρσ_desugar_kwargs({axis: vec(0, 0, 1["-u"]()["*"](1)), angle: dt["/"](12), origin: vec(0, 0, 0)})]);
+            "131";
+            t=t["+"](dt);
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

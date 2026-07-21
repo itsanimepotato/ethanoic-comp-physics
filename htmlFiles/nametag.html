@@ -1,0 +1,446 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+ρσ_modules.random = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+
+(function(){
+    var ρσ_seed_state, ρσ_get_random_byte;
+    ρσ_seed_state = (function(){
+        var ρσ_d = {};
+        ρσ_d["key"] = ρσ_list_decorate([]);
+        ρσ_d["key_i"] = 0;
+        ρσ_d["key_j"] = 0;
+        return ρσ_d;
+    }).call(this);
+    ρσ_get_random_byte = (function() {
+        var ρσ_anonfunc = function () {
+            var ρσ_unpack;
+            ρσ_seed_state.key_i = (ρσ_seed_state.key_i + 1) % 256;
+            ρσ_seed_state.key_j = (ρσ_seed_state.key_j + (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_i, ρσ_expr_temp)]) % 256;
+            ρσ_unpack = [(ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_j, ρσ_expr_temp)], 
+            (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_i, ρσ_expr_temp)]];
+            (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_i, ρσ_expr_temp)] = ρσ_unpack[0];
+            (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_j, ρσ_expr_temp)] = ρσ_unpack[1];
+            return (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(((ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_i, ρσ_expr_temp)] + (ρσ_expr_temp = ρσ_seed_state.key)[ρσ_bound_index(ρσ_seed_state.key_j, ρσ_expr_temp)]) % 256, ρσ_expr_temp)];
+        };
+        if (!ρσ_anonfunc.__module__) Object.defineProperties(ρσ_anonfunc, {
+            __module__ : {value: "random"}
+        });
+        return ρσ_anonfunc;
+    })();
+    function seed() {
+        var x = (arguments[0] === undefined || ( 0 === arguments.length-1 && arguments[arguments.length-1] !== null && typeof arguments[arguments.length-1] === "object" && arguments[arguments.length-1] [ρσ_kwargs_symbol] === true)) ? seed.__defaults__.x : arguments[0];
+        var ρσ_kwargs_obj = arguments[arguments.length-1];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "x")){
+            x = ρσ_kwargs_obj.x;
+        }
+        var i, j, ρσ_unpack;
+        ρσ_seed_state.key_i = ρσ_seed_state.key_j = 0;
+        if (typeof x === "number") {
+            x = x.toString();
+        } else if (typeof x !== "string") {
+            throw new TypeError("unhashable type: '" + typeof x + "'");
+        }
+        for (var ρσ_Index1 = 0; ρσ_Index1 < 256; ρσ_Index1++) {
+            i = ρσ_Index1;
+            (ρσ_expr_temp = ρσ_seed_state.key)[(typeof i === "number" && i < 0) ? ρσ_expr_temp.length + i : i] = i;
+        }
+        j = 0;
+        for (var ρσ_Index2 = 0; ρσ_Index2 < 256; ρσ_Index2++) {
+            i = ρσ_Index2;
+            j = (j + (ρσ_expr_temp = ρσ_seed_state.key)[(typeof i === "number" && i < 0) ? ρσ_expr_temp.length + i : i] + x.charCodeAt(i % x.length)) % 256;
+            ρσ_unpack = [(ρσ_expr_temp = ρσ_seed_state.key)[(typeof j === "number" && j < 0) ? ρσ_expr_temp.length + j : j], 
+            (ρσ_expr_temp = ρσ_seed_state.key)[(typeof i === "number" && i < 0) ? ρσ_expr_temp.length + i : i]];
+            (ρσ_expr_temp = ρσ_seed_state.key)[(typeof i === "number" && i < 0) ? ρσ_expr_temp.length + i : i] = ρσ_unpack[0];
+            (ρσ_expr_temp = ρσ_seed_state.key)[(typeof j === "number" && j < 0) ? ρσ_expr_temp.length + j : j] = ρσ_unpack[1];
+        }
+    };
+    if (!seed.__defaults__) Object.defineProperties(seed, {
+        __defaults__ : {value: {x:(new Date).getTime()}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["x"]},
+        __module__ : {value: "random"}
+    });
+
+    seed();
+    function random() {
+        var n, m, i;
+        n = 0;
+        m = 1;
+        for (var ρσ_Index3 = 0; ρσ_Index3 < 8; ρσ_Index3++) {
+            i = ρσ_Index3;
+            n += ρσ_get_random_byte() * m;
+            m *= 256;
+        }
+        return n / 0x10000000000000000;
+    };
+    if (!random.__module__) Object.defineProperties(random, {
+        __module__ : {value: "random"}
+    });
+
+    function randrange() {
+        var start, stop, step, width, n;
+        if (arguments.length === 1) {
+            return randbelow(int(arguments[0]));
+        }
+        start = int(arguments[0]);
+        stop = int(arguments[1]);
+        if (arguments.length < 3) {
+            step = 1;
+        } else {
+            step = int(arguments[2]);
+        }
+        width = stop - start;
+        if (step === 1) {
+            if (width > 0) {
+                return start + randbelow(width);
+            }
+            throw new ValueError("empty range for randrange()");
+        }
+        if (step > 0) {
+            n = Math.floor((width + step - 1) / step);
+        } else if (step < 0) {
+            n = Math.floor((width + step + 1) / step);
+        } else {
+            throw new ValueError("zero step for randrange()");
+        }
+        if (n <= 0) {
+            throw new ValueError("empty range in randrange(" + ρσ_str.format("{}", start) + ", " + ρσ_str.format("{}", stop) + ", " + ρσ_str.format("{}", step) + ")");
+        }
+        return start + step * randbelow(n);
+    };
+    if (!randrange.__module__) Object.defineProperties(randrange, {
+        __module__ : {value: "random"}
+    });
+
+    function randint(a, b) {
+        return int(random() * (b - a + 1) + a);
+    };
+    if (!randint.__argnames__) Object.defineProperties(randint, {
+        __argnames__ : {value: ["a", "b"]},
+        __module__ : {value: "random"}
+    });
+
+    function uniform(a, b) {
+        return random() * (b - a) + a;
+    };
+    if (!uniform.__argnames__) Object.defineProperties(uniform, {
+        __argnames__ : {value: ["a", "b"]},
+        __module__ : {value: "random"}
+    });
+
+    function randbelow(n) {
+        return Math.floor(random() * n);
+    };
+    if (!randbelow.__argnames__) Object.defineProperties(randbelow, {
+        __argnames__ : {value: ["n"]},
+        __module__ : {value: "random"}
+    });
+
+    function choice(seq) {
+        if (seq.length > 0) {
+            return seq[ρσ_bound_index(randbelow(seq.length), seq)];
+        } else {
+            throw new IndexError;
+        }
+    };
+    if (!choice.__argnames__) Object.defineProperties(choice, {
+        __argnames__ : {value: ["seq"]},
+        __module__ : {value: "random"}
+    });
+
+    function shuffle() {
+        var x = ( 0 === arguments.length-1 && arguments[arguments.length-1] !== null && typeof arguments[arguments.length-1] === "object" && arguments[arguments.length-1] [ρσ_kwargs_symbol] === true) ? undefined : arguments[0];
+        var random_f = (arguments[1] === undefined || ( 1 === arguments.length-1 && arguments[arguments.length-1] !== null && typeof arguments[arguments.length-1] === "object" && arguments[arguments.length-1] [ρσ_kwargs_symbol] === true)) ? shuffle.__defaults__.random_f : arguments[1];
+        var ρσ_kwargs_obj = arguments[arguments.length-1];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "random_f")){
+            random_f = ρσ_kwargs_obj.random_f;
+        }
+        var j, ρσ_unpack, i;
+        for (var ρσ_Index4 = 0; ρσ_Index4 < x.length; ρσ_Index4++) {
+            i = ρσ_Index4;
+            j = Math.floor(random_f() * (i + 1));
+            ρσ_unpack = [x[(typeof j === "number" && j < 0) ? x.length + j : j], x[(typeof i === "number" && i < 0) ? x.length + i : i]];
+            x[(typeof i === "number" && i < 0) ? x.length + i : i] = ρσ_unpack[0];
+            x[(typeof j === "number" && j < 0) ? x.length + j : j] = ρσ_unpack[1];
+        }
+        return x;
+    };
+    if (!shuffle.__defaults__) Object.defineProperties(shuffle, {
+        __defaults__ : {value: {random_f:random}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["x", "random_f"]},
+        __module__ : {value: "random"}
+    });
+
+    function sample(population, k) {
+        var x, j, ρσ_unpack, i;
+        x = population.slice();
+        for (var ρσ_Index5 = population.length - 1; ρσ_Index5 > population.length - k - 1; ρσ_Index5-=1) {
+            i = ρσ_Index5;
+            j = Math.floor(random() * (i + 1));
+            ρσ_unpack = [x[(typeof j === "number" && j < 0) ? x.length + j : j], x[(typeof i === "number" && i < 0) ? x.length + i : i]];
+            x[(typeof i === "number" && i < 0) ? x.length + i : i] = ρσ_unpack[0];
+            x[(typeof j === "number" && j < 0) ? x.length + j : j] = ρσ_unpack[1];
+        }
+        return x.slice(population.length - k);
+    };
+    if (!sample.__argnames__) Object.defineProperties(sample, {
+        __argnames__ : {value: ["population", "k"]},
+        __module__ : {value: "random"}
+    });
+
+    ρσ_modules.random.ρσ_seed_state = ρσ_seed_state;
+    ρσ_modules.random.ρσ_get_random_byte = ρσ_get_random_byte;
+    ρσ_modules.random.seed = seed;
+    ρσ_modules.random.random = random;
+    ρσ_modules.random.randrange = randrange;
+    ρσ_modules.random.randint = randint;
+    ρσ_modules.random.uniform = uniform;
+    ρσ_modules.random.randbelow = randbelow;
+    ρσ_modules.random.choice = choice;
+    ρσ_modules.random.shuffle = shuffle;
+    ρσ_modules.random.sample = sample;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, thick, height, space, gap, letters, x, L;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    var random = ρσ_modules.random;
+
+    "4";
+    print("this was made using boxes, spheres, arrows, helixes, and curves");
+    "7";
+    async function rc() {
+        var ρσ_ls, randNum;
+        "8";
+        randNum = random.randint(0, 7);
+        "9";
+        if ((randNum === 0 || typeof randNum === "object" && ρσ_equals(randNum, 0))) {
+            "10";
+            return color.white;
+            "11";
+        } else if ((randNum === 1 || typeof randNum === "object" && ρσ_equals(randNum, 1))) {
+            "12";
+            return color.red;
+            "13";
+        } else if ((randNum === 2 || typeof randNum === "object" && ρσ_equals(randNum, 2))) {
+            "14";
+            return color.green;
+            "15";
+        } else if ((randNum === 3 || typeof randNum === "object" && ρσ_equals(randNum, 3))) {
+            "16";
+            return color.blue;
+            "17";
+        } else if ((randNum === 4 || typeof randNum === "object" && ρσ_equals(randNum, 4))) {
+            "18";
+            return color.cyan;
+            "19";
+        } else if ((randNum === 5 || typeof randNum === "object" && ρσ_equals(randNum, 5))) {
+            "20";
+            return color.magenta;
+            "21";
+        } else (randNum === 6 || typeof randNum === "object" && ρσ_equals(randNum, 6));
+        {
+            "22";
+            return color.yellow;
+        }
+    };
+    if (!rc.__module__) Object.defineProperties(rc, {
+        __module__ : {value: null}
+    });
+
+    "24";
+    thick = .5;
+    "25";
+    height = 4;
+    "26";
+    space = 2;
+    "27";
+    gap = 3;
+    "29";
+    async function E(pos) {
+        "30";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(1["-u"]()["*"](space)["/"](2), 0, 0)), size: vector(thick, height, thick), color: (await rc())})]);
+        "31";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(0, height["/"](2), 0)), size: vector(space, thick, thick), color: (await rc())})]);
+        "32";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos, size: vector(space, thick, thick), color: (await rc())})]);
+        "33";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(0, 1["-u"]()["*"](height)["/"](2), 0)), size: vector(space, thick, thick), color: (await rc())})]);
+    };
+    if (!E.__argnames__) Object.defineProperties(E, {
+        __argnames__ : {value: ["pos"]},
+        __module__ : {value: null}
+    });
+
+    "35";
+    async function T(pos) {
+        "36";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(0, height["/"](2), 0)), size: vector(space, thick, thick), color: (await rc())})]);
+        "37";
+        ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: pos["+"](vector(0, height["/"](2), 0))["+"](vector(space["-"](2), thick["-"](1["*"](1)), thick)), color: (await rc()), radius: thick})]);
+        "38";
+        ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: pos["+"](vector(0, height["/"](2), 0))["+"](vector(space["-"](2), thick["-"](1["*"](2)), thick)), color: (await rc()), radius: thick})]);
+        "39";
+        ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: pos["+"](vector(0, height["/"](2), 0))["+"](vector(space["-"](2), thick["-"](1["*"](3)), thick)), color: (await rc()), radius: thick})]);
+        "40";
+        ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: pos["+"](vector(0, height["/"](2), 0))["+"](vector(space["-"](2), thick["-"](1["*"](4)), thick)), color: (await rc()), radius: thick})]);
+        "41";
+        ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: pos["+"](vector(0, height["/"](2), 0))["+"](vector(space["-"](2), thick["-"](1["*"](5)), thick)), color: (await rc()), radius: thick})]);
+    };
+    if (!T.__argnames__) Object.defineProperties(T, {
+        __argnames__ : {value: ["pos"]},
+        __module__ : {value: null}
+    });
+
+    "43";
+    async function H(pos) {
+        "44";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(1["-u"]()["*"](space)["/"](2), 0, 0)), size: vector(thick, height, thick), color: (await rc())})]);
+        "45";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(space["/"](2), 0, 0)), size: vector(thick, height, thick), color: (await rc())})]);
+        "46";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos, size: vector(space, thick, thick), color: (await rc())})]);
+    };
+    if (!H.__argnames__) Object.defineProperties(H, {
+        __argnames__ : {value: ["pos"]},
+        __module__ : {value: null}
+    });
+
+    "48";
+    async function A(pos) {
+        "49";
+        ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: pos["+"](vector(1["-u"]()["*"](space)["/"](2), 1["-u"]()["*"](height)["/"](2), 0)), axis: vector(space["/"](2), height, 0), shaftspace: thick, color: (await rc())})]);
+        "53";
+        ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: pos["+"](vector(space["/"](2), 1["-u"]()["*"](height)["/"](2), 0)), axis: vector(1["-u"]()["*"](space)["/"](2), height, 0), shaftspace: thick, color: (await rc())})]);
+        "57";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(space["/"](5), 1["-u"]()["*"](height)["/"](10), 0)), size: vector(space, thick, thick), color: (await rc())})]);
+    };
+    if (!A.__argnames__) Object.defineProperties(A, {
+        __argnames__ : {value: ["pos"]},
+        __module__ : {value: null}
+    });
+
+    "61";
+    async function N(pos) {
+        "62";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(1["-u"]()["*"](space)["/"](2), 0, 0)), size: vector(thick, height, thick), color: (await rc())})]);
+        "63";
+        ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: pos["+"](vector(space["/"](2), 0, 0)), size: vector(thick, height, thick), color: (await rc())})]);
+        "64";
+        ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: pos["+"](vector(1["-u"]()["*"](space)["/"](2), height["/"](2), 0)), axis: vector(space, 1["-u"]()["*"](height), 0), shaftspace: thick, color: (await rc())})]);
+    };
+    if (!N.__argnames__) Object.defineProperties(N, {
+        __argnames__ : {value: ["pos"]},
+        __module__ : {value: null}
+    });
+
+    "69";
+    async function C(pos) {
+        var ρσ_ls, R, arc, rad, theta;
+        "70";
+        ρσ_interpolate_kwargs.call(this, helix, [ρσ_desugar_kwargs({pos: pos, axis: vector(0, 0, 1), radius: 2, thickness: thick, coils: .25, color: (await rc())})]);
+        "72";
+        R = 5;
+        "73";
+        arc = ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({color: (await rc()), radius: thick["/"](2)})]);
+        "74";
+        ρσ_interpolate_kwargs.call(arc, arc.append, [ρσ_desugar_kwargs({pos: vector(pos.x["-"](1["*"](2)), 0, 0)})]);
+        "75";
+        for (var ρσ_Index6 = 180; ρσ_Index6["<"](270); ρσ_Index6++) {
+            theta = ρσ_Index6;
+            "76";
+            rad = theta["*"](pi)["/"](180);
+            "77";
+            ρσ_interpolate_kwargs.call(arc, arc.append, [ρσ_desugar_kwargs({pos: vector(R["*"](cos(rad))["+"](pos.x)["+"](3), R["*"](sin(rad)), 0)})]);
+        }
+    };
+    if (!C.__argnames__) Object.defineProperties(C, {
+        __argnames__ : {value: ["pos"]},
+        __module__ : {value: null}
+    });
+
+    "80";
+    letters = ρσ_list_decorate([ E, T, H, A, N, C ]);
+    "81";
+    x = 1["-u"]()["*"](10);
+    "83";
+    var ρσ_Iter7 = letters;
+    ρσ_Iter7 = ((typeof ρσ_Iter7[Symbol.iterator] === "function") ? (ρσ_Iter7 instanceof Map ? ρσ_Iter7.keys() : ρσ_Iter7) : Object.keys(ρσ_Iter7));
+    for (var ρσ_Index7 of ρσ_Iter7) {
+        L = ρσ_Index7;
+        "84";
+        (await L(vector(x, 0, 0)));
+        "85";
+        x=x["+"](space["+"](gap));
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

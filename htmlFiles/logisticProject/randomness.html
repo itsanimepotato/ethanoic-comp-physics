@@ -1,0 +1,843 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var r, playing, s1, s2, s3, s4, ndCurve_random, ndCurve_logistic, gc_random, gc_logistic, dLRM, dLRSD, columns, rowSpacing, columnSpacing, rows, pegs_logistic, pegs_random, ballss_logistic, ballss_random, balls, counts_logistic, counts_random, list_logistic, list_random, slots, g_logistic, g_random, e, s, bttm, ballLim;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, scene_logistic, scene_random, criticalValues, playing, columns, rows, rowSpacing, columnSpacing, bttm, s, e, slots, i, counts_logistic, counts_random, dt, damp, gravity, mass, balls, ballss_logistic, ballss_random, pegs_logistic, pegs_random, t, ballRadius, ballLim, g_logistic, gc_logistic, g_random, gc_random, radii, dLRM, dLRSD, r, list_logistic, list_random, starts, mkP, ww, s1, w, space, s2, w2, www, s3, w3, dLRMText, dLRSDText, dd, ddd, dddd, dddddd, ddddd, ndCurve_logistic, ndCurve_random, start_logistic, bs_logistic, start_random, bs_random, dir, n, over, p, b, m_log, sd_log, total_log, m_rnd, sd_rnd, total_rnd, nd_log, nd_rnd, chi, degFree, critical;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    scene_logistic = ρσ_interpolate_kwargs.call(this, canvas, [ρσ_desugar_kwargs({title: "Logistic", userzoom: false, userspin: false, userpan: false, resizable: false, width: 800, height: 400, align: "left"})]);
+    "4";
+    scene_random = ρσ_interpolate_kwargs.call(this, canvas, [ρσ_desugar_kwargs({title: "Random", userzoom: false, userspin: false, userpan: false, resizable: false, width: 800, height: 400, align: "left"})]);
+    "7";
+    criticalValues = ρσ_list_decorate([ 0, 3.841, 5.991, 7.815, 9.488, 11.07, 12.592, 14.067, 15.507, 16.919, 18.307, 19.675, 21.026, 22.362, 23.685, 24.996, 26.296, 27.587, 28.869, 30.144, 31.41, 32.671, 33.924, 35.172, 36.415, 37.652, 38.885, 40.113, 41.337 ])["+"](ρσ_list_decorate([ 0 ])["*"](90));
+    "9";
+    playing = false;
+    "13";
+    columns = 23;
+    "14";
+    rows = 10;
+    "16";
+    rowSpacing = 3;
+    "17";
+    columnSpacing = 3;
+    "19";
+    bttm = 5["-"](1["*"](rows["-"](1["*"](1)))["*"](columnSpacing));
+    "21";
+    s = 10["-"](1["*"](columns["-"](1["*"](1))["/"](2))["*"](rowSpacing));
+    "22";
+    e = 10["+"](columns["-"](1["*"](1))["/"](2)["*"](rowSpacing));
+    "24";
+    slots = (function() {
+        var ρσ_Iter = range(s, e, rowSpacing), ρσ_Result = [], i;
+        ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+        for (var ρσ_Index of ρσ_Iter) {
+            i = ρσ_Index;
+            ρσ_Result.push(ρσ_list_decorate([ i, i["+"](rowSpacing) ]));
+        }
+        ρσ_Result = ρσ_list_constructor(ρσ_Result);
+        return ρσ_Result;
+    })();
+    "27";
+    counts_logistic = (function() {
+        var ρσ_Iter = range(columns["-"](1["*"](1))), ρσ_Result = [], i;
+        ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+        for (var ρσ_Index of ρσ_Iter) {
+            i = ρσ_Index;
+            ρσ_Result.push(0);
+        }
+        ρσ_Result = ρσ_list_constructor(ρσ_Result);
+        return ρσ_Result;
+    })();
+    "28";
+    counts_random = (function() {
+        var ρσ_Iter = range(columns["-"](1["*"](1))), ρσ_Result = [], i;
+        ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+        for (var ρσ_Index of ρσ_Iter) {
+            i = ρσ_Index;
+            ρσ_Result.push(0);
+        }
+        ρσ_Result = ρσ_list_constructor(ρσ_Result);
+        return ρσ_Result;
+    })();
+    "32";
+    dt = .01;
+    "33";
+    damp = .3;
+    "36";
+    gravity = vec(0, 1["-u"]()["*"](50), 0);
+    "37";
+    mass = .01;
+    "39";
+    balls = 0;
+    "40";
+    ballss_logistic = ρσ_list_decorate([]);
+    "41";
+    ballss_random = ρσ_list_decorate([]);
+    "42";
+    pegs_logistic = ρσ_list_decorate([]);
+    "43";
+    pegs_random = ρσ_list_decorate([]);
+    "44";
+    t = 0;
+    "46";
+    ballRadius = 1;
+    "47";
+    ballLim = 1e5;
+    "50";
+    g_logistic = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Probability Distribution for Logistic Eq", xtitle: "slots", ytitle: "balls", xmin: 0, xmax: columns["-"](1["*"](1)), align: "left", width: 800, height: 200})]);
+    "52";
+    gc_logistic = ρσ_interpolate_kwargs.call(this, gvbars, [ρσ_desugar_kwargs({graph: g_logistic})]);
+    "54";
+    g_random = ρσ_interpolate_kwargs.call(this, graph, [ρσ_desugar_kwargs({title: "Probability Distribution for Random", xtitle: "slots", ytitle: "balls", xmin: 0, xmax: columns["-"](1["*"](1)), align: "left", width: 800, height: 200})]);
+    "56";
+    gc_random = ρσ_interpolate_kwargs.call(this, gvbars, [ρσ_desugar_kwargs({graph: g_random})]);
+    "59";
+    radii = ballRadius["+"](.5);
+    "62";
+    dLRM = 0;
+    "63";
+    dLRSD = 0;
+    "66";
+    r = 4;
+    "67";
+    list_logistic = ρσ_list_decorate([ .2 ]);
+    "68";
+    list_random = ρσ_list_decorate([ .2 ]);
+    "71";
+    async function logisitc(X) {
+        "72";
+        "73";
+        return r["*"](X)["*"](1["-"](1["*"](X)));
+    };
+    if (!logisitc.__argnames__) Object.defineProperties(logisitc, {
+        __argnames__ : {value: ["X"]},
+        __module__ : {value: null}
+    });
+
+    "80";
+    starts = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: strt, text: "Start/Stop", disabled: true})]);
+    "82";
+    async function strt(evt) {
+        var ρσ_ls, disabling, obj;
+        "83";
+        "84";
+        playing = !playing;
+        "85";
+        disabling = ρσ_list_decorate([ s1, s2, s3, s4 ]);
+        "86";
+        var ρσ_Iter1 = disabling;
+        ρσ_Iter1 = ((typeof ρσ_Iter1[Symbol.iterator] === "function") ? (ρσ_Iter1 instanceof Map ? ρσ_Iter1.keys() : ρσ_Iter1) : Object.keys(ρσ_Iter1));
+        for (var ρσ_Index1 of ρσ_Iter1) {
+            obj = ρσ_Index1;
+            "88";
+            obj.disabled = !obj.disabled;
+        }
+    };
+    if (!strt.__argnames__) Object.defineProperties(strt, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "93";
+    async function clearGraphs() {
+        var ρσ_ls, l, obj;
+        "94";
+        "95";
+        l = ρσ_list_decorate([ ndCurve_random, ndCurve_logistic, gc_random, gc_logistic ]);
+        "96";
+        var ρσ_Iter2 = l;
+        ρσ_Iter2 = ((typeof ρσ_Iter2[Symbol.iterator] === "function") ? (ρσ_Iter2 instanceof Map ? ρσ_Iter2.keys() : ρσ_Iter2) : Object.keys(ρσ_Iter2));
+        for (var ρσ_Index2 of ρσ_Iter2) {
+            obj = ρσ_Index2;
+            "97";
+            obj.remove();
+        }
+        "99";
+        dLRM = 0;
+        "100";
+        dLRSD = 0;
+        "102";
+        dLRMText.text = "\nDifference between Logistic and True Random Means: "["+"](ρσ_str.format("{}", dLRM))["+"]("");
+        "103";
+        dLRSDText.text = "\nDifference between Logistic and True Random Standard Deviations: "["+"](ρσ_str.format("{}", dLRSD))["+"]("");
+    };
+    if (!clearGraphs.__module__) Object.defineProperties(clearGraphs, {
+        __module__ : {value: null}
+    });
+
+    "107";
+    mkP = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({bind: mPegs, text: "Make Pegs"})]);
+    "111";
+    async function mPegs(evt) {
+        var ρσ_ls, obj, i, s_row, pos_vec, c_log, c_rnd, o;
+        "112";
+        "116";
+        var ρσ_Iter3 = ballss_logistic["+"](ballss_random)["+"](pegs_logistic)["+"](pegs_random);
+        ρσ_Iter3 = ((typeof ρσ_Iter3[Symbol.iterator] === "function") ? (ρσ_Iter3 instanceof Map ? ρσ_Iter3.keys() : ρσ_Iter3) : Object.keys(ρσ_Iter3));
+        for (var ρσ_Index3 of ρσ_Iter3) {
+            obj = ρσ_Index3;
+            "117";
+            obj.visible = false;
+        }
+        "118";
+        pegs_logistic = ρσ_list_decorate([]);
+        "119";
+        pegs_random = ρσ_list_decorate([]);
+        "120";
+        ballss_logistic = ρσ_list_decorate([]);
+        "121";
+        ballss_random = ρσ_list_decorate([]);
+        "122";
+        counts_logistic = (function() {
+            var ρσ_Iter = range(columns["-"](1["*"](1))), ρσ_Result = [], i;
+            ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+            for (var ρσ_Index of ρσ_Iter) {
+                i = ρσ_Index;
+                ρσ_Result.push(0);
+            }
+            ρσ_Result = ρσ_list_constructor(ρσ_Result);
+            return ρσ_Result;
+        })();
+        "123";
+        counts_random = (function() {
+            var ρσ_Iter = range(columns["-"](1["*"](1))), ρσ_Result = [], i;
+            ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+            for (var ρσ_Index of ρσ_Iter) {
+                i = ρσ_Index;
+                ρσ_Result.push(0);
+            }
+            ρσ_Result = ρσ_list_constructor(ρσ_Result);
+            return ρσ_Result;
+        })();
+        "124";
+        balls = 0;
+        "125";
+        list_logistic = ρσ_list_decorate([ .2 ]);
+        "126";
+        list_random = ρσ_list_decorate([ .2 ]);
+        "129";
+        for (var ρσ_Index4 = 0; ρσ_Index4["<"](rows); ρσ_Index4++) {
+            i = ρσ_Index4;
+            "130";
+            if (ρσ_equals(i["%"](2), 0)) {
+                "131";
+                s_row = 10["-"](1["*"](columns["-"](1["*"](1))["/"](2))["*"](rowSpacing));
+                "132";
+            } else {
+                "133";
+                s_row = 10["-"](1["*"](columns["-"](1["*"](1))["/"](2))["*"](rowSpacing))["-"](1["*"](rowSpacing["/"](2)));
+            }
+            "134";
+            for (var ρσ_Index5 = 0; ρσ_Index5["<"](columns); ρσ_Index5++) {
+                o = ρσ_Index5;
+                "135";
+                pos_vec = vec(s_row["+"](o["*"](rowSpacing)), 5["-"](1["*"](i)["*"](columnSpacing)), 0);
+                "136";
+                c_log = ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({canvas: scene_logistic, pos: pos_vec, axis: vec(0, 0, 3), radius: .5})]);
+                "137";
+                c_rnd = ρσ_interpolate_kwargs.call(this, cylinder, [ρσ_desugar_kwargs({canvas: scene_random, pos: pos_vec, axis: vec(0, 0, 3), radius: .5})]);
+                "138";
+                pegs_logistic=pegs_logistic["+"](ρσ_list_decorate([ c_log ]));
+                "139";
+                pegs_random=pegs_random["+"](ρσ_list_decorate([ c_rnd ]));
+            }
+        }
+        "141";
+        starts.disabled = false;
+        "142";
+        mkP.disabled = true;
+        "144";
+        (await clearGraphs());
+    };
+    if (!mPegs.__argnames__) Object.defineProperties(mPegs, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "150";
+    ww = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "152";
+    s1 = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: setCols, min: 9, max: 50, value: 23, step: 2})]);
+    "154";
+    w = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nColumns: "["+"](s1.value)})]);
+    "156";
+    async function setCols(evt) {
+        var ρσ_ls, i;
+        "157";
+        "158";
+        columns = evt.value;
+        "159";
+        w.text = "\nColumns: "["+"](s1.value);
+        "160";
+        g_logistic.xmax = columns["-"](1["*"](1));
+        "161";
+        g_random.xmax = columns["-"](1["*"](1));
+        "162";
+        counts_logistic = (function() {
+            var ρσ_Iter = range(columns["-"](1["*"](1))), ρσ_Result = [], i;
+            ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+            for (var ρσ_Index of ρσ_Iter) {
+                i = ρσ_Index;
+                ρσ_Result.push(0);
+            }
+            ρσ_Result = ρσ_list_constructor(ρσ_Result);
+            return ρσ_Result;
+        })();
+        "163";
+        counts_random = (function() {
+            var ρσ_Iter = range(columns["-"](1["*"](1))), ρσ_Result = [], i;
+            ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+            for (var ρσ_Index of ρσ_Iter) {
+                i = ρσ_Index;
+                ρσ_Result.push(0);
+            }
+            ρσ_Result = ρσ_list_constructor(ρσ_Result);
+            return ρσ_Result;
+        })();
+        "164";
+        s = 10["-"](1["*"](columns["-"](1["*"](1))["/"](2))["*"](rowSpacing));
+        "165";
+        e = 10["+"](columns["-"](1["*"](1))["/"](2)["*"](rowSpacing));
+        "166";
+        slots = (function() {
+            var ρσ_Iter = range(s, e, rowSpacing), ρσ_Result = [], i;
+            ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+            for (var ρσ_Index of ρσ_Iter) {
+                i = ρσ_Index;
+                ρσ_Result.push(ρσ_list_decorate([ i, i["+"](rowSpacing) ]));
+            }
+            ρσ_Result = ρσ_list_constructor(ρσ_Result);
+            return ρσ_Result;
+        })();
+        "168";
+        starts.disabled = true;
+        "169";
+        mkP.disabled = false;
+    };
+    if (!setCols.__argnames__) Object.defineProperties(setCols, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "171";
+    space = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "175";
+    ww = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "177";
+    s2 = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: setRows, min: 3, max: 50, value: 10, step: 1})]);
+    "179";
+    w2 = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nRows: "["+"](s2.value)})]);
+    "181";
+    async function setRows(evt) {
+        "182";
+        "183";
+        rows = evt.value;
+        "184";
+        w2.text = "\nRows: "["+"](s2.value);
+        "185";
+        bttm = 5["-"](1["*"](rows["-"](1["*"](1)))["*"](columnSpacing));
+        "187";
+        starts.disabled = true;
+        "188";
+        mkP.disabled = false;
+    };
+    if (!setRows.__argnames__) Object.defineProperties(setRows, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "190";
+    space = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "194";
+    www = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "196";
+    s3 = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({bind: setNumBalls, min: 1, max: 1e5, value: 1e5, step: 1})]);
+    "198";
+    w3 = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nBall Limit: "["+"](s3.value)})]);
+    "200";
+    async function setNumBalls(evt) {
+        "201";
+        "202";
+        ballLim = evt.value;
+        "203";
+        w3.text = "\nBall Limit: "["+"](s3.value);
+        "205";
+        starts.disabled = true;
+        "206";
+        mkP.disabled = false;
+    };
+    if (!setNumBalls.__argnames__) Object.defineProperties(setNumBalls, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "210";
+    space = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "212";
+    dLRMText = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nDifference between Logistic and True Random Means: "["+"](ρσ_str.format("{}", dLRM))["+"]("")})]);
+    "213";
+    dLRSDText = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nDifference between Logistic and True Random Standard Deviations: "["+"](ρσ_str.format("{}", dLRSD))["+"]("")})]);
+    "215";
+    space = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "217";
+    dd = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nStandard deviation of logistic: 0"})]);
+    "218";
+    ddd = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nStandard deviation of random: 0"})]);
+    "220";
+    space = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "222";
+    dddd = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nPearson's Chi-Square (of Fit) Test:"})]);
+    "223";
+    dddddd = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nCritical value:"})]);
+    "224";
+    ddddd = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\nDegrees of freedom:"})]);
+    "226";
+    space = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n"})]);
+    "228";
+    ndCurve_logistic = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: g_logistic, color: color.red})]);
+    "229";
+    ndCurve_random = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: g_random, color: color.blue})]);
+    "231";
+    async function chiSquare(expected, observed) {
+        var ρσ_ls, s, i;
+        "232";
+        s = 0;
+        "233";
+        var ρσ_Iter6 = range(len(expected));
+        ρσ_Iter6 = ((typeof ρσ_Iter6[Symbol.iterator] === "function") ? (ρσ_Iter6 instanceof Map ? ρσ_Iter6.keys() : ρσ_Iter6) : Object.keys(ρσ_Iter6));
+        for (var ρσ_Index6 of ρσ_Iter6) {
+            i = ρσ_Index6;
+            "234";
+            if ((ρσ_getitem(expected, i) !== 0 && (typeof ρσ_getitem(expected, i) !== "object" || ρσ_not_equals(ρσ_getitem(expected, i), 0)))) {
+                "235";
+                s=s["+"](Math.pow((ρσ_getitem(observed, i)["-"](1["*"](ρσ_getitem(expected, i)))), 2)["/"](ρσ_getitem(expected, i)));
+            }
+        }
+        "236";
+        return s;
+    };
+    if (!chiSquare.__argnames__) Object.defineProperties(chiSquare, {
+        __argnames__ : {value: ["expected", "observed"]},
+        __module__ : {value: null}
+    });
+
+    "238";
+    async function degOfFreedom(counts) {
+        var ρσ_ls, num, i;
+        "239";
+        num = 0;
+        "240";
+        var ρσ_Iter7 = range(len(counts));
+        ρσ_Iter7 = ((typeof ρσ_Iter7[Symbol.iterator] === "function") ? (ρσ_Iter7 instanceof Map ? ρσ_Iter7.keys() : ρσ_Iter7) : Object.keys(ρσ_Iter7));
+        for (var ρσ_Index7 of ρσ_Iter7) {
+            i = ρσ_Index7;
+            "241";
+            if ((ρσ_getitem(counts, i) !== 0 && (typeof ρσ_getitem(counts, i) !== "object" || ρσ_not_equals(ρσ_getitem(counts, i), 0)))) {
+                "242";
+                num=num["+"](1);
+            }
+        }
+        "243";
+        return num["-"](1["*"](1));
+    };
+    if (!degOfFreedom.__argnames__) Object.defineProperties(degOfFreedom, {
+        __argnames__ : {value: ["counts"]},
+        __module__ : {value: null}
+    });
+
+    "246";
+    async function mean_counts(counts) {
+        var ρσ_ls, total;
+        "247";
+        total = (await sum(counts));
+        "248";
+        if ((total === 0 || typeof total === "object" && ρσ_equals(total, 0))) {
+            "249";
+            return 0;
+        }
+        "250";
+        return (await sum((function() {
+            function* js_generator() {
+                var ρσ_Iter = range(len(counts)), i;
+                ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                for (var ρσ_Index of ρσ_Iter) {
+                    i = ρσ_Index;
+                    yield (i["*"](ρσ_getitem(counts, i)));
+                }
+
+            }
+            var result = js_generator.call(this);
+            result.send = result.next;
+            return result;
+        })()))["/"](total);
+    };
+    if (!mean_counts.__argnames__) Object.defineProperties(mean_counts, {
+        __argnames__ : {value: ["counts"]},
+        __module__ : {value: null}
+    });
+
+    "252";
+    async function SD_counts(counts) {
+        var ρσ_ls, total, m, variance;
+        "253";
+        total = (await sum(counts));
+        "254";
+        if ((total === 0 || typeof total === "object" && ρσ_equals(total, 0))) {
+            "255";
+            return 0;
+        }
+        "257";
+        m = (await mean_counts(counts));
+        "258";
+        variance = (await sum((function() {
+            function* js_generator() {
+                var ρσ_Iter = range(len(counts)), i;
+                ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                for (var ρσ_Index of ρσ_Iter) {
+                    i = ρσ_Index;
+                    yield (ρσ_getitem(counts, i)["*"](Math.pow((i["-"](1["*"](m))), 2)));
+                }
+
+            }
+            var result = js_generator.call(this);
+            result.send = result.next;
+            return result;
+        })()))["/"](total);
+        "259";
+        return sqrt(variance);
+    };
+    if (!SD_counts.__argnames__) Object.defineProperties(SD_counts, {
+        __argnames__ : {value: ["counts"]},
+        __module__ : {value: null}
+    });
+
+    "261";
+    async function ndFormula(x, m, sd) {
+        var ρσ_ls, mult, ePart;
+        "262";
+        if ((sd === 0 || typeof sd === "object" && ρσ_equals(sd, 0))) {
+            "263";
+            return 0;
+        }
+        "265";
+        mult = 1["/"](sd["*"](sqrt(2["*"](pi))));
+        "266";
+        ePart = exp(1["-u"]()["*"](Math.pow((x["-"](1["*"](m))), 2))["/"](2["*"](Math.pow(sd, 2))));
+        "267";
+        return mult["*"](ePart);
+    };
+    if (!ndFormula.__argnames__) Object.defineProperties(ndFormula, {
+        __argnames__ : {value: ["x", "m", "sd"]},
+        __module__ : {value: null}
+    });
+
+    "269";
+    while (true) {
+        "270";
+        (await rate(100));
+        "271";
+        if (playing) {
+            "272";
+            t=t["+"](1);
+            "274";
+            if (balls["<"](ballLim) && ρσ_equals(t["%"](10), 0)) {
+                "275";
+                balls=balls["+"](1);
+                "277";
+                ρσ_setitem(list_logistic, balls, (await logisitc(ρσ_getitem(list_logistic, balls["-"](1["*"](1))))));
+                "278";
+                start_logistic = 8.6["+"](ρσ_getitem(list_logistic, balls)["*"](2.8));
+                "279";
+                bs_logistic = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({canvas: scene_logistic, pos: vec(start_logistic, 10, 0), color: color.red, radius: ballRadius})]);
+                "280";
+                bs_logistic.vel = vec(0, 0, 0);
+                "281";
+                bs_logistic.counted = false;
+                "282";
+                ballss_logistic=ballss_logistic["+"](ρσ_list_decorate([ bs_logistic ]));
+                "284";
+                ρσ_setitem(list_random, balls, random());
+                "285";
+                start_random = 8.6["+"](random()["*"](2.8));
+                "286";
+                bs_random = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({canvas: scene_random, pos: vec(start_random, 10, 0), color: color.blue, radius: ballRadius})]);
+                "287";
+                bs_random.vel = vec(0, 0, 0);
+                "288";
+                bs_random.counted = false;
+                "289";
+                ballss_random=ballss_random["+"](ρσ_list_decorate([ bs_random ]));
+            }
+            "291";
+            var ρσ_Iter8 = ballss_logistic;
+            ρσ_Iter8 = ((typeof ρσ_Iter8[Symbol.iterator] === "function") ? (ρσ_Iter8 instanceof Map ? ρσ_Iter8.keys() : ρσ_Iter8) : Object.keys(ρσ_Iter8));
+            for (var ρσ_Index8 of ρσ_Iter8) {
+                b = ρσ_Index8;
+                "294";
+                if (b.pos.y[">"](bttm)) {
+                    "295";
+                    b.vel = b.vel["+"](gravity["*"](dt));
+                    "296";
+                    b.pos = b.pos["+"](b.vel["*"](dt));
+                    "299";
+                    var ρσ_Iter9 = pegs_logistic;
+                    ρσ_Iter9 = ((typeof ρσ_Iter9[Symbol.iterator] === "function") ? (ρσ_Iter9 instanceof Map ? ρσ_Iter9.keys() : ρσ_Iter9) : Object.keys(ρσ_Iter9));
+                    for (var ρσ_Index9 of ρσ_Iter9) {
+                        p = ρσ_Index9;
+                        "300";
+                        if (mag(p.pos["-"](1["*"](b.pos)))["<"](radii)) {
+                            "303";
+                            dir = b.pos["-"](1["*"](p.pos));
+                            "304";
+                            n = norm(dir);
+                            "307";
+                            if ((n.x === 0 || typeof n.x === "object" && ρσ_equals(n.x, 0))) {
+                                "308";
+                                n.x=n.x["+"](random()["-"](1["*"](.5))["*"](.1));
+                            }
+                            "311";
+                            b.vel = b.vel["-"](1["*"](2)["*"](dot(b.vel, n))["*"](n)["*"](1["-"](1["*"](damp))));
+                            "314";
+                            over = radii["-"](1["*"](mag(b.pos["-"](1["*"](p.pos)))));
+                            "315";
+                            b.pos=b.pos["+"](n["*"](over));
+                            "317";
+                        }
+                    }
+                }
+                if (b.pos.y["<"](bttm)) {
+                    "318";
+                    var ρσ_Iter10 = range(len(slots));
+                    ρσ_Iter10 = ((typeof ρσ_Iter10[Symbol.iterator] === "function") ? (ρσ_Iter10 instanceof Map ? ρσ_Iter10.keys() : ρσ_Iter10) : Object.keys(ρσ_Iter10));
+                    for (var ρσ_Index10 of ρσ_Iter10) {
+                        i = ρσ_Index10;
+                        "319";
+                        if (b.pos.x["<"](ρσ_getitem(ρσ_getitem(slots, i), 1)) && b.pos.x[">"](ρσ_getitem(ρσ_getitem(slots, i), 0)) && (b.counted === false || typeof b.counted === "object" && ρσ_equals(b.counted, false))) {
+                            "320";
+                            ρσ_setitem(counts_logistic, i, ρσ_getitem(counts_logistic, i)["+"](1));
+                            "322";
+                            gc_logistic.visible = false;
+                            "323";
+                            gc_logistic.remove();
+                            "324";
+                            gc_logistic = ρσ_interpolate_kwargs.call(this, gvbars, [ρσ_desugar_kwargs({graph: g_logistic})]);
+                            "326";
+                            var ρσ_Iter11 = range(len(counts_logistic));
+                            ρσ_Iter11 = ((typeof ρσ_Iter11[Symbol.iterator] === "function") ? (ρσ_Iter11 instanceof Map ? ρσ_Iter11.keys() : ρσ_Iter11) : Object.keys(ρσ_Iter11));
+                            for (var ρσ_Index11 of ρσ_Iter11) {
+                                i = ρσ_Index11;
+                                "327";
+                                gc_logistic.plot(i, ρσ_getitem(counts_logistic, i));
+                            }
+                            "328";
+                            b.counted = true;
+                            "329";
+                            b.visible = false;
+                            "330";
+                            ballss_logistic.remove(b);
+                        }
+                    }
+                }
+            }
+            "332";
+            var ρσ_Iter12 = ballss_random;
+            ρσ_Iter12 = ((typeof ρσ_Iter12[Symbol.iterator] === "function") ? (ρσ_Iter12 instanceof Map ? ρσ_Iter12.keys() : ρσ_Iter12) : Object.keys(ρσ_Iter12));
+            for (var ρσ_Index12 of ρσ_Iter12) {
+                b = ρσ_Index12;
+                "335";
+                if (b.pos.y[">"](bttm)) {
+                    "336";
+                    b.vel = b.vel["+"](gravity["*"](dt));
+                    "337";
+                    b.pos = b.pos["+"](b.vel["*"](dt));
+                    "340";
+                    var ρσ_Iter13 = pegs_random;
+                    ρσ_Iter13 = ((typeof ρσ_Iter13[Symbol.iterator] === "function") ? (ρσ_Iter13 instanceof Map ? ρσ_Iter13.keys() : ρσ_Iter13) : Object.keys(ρσ_Iter13));
+                    for (var ρσ_Index13 of ρσ_Iter13) {
+                        p = ρσ_Index13;
+                        "341";
+                        if (mag(p.pos["-"](1["*"](b.pos)))["<"](radii)) {
+                            "344";
+                            dir = b.pos["-"](1["*"](p.pos));
+                            "345";
+                            n = norm(dir);
+                            "347";
+                            if ((n.x === 0 || typeof n.x === "object" && ρσ_equals(n.x, 0))) {
+                                "348";
+                                n.x=n.x["+"](random()["-"](1["*"](.5))["*"](.1));
+                            }
+                            "351";
+                            b.vel = b.vel["-"](1["*"](2)["*"](dot(b.vel, n))["*"](n)["*"](1["-"](1["*"](damp))));
+                            "354";
+                            over = radii["-"](1["*"](mag(b.pos["-"](1["*"](p.pos)))));
+                            "355";
+                            b.pos=b.pos["+"](n["*"](over));
+                            "357";
+                        }
+                    }
+                }
+                if (b.pos.y["<"](bttm)) {
+                    "358";
+                    var ρσ_Iter14 = range(len(slots));
+                    ρσ_Iter14 = ((typeof ρσ_Iter14[Symbol.iterator] === "function") ? (ρσ_Iter14 instanceof Map ? ρσ_Iter14.keys() : ρσ_Iter14) : Object.keys(ρσ_Iter14));
+                    for (var ρσ_Index14 of ρσ_Iter14) {
+                        i = ρσ_Index14;
+                        "359";
+                        if (b.pos.x["<"](ρσ_getitem(ρσ_getitem(slots, i), 1)) && b.pos.x[">"](ρσ_getitem(ρσ_getitem(slots, i), 0)) && (b.counted === false || typeof b.counted === "object" && ρσ_equals(b.counted, false))) {
+                            "360";
+                            ρσ_setitem(counts_random, i, ρσ_getitem(counts_random, i)["+"](1));
+                            "362";
+                            gc_random.visible = false;
+                            "363";
+                            gc_random.remove();
+                            "364";
+                            gc_random = ρσ_interpolate_kwargs.call(this, gvbars, [ρσ_desugar_kwargs({graph: g_random})]);
+                            "366";
+                            var ρσ_Iter15 = range(len(counts_random));
+                            ρσ_Iter15 = ((typeof ρσ_Iter15[Symbol.iterator] === "function") ? (ρσ_Iter15 instanceof Map ? ρσ_Iter15.keys() : ρσ_Iter15) : Object.keys(ρσ_Iter15));
+                            for (var ρσ_Index15 of ρσ_Iter15) {
+                                i = ρσ_Index15;
+                                "367";
+                                gc_random.plot(i, ρσ_getitem(counts_random, i));
+                            }
+                            "368";
+                            b.counted = true;
+                            "369";
+                            b.visible = false;
+                            "370";
+                            ballss_random.remove(b);
+                        }
+                    }
+                }
+            }
+            "372";
+            m_log = (await mean_counts(counts_logistic));
+            "373";
+            sd_log = (await SD_counts(counts_logistic));
+            "374";
+            total_log = (await sum(counts_logistic));
+            "376";
+            m_rnd = (await mean_counts(counts_random));
+            "377";
+            sd_rnd = (await SD_counts(counts_random));
+            "378";
+            total_rnd = (await sum(counts_random));
+            "380";
+            ndCurve_logistic.visible = false;
+            "381";
+            ndCurve_logistic.remove();
+            "382";
+            ndCurve_logistic = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: g_logistic, color: color.red})]);
+            "384";
+            ndCurve_random.visible = false;
+            "385";
+            ndCurve_random.remove();
+            "386";
+            ndCurve_random = ρσ_interpolate_kwargs.call(this, gcurve, [ρσ_desugar_kwargs({graph: g_random, color: color.blue})]);
+            "388";
+            for (var ρσ_Index16 = 0; ρσ_Index16["<"](columns); ρσ_Index16++) {
+                i = ρσ_Index16;
+                "389";
+                nd_log = (await ndFormula(i, m_log, sd_log))["*"](total_log);
+                "390";
+                ndCurve_logistic.plot(i, nd_log);
+                "391";
+                nd_rnd = (await ndFormula(i, m_rnd, sd_rnd))["*"](total_rnd);
+                "392";
+                ndCurve_random.plot(i, nd_rnd);
+            }
+            "394";
+            dLRM = abs(m_log["-"](1["*"](m_rnd)));
+            "395";
+            dLRSD = abs(sd_log["-"](1["*"](sd_rnd)));
+            "397";
+            dLRMText.text = "\nDifference between Logistic and True Random Means: "["+"](ρσ_str.format("{}", dLRM))["+"]("");
+            "398";
+            dLRSDText.text = "\nDifference between Logistic and True Random Standard Deviations: "["+"](ρσ_str.format("{}", dLRSD))["+"]("");
+            "400";
+            dd.text = "\nStandard deviation of logistic: "["+"](ρσ_str.format("{}", sd_log))["+"]("");
+            "401";
+            ddd.text = "\nStandard deviation of random: "["+"](ρσ_str.format("{}", sd_rnd))["+"]("");
+            "403";
+            chi = (await chiSquare(counts_random, counts_logistic));
+            "404";
+            dddd.text = "\nPearson's Chi-Square (of Fit) Test: "["+"](ρσ_str.format("{}", chi))["+"]("");
+            "406";
+            degFree = (await degOfFreedom(counts_random));
+            "408";
+            critical = ρσ_getitem(criticalValues, degFree);
+            "409";
+            dddddd.text = "\nCritical value: "["+"](ρσ_str.format("{}", critical))["+"]("");
+            "411";
+            ddddd.text = "\nDegrees of freedom: "["+"](ρσ_str.format("{}", degFree))["+"]("");
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

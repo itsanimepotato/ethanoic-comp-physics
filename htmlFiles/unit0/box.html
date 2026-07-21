@@ -1,0 +1,134 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, body, glasses;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "4";
+    body = box();
+    "6";
+    body.color = color.red;
+    "7";
+    body.height = 2;
+    "9";
+    glasses = (await ellipsoid());
+    "11";
+    glasses.color = color.cyan;
+    "12";
+    glasses.pos = vector(.5, .5, 0);
+    "13";
+    glasses.size = vector(.75, .75, .75);
+    "15";
+    async function antenna(dx, dz) {
+        var ρσ_ls, antenna;
+        "16";
+        antenna = helix();
+        "17";
+        antenna.pos = vector(dx, 1, dz);
+        "18";
+        antenna.axis = vector.random();
+        "19";
+        antenna.radius = .25;
+        "20";
+        antenna.color = vector.random();
+        "21";
+        antenna.length = 10;
+    };
+    if (!antenna.__argnames__) Object.defineProperties(antenna, {
+        __argnames__ : {value: ["dx", "dz"]},
+        __module__ : {value: null}
+    });
+
+    "23";
+    (await antenna(1, 1));
+    "24";
+    (await antenna(1["-u"]()["*"](1), 1["-u"]()["*"](1)));
+    "26";
+    async function leg(dx, dz) {
+        var ρσ_ls, leg;
+        "27";
+        leg = box();
+        "28";
+        leg.pos = vector(dx, 1["-u"]()["*"](1), dz);
+        "29";
+        leg.axis = vector(0, 1["-u"]()["*"](1), 0);
+        "30";
+        leg.color = vector.random();
+    };
+    if (!leg.__argnames__) Object.defineProperties(leg, {
+        __argnames__ : {value: ["dx", "dz"]},
+        __module__ : {value: null}
+    });
+
+    "33";
+    (await leg(.5, .5));
+    "34";
+    (await leg(1["-u"]()["*"](.5), 1["-u"]()["*"](.5)));
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

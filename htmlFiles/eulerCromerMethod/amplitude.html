@@ -1,0 +1,219 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var prevVel, prevTime, t, paused;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    var version, print, arange, __name__, type, ρσ_ls, wall, ball, spring, equilPos, t, dt, prevVel, prevTime, periodMeasured, initialPosText, posSlider, paused, startButton;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "3";
+    scene.userzoom = false;
+    "5";
+    wall = ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vector(1["-u"]()["*"](3), 0, 0), height: 3, length: .1, texture: textures.wood})]);
+    "6";
+    ball = ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: vector(4, 0, 0), radius: .3, color: color.yellow})]);
+    "7";
+    spring = ρσ_interpolate_kwargs.call(this, helix, [ρσ_desugar_kwargs({pos: wall.pos, axis: ball.pos["-"](1["*"](wall.pos)), coils: 20, radius: .2})]);
+    "9";
+    ball.vel = vector(0, 0, 0);
+    "10";
+    ball.acc = vector(0, 0, 0);
+    "11";
+    ball.mass = 10;
+    "12";
+    equilPos = vector(2, 0, 0);
+    "13";
+    spring.k = 200;
+    "15";
+    t = 0;
+    "16";
+    dt = .001;
+    "18";
+    prevVel = 0;
+    "19";
+    prevTime = 0;
+    "20";
+    periodMeasured = false;
+    "22";
+    async function detectPeriod() {
+        var ρσ_ls, T, pdStop;
+        "23";
+        "25";
+        if (prevVel[">"](0) && ball.vel.x["<="](0)) {
+            "26";
+            if ((prevTime !== 0 && (typeof prevTime !== "object" || ρσ_not_equals(prevTime, 0)))) {
+                "27";
+                T = t["-"](1["*"](prevTime));
+                "28";
+                if (!pdStop) {
+                    "29";
+                    print("Measured Period =", T);
+                }
+                "30";
+                pdStop = false;
+            }
+            "31";
+            prevTime = t;
+        }
+        "33";
+        prevVel = ball.vel.x;
+    };
+    if (!detectPeriod.__module__) Object.defineProperties(detectPeriod, {
+        __module__ : {value: null}
+    });
+
+    "35";
+    async function setInitialPosition(s) {
+        "36";
+        if (paused) {
+            "37";
+            ball.pos = vector(s.value, 0, 0);
+            "38";
+            ball.vel = vector(0, 0, 0);
+            "39";
+            spring.axis = ball.pos["-"](1["*"](wall.pos));
+            "40";
+            initialPosText.text = "Initial Position = {:1.2f}".format(s.value);
+        }
+    };
+    if (!setInitialPosition.__argnames__) Object.defineProperties(setInitialPosition, {
+        __argnames__ : {value: ["s"]},
+        __module__ : {value: null}
+    });
+
+    "42";
+    scene.append_to_caption("\n\nAdjust Initial Position Before Starting\n");
+    "43";
+    initialPosText = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "Initial Position = 4.00\n"})]);
+    "45";
+    posSlider = ρσ_interpolate_kwargs.call(this, slider, [ρσ_desugar_kwargs({min: 1, max: 6, value: 4, length: 300, bind: setInitialPosition})]);
+    "47";
+    paused = true;
+    "49";
+    async function pause(b) {
+        var ρσ_ls, pdStop;
+        "50";
+        "51";
+        paused = !paused;
+        "53";
+        if (paused) {
+            "54";
+            b.text = "Start Simulation";
+            "55";
+            posSlider.disabled = false;
+            "56";
+        } else {
+            "57";
+            b.text = "Stop Simulation";
+            "58";
+            posSlider.disabled = true;
+            "59";
+            pdStop = true;
+        }
+    };
+    if (!pause.__argnames__) Object.defineProperties(pause, {
+        __argnames__ : {value: ["b"]},
+        __module__ : {value: null}
+    });
+
+    "61";
+    scene.append_to_caption("\n\n");
+    "62";
+    startButton = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({text: "Start Simulation", bind: pause})]);
+    "64";
+    async function springForce(displacement) {
+        "65";
+        return 1["-u"]()["*"](spring.k)["*"](displacement["-"](1["*"](equilPos)));
+    };
+    if (!springForce.__argnames__) Object.defineProperties(springForce, {
+        __argnames__ : {value: ["displacement"]},
+        __module__ : {value: null}
+    });
+
+    "67";
+    while (true) {
+        "68";
+        (await rate(1e3));
+        "70";
+        if (!paused) {
+            "71";
+            t=t["+"](dt);
+            "73";
+            ball.acc = (await springForce(ball.pos))["/"](ball.mass);
+            "74";
+            ball.vel.x=ball.vel.x["+"](ball.acc.x["*"](dt));
+            "75";
+            ball.pos=ball.pos["+"](ball.vel["*"](dt));
+            "77";
+            spring.axis = ball.pos["-"](1["*"](wall.pos));
+            "79";
+            (await detectPeriod());
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

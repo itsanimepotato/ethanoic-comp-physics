@@ -1,0 +1,447 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var objects;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function round(num, n=0) {return Number(num.toFixed(n))}
+
+    var version, print, arange, __name__, type, ρσ_ls, fieldCount, fieldWidth, fieldDA, field, y, G, dt, amtObjects, i, p, EPSILON, t, floor, _GS_1, v2pos, ax;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "5";
+    function Vector2() {;
+    }
+    Vector2.prototype.__init__ = async function __init__(x, y) {
+        var self = this;
+        "7";
+        self.x = x;
+        "8";
+        self.y = y;
+    };
+    if (!Vector2.prototype.__init__.__argnames__) Object.defineProperties(Vector2.prototype.__init__, {
+        __argnames__ : {value: ["x", "y"]},
+        __module__ : {value: null}
+    });
+    Vector2.__argnames__ = Vector2.prototype.__init__.__argnames__;
+    Vector2.__handles_kwarg_interpolation__ = Vector2.prototype.__init__.__handles_kwarg_interpolation__;
+    Vector2.prototype.__add__ = async function __add__(other) {
+        var self = this;
+        "10";
+        self.x=self.x["+"](other.x);
+        "11";
+        self.y=self.y["+"](other.y);
+        "12";
+        return self;
+    };
+    if (!Vector2.prototype.__add__.__argnames__) Object.defineProperties(Vector2.prototype.__add__, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.__subtract__ = async function __subtract__(other) {
+        var self = this;
+        "14";
+        self.x=self.x["-"](other.x);
+        "15";
+        self.y=self.y["-"](other.y);
+        "16";
+        return self;
+    };
+    if (!Vector2.prototype.__subtract__.__argnames__) Object.defineProperties(Vector2.prototype.__subtract__, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.__multiply__ = async function __multiply__(other) {
+        var self = this;
+        "19";
+        self.x=self.x["*"](other);
+        "20";
+        self.y=self.y["*"](other);
+        "21";
+        return self;
+    };
+    if (!Vector2.prototype.__multiply__.__argnames__) Object.defineProperties(Vector2.prototype.__multiply__, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.setX = async function setX(x) {
+        var self = this;
+        "23";
+        self.x = x;
+    };
+    if (!Vector2.prototype.setX.__argnames__) Object.defineProperties(Vector2.prototype.setX, {
+        __argnames__ : {value: ["x"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.setY = async function setY(y) {
+        var self = this;
+        "25";
+        self.y = y;
+    };
+    if (!Vector2.prototype.setY.__argnames__) Object.defineProperties(Vector2.prototype.setY, {
+        __argnames__ : {value: ["y"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.clone = async function clone() {
+        var self = this;
+        var ρσ_ls, _GS_1;
+        "27";
+        _GS_1 = new Vector2;
+        (await _GS_1.__init__(self.x, self.y));
+        return _GS_1;
+    };
+    if (!Vector2.prototype.clone.__module__) Object.defineProperties(Vector2.prototype.clone, {
+        __module__ : {value: null}
+    });
+    Vector2.prototype.magsq = async function magsq() {
+        var self = this;
+        "29";
+        return self.x["*"](self.x)["+"](self.y["*"](self.y));
+    };
+    if (!Vector2.prototype.magsq.__module__) Object.defineProperties(Vector2.prototype.magsq, {
+        __module__ : {value: null}
+    });
+    Vector2.prototype.mag = async function mag() {
+        var self = this;
+        "31";
+        return sqrt(self.x["*"](self.x)["+"](self.y["*"](self.y)));
+    };
+    if (!Vector2.prototype.mag.__module__) Object.defineProperties(Vector2.prototype.mag, {
+        __module__ : {value: null}
+    });
+    Vector2.prototype.distsq = async function distsq(other) {
+        var self = this;
+        "33";
+        return self.x["-"](1["*"](other.x))["*"](self.x["-"](1["*"](other.x)))["+"](self.y["-"](1["*"](other.y))["*"](self.y["-"](1["*"](other.y))));
+    };
+    if (!Vector2.prototype.distsq.__argnames__) Object.defineProperties(Vector2.prototype.distsq, {
+        __argnames__ : {value: ["other"]},
+        __module__ : {value: null}
+    });
+    Vector2.prototype.toString = async function toString() {
+        var self = this;
+        "35";
+        return "<"["+"](ρσ_str.format("{}", self.x))["+"](", ")["+"](ρσ_str.format("{}", self.y))["+"](">");
+    };
+    if (!Vector2.prototype.toString.__module__) Object.defineProperties(Vector2.prototype.toString, {
+        __module__ : {value: null}
+    });
+    Vector2.prototype.__repr__ = async function __repr__() {
+                return "<"["+"](__name__)["+"](".")["+"](this.constructor.name)["+"](" #")["+"](this.ρσ_object_id)["+"](">");
+    };
+    Vector2.prototype.__str__ = async function __str__() {
+        return this.__repr__();
+    };
+    Object.defineProperty(Vector2.prototype, "__bases__", {value: []});
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    "37";
+    fieldCount = 64;
+    "38";
+    fieldWidth = 8;
+    "39";
+    fieldDA = fieldWidth["/"](fieldCount);
+    "40";
+    field = (function() {
+        var ρσ_Iter = range(0, fieldCount), ρσ_Result = [], y;
+        ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+        for (var ρσ_Index of ρσ_Iter) {
+            y = ρσ_Index;
+            ρσ_Result.push((function() {
+                var ρσ_Iter = range(0, fieldCount), ρσ_Result = [], x;
+                ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                for (var ρσ_Index of ρσ_Iter) {
+                    x = ρσ_Index;
+                    ρσ_Result.push(ρσ_interpolate_kwargs.call(this, arrow, [ρσ_desugar_kwargs({pos: vec(y["*"](fieldDA), 0, x["*"](fieldDA))})]));
+                }
+                ρσ_Result = ρσ_list_constructor(ρσ_Result);
+                return ρσ_Result;
+            })());
+        }
+        ρσ_Result = ρσ_list_constructor(ρσ_Result);
+        return ρσ_Result;
+    })();
+    "42";
+    G = 6.7e-11;
+    "43";
+    dt = .1;
+    "45";
+    amtObjects = 2;
+    "46";
+    objects = ρσ_list_decorate([]);
+    "47";
+    for (var ρσ_Index1 = 0; ρσ_Index1["<"](amtObjects); ρσ_Index1++) {
+        i = ρσ_Index1;
+        "48";
+        objects.append(0);
+    }
+    "50";
+    for (var ρσ_Index2 = 0; ρσ_Index2["<"](amtObjects); ρσ_Index2++) {
+        i = ρσ_Index2;
+        "51";
+        var objects;
+        "52";
+        p = vec(5, 0, 5);
+        "53";
+        ρσ_setitem(objects, i, ρσ_interpolate_kwargs.call(this, sphere, [ρσ_desugar_kwargs({pos: p, radius: fieldDA, color: vector.random()})]));
+        "54";
+        ρσ_getitem(objects, i).vel = vec(random(1["-u"]()["*"](.5), .5), 0, random(1["-u"]()["*"](.5), .5));
+        "55";
+        ρσ_getitem(objects, i).acc = vec(0, 0, 0);
+        "56";
+        ρσ_getitem(objects, i).mass = 1e3;
+    }
+    "58";
+    async function printField(field) {
+        var ρσ_ls, str, y, x;
+        "59";
+        for (var ρσ_Index3 = 0; ρσ_Index3["<"](fieldCount); ρσ_Index3++) {
+            x = ρσ_Index3;
+            "60";
+            for (var ρσ_Index4 = 0; ρσ_Index4["<"](fieldCount); ρσ_Index4++) {
+                y = ρσ_Index4;
+                "61";
+                str = ρσ_getitem(ρσ_getitem(field, x), y).axis;
+                "62";
+                ρσ_interpolate_kwargs.call(this, print, [str].concat([ρσ_desugar_kwargs({end: " "})]));
+            }
+            "63";
+            print();
+        }
+    };
+    if (!printField.__argnames__) Object.defineProperties(printField, {
+        __argnames__ : {value: ["field"]},
+        __module__ : {value: null}
+    });
+
+    "65";
+    EPSILON = 1e-5;
+    "67";
+    async function zeroPoint(field, x, y) {
+        "68";
+        ρσ_getitem(ρσ_getitem(field, x), y).axis = vec(0, 0, 0);
+        "69";
+        ρσ_getitem(ρσ_getitem(field, x), y).pos.y = 0;
+    };
+    if (!zeroPoint.__argnames__) Object.defineProperties(zeroPoint, {
+        __argnames__ : {value: ["field", "x", "y"]},
+        __module__ : {value: null}
+    });
+
+    "71";
+    async function zeroField(field) {
+        var ρσ_ls, y, x;
+        "72";
+        for (var ρσ_Index5 = 0; ρσ_Index5["<"](fieldCount); ρσ_Index5++) {
+            x = ρσ_Index5;
+            "73";
+            for (var ρσ_Index6 = 0; ρσ_Index6["<"](fieldCount); ρσ_Index6++) {
+                y = ρσ_Index6;
+                "74";
+                (await zeroPoint(field, x, y));
+            }
+        }
+    };
+    if (!zeroField.__argnames__) Object.defineProperties(zeroField, {
+        __argnames__ : {value: ["field"]},
+        __module__ : {value: null}
+    });
+
+    "78";
+    async function updateField(field, v2pos, mass) {
+        var ρσ_ls, p, valMag, x, y;
+        "79";
+        for (var ρσ_Index7 = 0; ρσ_Index7["<"](fieldCount); ρσ_Index7++) {
+            y = ρσ_Index7;
+            "80";
+            for (var ρσ_Index8 = 0; ρσ_Index8["<"](fieldCount); ρσ_Index8++) {
+                x = ρσ_Index8;
+                "81";
+                p = vector(x["*"](fieldDA), 0, y["*"](fieldDA));
+                "83";
+                p.x=p.x["-"](v2pos.x);
+                "84";
+                p.z=p.z["-"](v2pos.y);
+                "86";
+                valMag = mag(p);
+                "88";
+                if (valMag[">"](fieldDA)) {
+                    "89";
+                    ρσ_getitem(ρσ_getitem(field, x), y).axis=ρσ_getitem(ρσ_getitem(field, x), y).axis["+"](1["-u"]()["*"](hat(p))["*"](fieldDA));
+                    "90";
+                    ρσ_getitem(ρσ_getitem(field, x), y).pos.y=ρσ_getitem(ρσ_getitem(field, x), y).pos.y["-"](fieldDA["/"](valMag));
+                }
+            }
+        }
+    };
+    if (!updateField.__argnames__) Object.defineProperties(updateField, {
+        __argnames__ : {value: ["field", "v2pos", "mass"]},
+        __module__ : {value: null}
+    });
+
+    "92";
+    scene.append_to_title("<div id='fps'/>");
+    "96";
+    (await rate(60));
+    "98";
+    t = 0;
+    "99";
+    dt = .1;
+    "100";
+    floor = ρσ_interpolate_kwargs.call(this, box, [ρσ_desugar_kwargs({pos: vec(fieldWidth["/"](2), 0, fieldWidth["/"](2)), size: vec(fieldWidth, .1, fieldWidth), opacity: .5})]);
+    "103";
+    _GS_1 = new Vector2;
+    (await _GS_1.__init__(0, 0));
+    v2pos = _GS_1;
+    "105";
+    async function gravity(object) {
+        var ρσ_ls, totForce, distance, force, i, aForce, avgForce;
+        "106";
+        totForce = 0;
+        "107";
+        var ρσ_Iter9 = range(len(objects));
+        ρσ_Iter9 = ((typeof ρσ_Iter9[Symbol.iterator] === "function") ? (ρσ_Iter9 instanceof Map ? ρσ_Iter9.keys() : ρσ_Iter9) : Object.keys(ρσ_Iter9));
+        for (var ρσ_Index9 of ρσ_Iter9) {
+            i = ρσ_Index9;
+            "108";
+            if ((object.pos !== ρσ_getitem(objects, i).pos && (typeof object.pos !== "object" || ρσ_not_equals(object.pos, ρσ_getitem(objects, i).pos)))) {
+                "109";
+                distance = mag(object.pos["-"](1["*"](ρσ_getitem(objects, i).pos)));
+                "110";
+                force = G["*"](object.mass)["*"](ρσ_getitem(objects, i).mass)["/"](Math.pow(distance, 2));
+                "111";
+                totForce=totForce["+"](force);
+            }
+        }
+        "113";
+        aForce = totForce["/"](len(objects));
+        "114";
+        avgForce = vec(aForce["*"](object.acc.x), 0, aForce["*"](object.acc.z));
+        "115";
+        return avgForce;
+    };
+    if (!gravity.__argnames__) Object.defineProperties(gravity, {
+        __argnames__ : {value: ["object"]},
+        __module__ : {value: null}
+    });
+
+    "117";
+    while (1) {
+        "118";
+        (await rate(60));
+        "119";
+        (await zeroField(field));
+        "121";
+        var ρσ_Iter10 = range(len(objects));
+        ρσ_Iter10 = ((typeof ρσ_Iter10[Symbol.iterator] === "function") ? (ρσ_Iter10 instanceof Map ? ρσ_Iter10.keys() : ρσ_Iter10) : Object.keys(ρσ_Iter10));
+        for (var ρσ_Index10 of ρσ_Iter10) {
+            i = ρσ_Index10;
+            "122";
+            v2pos.x = ρσ_getitem(objects, i).pos.x;
+            "123";
+            v2pos.y = ρσ_getitem(objects, i).pos.z;
+            "124";
+            (await updateField(field, v2pos, 5.97e24));
+            "126";
+            ax = ρσ_getitem(ρσ_getitem(field, round(ρσ_getitem(objects, i).pos.x["/"](fieldDA))), round(ρσ_getitem(objects, i).pos.z["/"](fieldDA)));
+            "127";
+            ρσ_getitem(objects, i).acc = (await gravity(ρσ_getitem(objects, i)));
+            "128";
+            ρσ_getitem(objects, i).vel=ρσ_getitem(objects, i).vel["+"](ρσ_getitem(objects, i).acc["*"](dt));
+            "129";
+            ρσ_getitem(objects, i).pos=ρσ_getitem(objects, i).pos["+"](ρσ_getitem(objects, i).vel["*"](dt));
+            "131";
+            if (ρσ_getitem(objects, i).pos.x[">="](fieldWidth["-"](1["*"](fieldDA))) || ρσ_getitem(objects, i).pos.x["<"](fieldDA) || ρσ_getitem(objects, i).pos.z[">"](fieldWidth["-"](1["*"](fieldDA))) || ρσ_getitem(objects, i).pos.z["<"](fieldDA)) {
+                "132";
+                ρσ_getitem(objects, i).vel=ρσ_getitem(objects, i).vel["*"](1["-u"]()["*"](1));
+                "133";
+                ρσ_getitem(objects, i).pos=ρσ_getitem(objects, i).pos["+"](ρσ_getitem(objects, i).vel["*"](dt)["*"](2));
+            }
+        }
+        "135";
+        var ρσ_Iter11 = range(len(objects));
+        ρσ_Iter11 = ((typeof ρσ_Iter11[Symbol.iterator] === "function") ? (ρσ_Iter11 instanceof Map ? ρσ_Iter11.keys() : ρσ_Iter11) : Object.keys(ρσ_Iter11));
+        for (var ρσ_Index11 of ρσ_Iter11) {
+            i = ρσ_Index11;
+            "136";
+            print(""["+"](ρσ_str.format("{}", i))["+"](", ")["+"](ρσ_str.format("{}", ρσ_getitem(objects, i).pos))["+"](",")["+"](ρσ_str.format("{}", ρσ_getitem(objects, i).vel))["+"](",")["+"](ρσ_str.format("{}", ρσ_getitem(objects, i).acc))["+"](""));
+        }
+        "138";
+        t=t["+"](.01);
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>
