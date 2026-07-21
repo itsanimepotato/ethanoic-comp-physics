@@ -1,0 +1,27 @@
+Web VPython 3.2
+
+r = float(input(prompt="rate?"))
+startX = float(input(prompt="starting pop?"))
+n = int(input(prompt="iters?"))
+
+vals = []
+vals.append(startX)
+
+def logistic(cx):
+    return r*cx*(1-cx)
+    
+pIGraph = graph(title="pop fraction vs iterate number", xtitle="iterate number", ytitle="pop fraction")
+pIDots = gdots(graph=pIGraph)
+pICurve = gcurve(graph=pIGraph)
+
+
+
+for i in range(0,n,1):
+    if i == 0:
+        pIDots.plot(0,vals[0])
+        pICurve.plot(0,vals[0])  
+    else:
+        global vals
+        vals[i] = logistic(vals[i-1])
+        pIDots.plot(i,vals[i])
+        pICurve.plot(i,vals[i])
