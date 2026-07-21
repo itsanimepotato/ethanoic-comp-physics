@@ -1,0 +1,89 @@
+Web VPython 3.2
+
+class Vector2:
+    def __init__(self, x, y):
+        self.x = x;
+        self.y = y;
+    def __add__(self, other):
+        self.x += other.x;
+        self.y += other.y; 
+        return self;
+    def __subtract__(self, other):
+        self.x -= other.x;
+        self.y -= other.y;
+        return self;
+    def __multiply__(self, other):
+        self.x *= other;
+        self.y *= other;
+        return self;
+    def setX(self, x):
+        self.x = x;
+    def setY(self, y):
+        self.y = y;
+    def clone(self):
+        return Vector2(self.x, self.y);
+    def magsq(self):
+        return self.x*self.x + self.y*self.y;
+    def mag(self):
+        return sqrt(self.x*self.x + self.y*self.y);
+    def distsq(self, other):
+        return (self.x-other.x)*(self.x-other.x) + (self.y-other.y)*(self.y-other.y);
+    def toString(self):
+        return f"<{self.x}, {self.y}>"
+
+fieldCount = 32; 
+fieldWidth = 4; 
+fieldDA = fieldWidth / fieldCount; 
+field = [[[Vector2(0, 0), arrow(pos=vec(x*fieldDA, y*fieldDA, 0))] for x in range(0, fieldCount)] for y in range(0, fieldCount)];
+
+
+
+def printField(field):
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            str = (field[x][y][0].toString())
+            print(str, end=" ");
+        print();
+
+EPSILON = 1e-5
+
+def zeroPoint(field, x, y):
+    field[x][y][0].__multiply__(0);
+    field[x][y][1].axis.x = 0;
+    field[x][y][1].axis.y = 0;
+
+def updateField(field, v2pos, mass):
+    for x in range(0, fieldCount):
+        for y in range(0, fieldCount):
+            p = Vector2(x,y);
+            p.__subtract__(v2pos); 
+            if((p.magsq() > 1)):
+                field[x][y][0] = (p.__multiply__(-mass/p.magsq())); #test jargon, this is not gravity. 
+                magVal = field[x][y][0].magsq();
+                if(magVal > 1):
+                    field[x][y][1].axis.x = field[x][y][0].x*fieldDA/magVal;
+                    field[x][y][1].axis.y = field[x][y][0].y*fieldDA/magVal;
+                else:
+                    zeroPoint(field, x, y);
+            else:
+                zeroPoint(field, x, y);
+
+scene.append_to_title("<div id='fps'/>")
+
+ball = sphere(pos = vec(0,0,0), size = vec(0.1,0.1,0.1))
+
+G = 6.7e-11;
+dt = 0.1; 
+t=0
+while True:
+    rate(60);
+    #printField(field); 
+
+
+    updateField(field,
+    
+    ball.pos.x = cos(radians(t))
+    ball.pos.y = sin(radians(t))
+
+    t += dt
+    
